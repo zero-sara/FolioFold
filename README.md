@@ -96,16 +96,16 @@ FolioFold is a local-first **résumé/portfolio builder and publisher**. Write i
 
 ### 内置模板
 
-FolioFold 内置两套模板：
+FolioFold 自带两个模板：Starter 和 FolioFold Demo。
+Starter 是你开始制作自己的简历/作品集的起点；FolioFold Demo 用来查看完整示例。
+你可以直接编辑 Starter，并把它逐步变成自己的项目。
 
 | 模板 | 用途 |
 |---|---|
-| **Starter** | 干净的起点，内容是中性占位文案，适合直接改成自己的东西 |
-| **FolioFold Demo** | 完整的演示简历/作品集，能看到 FolioFold 做出来的样子（也就是上面的公开 Demo） |
+| **Starter** | 你的起点。自带基本排版、栏目和可编辑的示例内容，直接改就能变成自己的简历/作品集，不需要从空白开始 |
+| **FolioFold Demo** | 官方演示模板，用来查看 FolioFold 的完整效果；不作为制作自己内容的默认起点 |
 
-> **Main 不是"第三套模板"。** 你在编辑器里正在编辑、属于你自己的那份内容，保存在本机，叫 **Main（你的工作区）**，它不会进入仓库，也不在"可供选择的模板"列表中。第一次启动时，如果本机还没有自己的内容，FolioFold 会用 **Starter** 初始化你的工作区；之后这个工作区就是你自己的项目，可以继续编辑和添加内容。你已有的内容永远不会被覆盖。
-
-也可以把一套版式导出成模板文件（只含视觉设计，不含文字和媒体），在别处导入套用。
+你也可以继续导入或制作其他模板：把一套版式导出成模板文件（只含视觉设计，不含文字和媒体），在别处导入套用。
 
 ### 🛠️ 开始使用
 
@@ -158,16 +158,16 @@ Content and visual design are stored separately, so editing your words never bre
 
 ### Built-in templates
 
-FolioFold ships with two templates:
+FolioFold ships with two templates: Starter and FolioFold Demo.
+Starter is where you begin making your own résumé/portfolio; FolioFold Demo is for seeing the full example.
+You can edit Starter directly and gradually turn it into your own project.
 
 | Template | What it's for |
 |---|---|
-| **Starter** | A clean starting point. Neutral placeholder content you replace with your own. |
-| **FolioFold Demo** | A complete sample résumé/portfolio showing what FolioFold can look like — the public demo above. |
+| **Starter** | Your starting point. It comes with basic layout, sections and editable sample content — edit it into your own résumé/portfolio instead of starting from blank. |
+| **FolioFold Demo** | The official demo template for viewing what FolioFold can produce; not the default starting point for making your own content. |
 
-> **Main is not a "third template."** The portfolio you're actively editing — your own content — is stored locally and is called **Main (your workspace)**. It never enters the repository and is not listed as a selectable template. On first run, if you don't have a portfolio yet, FolioFold initializes one from **Starter**. After that, this workspace is your own project — keep editing and adding to it. Your existing content is never overwritten.
-
-You can also export a look as a template file (visual design only, no text or media) and import it elsewhere.
+You can also import or make other templates: export a look as a template file (visual design only, no text or media) and import it elsewhere.
 
 ### 🛠️ Getting started
 
