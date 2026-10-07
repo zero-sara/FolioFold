@@ -27,9 +27,7 @@ if not errorlevel 1 (
 if not defined PY (
     where python >nul 2>nul
     if not errorlevel 1 (
-        for /f "tokens=2" %%v in ('python --version 2^>^&1') do (
-            echo %%v | findstr /b "3.11" >nul 2>nul && set "PY=python"
-        )
+for /f "tokens=2" %%v in ('python --version 2^>^&1') do echo %%v | findstr /b "3.11" >nul 2>nul && set "PY=python"
     )
 )
 if not defined PY (

@@ -1,0 +1,14 @@
+# Windows 批处理必须由 CRLF 结尾：cmd.exe 遇到 LF-only 的 .bat 会
+# 解析错乱（for 块变量不展开、goto 跳错行），表现为
+# "'xxx' is not recognized" / "The system cannot find the drive specified"。
+# 这里强制 .bat 在检出时始终为 CRLF，避免编辑器/Git 再次把它写成 LF。
+*.bat text eol=crlf
+
+# 其余文本文件统一 LF，避免跨平台 diff 噪音
+*.js   text eol=lf
+*.css  text eol=lf
+*.html text eol=lf
+*.md   text eol=lf
+*.json text eol=lf
+*.py   text eol=lf
+*.cjs  text eol=lf
