@@ -1231,7 +1231,7 @@ const SHOWREEL_resolveSource=(sp, localUrl, chaptersHtml)=>{
 function VE_renderFooterBrand(profile){
   const p = profile || {};
   // ⚠ 姓名与头衔要**各自包一层 span**再拼：i18n 的整篇翻译是「文本节点精确匹配」替换，
-  // 拼成一个文本节点后（例如 '某人 · 声音设计 / 音频制作 / AIGC'）在译文表里查不到这一整串，
+  // 拼成一个文本节点后（例如 '某人 · Product Designer'）在译文表里查不到这一整串，
   // 英文模式下页脚就会一直留中文。拆开后两段各自命中，中间的 ' · ' 原样保留。
   const parts = [p.name, p.role].filter(Boolean)
     .map(x => '<span class="ff-foot-part">' + esc(x) + '</span>');
@@ -6788,7 +6788,7 @@ async function main(){
   // 技能：按**内容形态**选渲染，不是一律一种 ——
   //   · 多个词条（Python / JavaScript / HTML / CSS …）→ **词组云**（chips），横向铺开、自动换行。
   //   · 只有一条、而且是一整句（用户在单个字段里塞了一串工具名，如
-  //     "Protools、Cubase、剪映、达芬奇、Office、Pr、Ps、Python、GitHub、Codex等。"）
+  //     "工具甲、工具乙、工具丙等。"）
   //     → 仍然是**整行文本行**。一整句塞进小胶囊里会又长又别扭，而"一个词占一行"才是丑的根源。
   // 用户原话：「技能就这么一点字儿，为什么一定要遵循每一个一行呢？它完全可以五个排成一行。」
   //   —— 注意"就这么一点字儿"是判据：**短的**该并排，**一整句**就该自己占一行。
