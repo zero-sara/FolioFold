@@ -10,7 +10,7 @@ set "ROOT=%~dp0"
 if "%ROOT:~-1%"=="\" set "ROOT=%ROOT:~0,-1%"
 
 rem --- 0. Single-instance: if already running, just open browser ---
-powershell -NoProfile -Command "try{if((Invoke-WebRequest -Uri 'http://127.0.0.1:3000/api/version' -TimeoutSec 2 -UseBasicParsing).StatusCode -eq 200){exit 0}}catch{};exit 1" >nul 2>nul
+call :check_up
 if not errorlevel 1 (
     echo FolioFold is already running. Opening browser...
     start "" http://localhost:3000/
@@ -34,7 +34,7 @@ if not defined PY (
 )
 if not defined PY (
     echo [Error] Python 3.11 was not found.
-    echo Please install Python 3.11 (https://www.python.org/downloads/) with "Add to PATH" checked.
+    echo Please install Python 3.11 ^(https://www.python.org/downloads/^) with "Add to PATH" checked.
     echo Or run manually:  py -3.11 server.py
     pause
     goto :eof
@@ -50,7 +50,7 @@ start "FolioFold" %PY% "%ROOT%\server.py"
 rem --- 4. Wait for health check (up to ~20s) ---
 set "UP=0"
 for /l %%i in (1,1,40) do (
-    powershell -NoProfile -Command "try{if((Invoke-WebRequest -Uri 'http://127.0.0.1:3000/api/version' -TimeoutSec 1 -UseBasicParsing).StatusCode -eq 200){exit 0}}catch{};exit 1" >nul 2>nul
+    call :check_up
     if not errorlevel 1 (set "UP=1" & goto :ready)
     timeout /t 1 /nobreak >nul 2>nul
 )
@@ -62,3 +62,15 @@ if "%UP%"=="1" (
     echo [Warning] Server did not start in time. Check the "FolioFold" console window for errors.
 )
 goto :eof
+
+rem --- Proxy-safe localhost health check (curl bypasses HTTP_PROXY so the guard /
+rem     stop detection work even when a system proxy is configured). Falls back to
+rem     PowerShell only if curl.exe is unavailable. Sets errorlevel 0 = server UP. ---
+:check_up
+where curl >nul 2>nul
+if not errorlevel 1 (
+    curl.exe -s -o nul --noproxy * --max-time 2 -w "%%{http_code}" "http://127.0.0.1:3000/api/version" | findstr /b "200" >nul 2>nul
+) else (
+    powershell -NoProfile -Command "try{if((Invoke-WebRequest -Uri 'http://127.0.0.1:3000/api/version' -TimeoutSec 2 -UseBasicParsing).StatusCode -eq 200){exit 0}}catch{};exit 1" >nul 2>nul
+)
+exit /b

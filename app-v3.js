@@ -5850,6 +5850,40 @@ function hostingBaseOf(url){
   } catch (e) { return ''; }
 }
 
+// ===== 发布面板「用户正在输入」守卫（修复自愈重渲清空输入 / 打断拼音）=====
+// 探针陈旧 / 大媒体上传时，发布面板会整面板重渲（自愈刷新）。若用户当时正在输入框打字
+// （尤其中文拼音组合输入），整面板重渲会清空已输入内容、打断拼音。
+// 这里在 document 全局记录「最后一次输入 / 键盘活动的时间戳」，并提供判定函数，
+// 让自愈重渲在用户正在输入时自动延后，而不是硬重渲。
+window.__ffPubLastInputTs = window.__ffPubLastInputTs || 0;
+(function __ffPubInputGuard(){
+  if (window.__ffPubInputGuardReady) return;
+  window.__ffPubInputGuardReady = true;
+  const mark = (e) => {
+    const t = e && e.target; if (!t || !t.tagName) return;
+    const tag = t.tagName.toUpperCase();
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || t.isContentEditable) {
+      window.__ffPubLastInputTs = Date.now();
+    }
+  };
+  document.addEventListener('input', mark, true);
+  document.addEventListener('keydown', mark, true);
+  document.addEventListener('compositionstart', mark, true);
+  document.addEventListener('compositionend', mark, true);
+})();
+// 用户是否正在发布面板里输入（焦点在输入框且近期有键盘 / 输入活动）。
+function __ffPubUserTyping(){
+  const el = document.activeElement;
+  if (el && el.tagName) {
+    const tag = el.tagName.toUpperCase();
+    if ((tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || el.isContentEditable)
+        && (Date.now() - (window.__ffPubLastInputTs || 0) < 3000)) {
+      return true;
+    }
+  }
+  return false;
+}
+
 async function renderGithubSection(pb, gh){
   if(!pb) return;
   // ⚠ deployBtnHtml 定义在 renderPublicLink 作用域内，这里拿不到（曾导致 ReferenceError → 整个分区空白）。
@@ -5863,13 +5897,22 @@ async function renderGithubSection(pb, gh){
   if (status.probeStale) {
     if ((window.__ghProbeRetry || 0) < 4) {
       window.__ghProbeRetry = (window.__ghProbeRetry || 0) + 1;
-      // 自愈重渲只在"用户没有正在操作"时做：凭证表单开着、或发布进行中都不重渲，
-      // 否则用户填到一半的输入会被清空、进度/按钮会闪一下（真实反馈 2026-09-18）。
+      // 自愈重渲只在"用户没有正在操作"时做：凭证表单开着、发布进行中、或用户正在输入框打字都不重渲，
+      // 否则用户填到一半的输入会被清空、进度/按钮会闪一下，中文拼音输入也会被强行打断（真实反馈 2026-09-18）。
+      // 用户正在打字时，本次延后至其停手后再重渲（最多延后 30 秒）。
       if (!__pubSetupOpen && !pubuiBusy()) {
-        setTimeout(() => { const d = document.getElementById('publish-dialog'); if (d && d.open) renderPublicLink(d); }, 2500);
+        setTimeout(function __ghProbeHeal(){
+          const d = document.getElementById('publish-dialog');
+          if (!(d && d.open)) return;
+          if (__ffPubUserTyping()) {
+            if ((window.__ghProbeDefer||0) < 30) { window.__ghProbeDefer = (window.__ghProbeDefer||0) + 1; setTimeout(__ghProbeHeal, 1000); }
+            return;
+          }
+          renderPublicLink(d);
+        }, 2500);
       }
     }
-  } else { window.__ghProbeRetry = 0; }
+  } else { window.__ghProbeRetry = 0; window.__ghProbeDefer = 0; }
   // 警告判据来自服务端的**真实 API 探测**（canCreateRepo），不再靠令牌前缀猜。
   const capWarn=(status.connected && status.canCreateRepo===false)
     ? `<p class="publish-desc" style="color:#9a6700">⚠ ${esc(status.warning||'当前 GitHub 授权没有在你账号下新建仓库的权限，发布到 GitHub Pages 会失败。')}</p>`
@@ -6082,8 +6125,14 @@ function wirePublicLink(dialog, st){
     host.appendChild(mp);
     if((window.__pubMediaRetry||0)<240){ window.__pubMediaRetry=(window.__pubMediaRetry||0)+1;
       // 自愈重渲只在没有用户交互时做：凭证表单开着（用户可能在输入）或发布进行中（进度由 pubuiPaint 更新）都跳过，
-      // 否则会把输入清空 / 画面闪一下。
-      if(!__pubSetupOpen && !pubuiBusy()) setTimeout(()=>renderPublicLink(dialog),5000); }
+      // 否则会把输入清空 / 画面闪一下。用户正在打字时延后重渲（最多延后 240 秒）。
+      if(!__pubSetupOpen && !pubuiBusy()){
+        setTimeout(function __pubMediaHeal(){
+          if(!(dialog && dialog.open)) return;
+          if(__ffPubUserTyping()){ if((window.__pubMediaDefer||0)<240){ window.__pubMediaDefer=(window.__pubMediaDefer||0)+1; setTimeout(__pubMediaHeal,1000);} return; }
+          renderPublicLink(dialog);
+        },5000);
+      } }
   } else {
     window.__pubMediaRetry=0;
     const fails=((mu.failed)||[]).filter(Boolean);

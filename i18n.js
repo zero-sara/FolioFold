@@ -762,7 +762,19 @@
     } catch (_) {}
     return '';
   }
+  /* ——— 发行配置：单语言 / 多语言 ———
+   * 由 dist-config.js（必须在 i18n.js 之前加载）写入 window.__FF_DIST__。
+   *   langMode: 'single' → 锁定 defaultLang，隐藏所有语言切换入口
+   *                          （编辑器顶部 / 作品集页面 / 排版编辑三处共用同一套组件）
+   *   langMode: 'multi'  → 完整 i18n，可自由切换（默认）
+   * 这样无需改动任何多语言资源，就能出「单语言版」发行物（FolioFold-ZH / FolioFold-EN）。 */
+  const _FF_DIST = (typeof window !== 'undefined' && window.__FF_DIST__) || {};
+  const _FF_LANG_MODE = _FF_DIST.langMode === 'single' ? 'single' : 'multi';
+  const _FF_DEFAULT_LANG = (_FF_DIST.defaultLang || 'zh-CN');
+
   function getLocale() {
+    // 单语言发行：恒为 defaultLang，不读 localStorage、不随切换改变。
+    if (_FF_LANG_MODE === 'single') return _FF_DEFAULT_LANG;
     // 「无语言系统」的版本恒为中文 —— 绝不能出现"界面翻了一半"的样子。
     if (!capable()) return SOURCE;
     return normal(readStored());
@@ -1064,6 +1076,17 @@
 
   /* ————————————————————————— 切换 ————————————————————————— */
   function setLocale(next, options) {
+    // 单语言发行：任何切换请求都被强制回落到 defaultLang（入口本就不显示，这里双保险，
+    // 防止来自 postMessage / storage 事件的跨 frame 同步把语言带偏）。
+    if (_FF_LANG_MODE === 'single') {
+      const d = _FF_DEFAULT_LANG;
+      if (_applied !== d) {
+        _applied = d;
+        try { localStorage.setItem(LOCALE_KEYS[scope()] || LOCALE_KEYS.editor, d); } catch (_) {}
+        applyAll();
+      }
+      return d;
+    }
     // 「无语言系统」的版本：切换请求直接忽略（按钮本来也不存在，这里是双保险）。
     if (!capable()) return SOURCE;
     const lang = normal(next);
@@ -1239,6 +1262,11 @@
   function mountSwitcher(target, options) {
     if (!target) return;
     const opts = options || {};
+    // 单语言发行：彻底不渲染任何语言切换入口（编辑器顶部 / 作品集页面 / 排版编辑三处共用此组件）。
+    if (_FF_LANG_MODE === 'single') {
+      try { target.hidden = true; target.innerHTML = ''; target.className = ''; } catch (_) {}
+      return;
+    }
     // 记住宿主：能力探测回来（有→无 / 无→有）时要能重挂或收起。顺带清掉已脱离 DOM 的旧宿主，
     // 否则编辑器每次 render() 重建 DOM，这张表会越攒越长。
     for (let i = _mounts.length - 1; i >= 0; i--) if (!_mounts[i].target.isConnected) _mounts.splice(i, 1);

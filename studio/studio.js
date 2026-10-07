@@ -1701,6 +1701,40 @@
     }
   };
 
+  // ===== 发布面板「用户正在输入」守卫（修复自愈重渲清空输入 / 打断拼音）=====
+  // 探针陈旧 / 大媒体上传时，发布面板会整面板重渲（自愈刷新）。若用户当时正在输入框打字
+  // （尤其中文拼音组合输入），整面板重渲会清空已输入内容、打断拼音。
+  // 这里在 document 全局记录「最后一次输入 / 键盘活动的时间戳」，并提供判定函数，
+  // 让自愈重渲在用户正在输入时自动延后，而不是硬重渲。
+  window.__ffPubLastInputTs = window.__ffPubLastInputTs || 0;
+  (function __ffPubInputGuard(){
+    if (window.__ffPubInputGuardReady) return;
+    window.__ffPubInputGuardReady = true;
+    const mark = (e) => {
+      const t = e && e.target; if (!t || !t.tagName) return;
+      const tag = t.tagName.toUpperCase();
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || t.isContentEditable) {
+        window.__ffPubLastInputTs = Date.now();
+      }
+    };
+    document.addEventListener('input', mark, true);
+    document.addEventListener('keydown', mark, true);
+    document.addEventListener('compositionstart', mark, true);
+    document.addEventListener('compositionend', mark, true);
+  })();
+  // 用户是否正在发布面板里输入（焦点在输入框且近期有键盘 / 输入活动）。
+  function __ffPubUserTyping(){
+    const el = document.activeElement;
+    if (el && el.tagName) {
+      const tag = el.tagName.toUpperCase();
+      if ((tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || el.isContentEditable)
+          && (Date.now() - (window.__ffPubLastInputTs || 0) < 3000)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   const stRenderPublink = async () => {
     const body = document.getElementById('st-publink-body'); if (!body) return;
     __stSetupOpen = false;   // 能走到完整重渲，说明凭证表单已关闭
@@ -1760,13 +1794,22 @@
       if (ghstat.probeStale) {
         if (__stProbeRetry < 4) {
           __stProbeRetry++;
-          // 自愈重渲只在"用户没有正在操作"时做：凭证表单开着、或发布进行中都不重渲，
-          // 否则用户填到一半的输入会被清空、进度/按钮会闪一下（真实反馈 2026-09-18）。
+          // 自愈重渲只在"用户没有正在操作"时做：凭证表单开着、发布进行中、或用户正在输入框打字都不重渲，
+          // 否则用户填到一半的输入会被清空、进度/按钮会闪一下，中文拼音输入也会被强行打断（真实反馈 2026-09-18）。
+          // 用户正在打字时，本次延后至其停手后再重渲（最多延后 30 秒）。
           if (!__stSetupOpen && !stPubuiBusy()) {
-            setTimeout(() => { const d = stPublinkDialog(); if (d && d.open) stRenderPublink(); }, 2500);
+            setTimeout(function __stProbeHeal(){
+              const d = stPublinkDialog();
+              if (!(d && d.open)) return;
+              if (__ffPubUserTyping()) {
+                if ((window.__stProbeDefer||0) < 30) { window.__stProbeDefer = (window.__stProbeDefer||0) + 1; setTimeout(__stProbeHeal, 1000); }
+                return;
+              }
+              stRenderPublink();
+            }, 2500);
           }
         }
-      } else { __stProbeRetry = 0; }
+      } else { __stProbeRetry = 0; window.__stProbeDefer = 0; }
       // 警告判据来自服务端的**真实 API 探测**（/api/github/status 的 canCreateRepo），
       // 不再靠令牌前缀猜。授权失效 / 权限不足分开说，且都给出下一步怎么做。
       const capWarn = (ghstat.connected && ghstat.canCreateRepo === false)
@@ -1787,8 +1830,14 @@
         if (__stMediaRetry < 240) {
           __stMediaRetry++;
           // 同 probeStale：用户正在操作 / 正在发布时不重渲，避免清空输入与画面闪动。
+          // 用户正在打字时延后重渲（最多延后 240 秒）。
           if (!__stSetupOpen && !stPubuiBusy()) {
-            setTimeout(() => { const d = stPublinkDialog(); if (d && d.open) stRenderPublink(); }, 5000);
+            setTimeout(function __stMediaHeal(){
+              const d = stPublinkDialog();
+              if (!(d && d.open)) return;
+              if (__ffPubUserTyping()) { if ((window.__stMediaDefer||0) < 240) { window.__stMediaDefer = (window.__stMediaDefer||0) + 1; setTimeout(__stMediaHeal, 1000); } return; }
+              stRenderPublink();
+            }, 5000);
           }
         }
       } else {

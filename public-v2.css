@@ -189,7 +189,11 @@ h1{font-size:clamp(40px,7vw,96px);line-height:1;letter-spacing:-.04em;font-weigh
 .exp-hl ul{margin:8px 0 0;padding-left:0;list-style:none;display:grid;gap:8px}
 .exp-hl li{padding-left:18px;position:relative;line-height:1.7;font-size:14px;color:#3e3a33}
 .exp-hl li::before{content:'';position:absolute;left:0;top:11px;width:6px;height:1px;background:var(--accent)}
-.exp-media img{width:100%;height:auto;display:block;border-radius:6px;border:1px solid var(--line)}
+.exp-media img{width:100%;height:auto;display:block;border-radius:6px;border:1px solid var(--line);object-fit:cover;object-position:center}
+/* 全局保险：所有内容区图片默认 object-fit:cover（等比裁切，绝不非等比拉伸）。
+   任何给图片容器强制固定 height 的写法都必须配 object-fit，否则会拉伸变形。
+   —— 这是「发布后图片被压扁」类 bug 的根因防护，禁止针对某个模板 / 文件名特判。 */
+  .exp-media img,.ai-media img,.ai-project-media img,.works-cover img,.about-media img,.showreel-media img,img.ve-resizable{object-fit:cover;object-position:center}
 /* 有图：文字区 + 媒体区两栏（与 C/D/E 同一套契约：无媒体全宽、有媒体两栏） */
 @media(min-width:900px){
   .exp-body.has-media{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,var(--exp-pm-w,38%));gap:28px;align-items:start}

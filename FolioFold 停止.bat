@@ -13,12 +13,12 @@ echo Stopping FolioFold (this project only)...
 
 rem --- Method 1: localhost-only safe stop endpoint /api/shutdown ---
 rem   (server binds 127.0.0.1 only, so it is unreachable externally)
-powershell -NoProfile -Command "try{(Invoke-WebRequest -Uri 'http://127.0.0.1:3000/api/shutdown' -Method POST -TimeoutSec 3 -UseBasicParsing) | Out-Null}catch{}" >nul 2>nul
+curl.exe -s -o nul --noproxy * --max-time 3 -X POST "http://127.0.0.1:3000/api/shutdown" >nul 2>nul
 
 rem --- Method 2: wait for the port to free (up to ~8s) ---
 set "STOPPED=0"
 for /l %%i in (1,1,16) do (
-    powershell -NoProfile -Command "try{if((Invoke-WebRequest -Uri 'http://127.0.0.1:3000/api/version' -TimeoutSec 1 -UseBasicParsing).StatusCode -eq 200){exit 0}}catch{};exit 1" >nul 2>nul
+    call :check_up
     if errorlevel 1 (set "STOPPED=1" & goto :done)
     timeout /t 1 /nobreak >nul 2>nul
 )
@@ -46,3 +46,15 @@ if defined PID (
     if exist "%ROOT%\.foliofold.pid" del /q "%ROOT%\.foliofold.pid" >nul 2>nul
 )
 goto :eof
+
+rem --- Proxy-safe localhost health check (curl bypasses HTTP_PROXY so the stop
+rem     detection is reliable even when a system proxy is configured). Falls back to
+rem     PowerShell only if curl.exe is unavailable. Sets errorlevel 0 = server UP. ---
+:check_up
+where curl >nul 2>nul
+if not errorlevel 1 (
+    curl.exe -s -o nul --noproxy * --max-time 1 -w "%%{http_code}" "http://127.0.0.1:3000/api/version" | findstr /b "200" >nul 2>nul
+) else (
+    powershell -NoProfile -Command "try{if((Invoke-WebRequest -Uri 'http://127.0.0.1:3000/api/version' -TimeoutSec 1 -UseBasicParsing).StatusCode -eq 200){exit 0}}catch{};exit 1" >nul 2>nul
+)
+exit /b

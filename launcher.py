@@ -136,13 +136,20 @@ def open_browser():
 
 
 def find_server(base):
-    here = os.path.join(base, "server.py")
-    if os.path.isfile(here):
-        return here
-    # Allow the launcher to live one level above the app (e.g. a release/ folder)
-    up = os.path.abspath(os.path.join(base, "..", "server.py"))
-    if os.path.isfile(up):
-        return up
+    # Search upward from the launcher's directory for server.py, so the EXE works
+    # whether it sits next to server.py (project root) or inside a release/
+    # subfolder of the project (e.g. release/FolioFold/FolioFold.exe). server.py
+    # always serves from its own directory, so once found we cd there and the
+    # whole app (portfolio/, content/, etc.) is available.
+    cur = base
+    for _ in range(4):
+        cand = os.path.join(cur, "server.py")
+        if os.path.isfile(cand):
+            return cand
+        parent = os.path.dirname(cur)
+        if parent == cur:
+            break
+        cur = parent
     return None
 
 
