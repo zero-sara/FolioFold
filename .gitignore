@@ -1,0 +1,118 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Logs and temp
+*.tmp
+*.bak
+*.log
+
+# Large media (use external host / Git LFS for videos)
+# Showreel 视频——通常超过 100MB，放外部存储
+public/media/showreel/*.mp4
+public/media/showreel/*.mov
+# Projects 大文件
+public/media/projects/*.mp4
+public/media/projects/*.mov
+public/media/projects/*.zip
+
+# 2026-09-25 清理审计：源码仓不放任何真实媒体（发布由 server 构建时另行拷贝，不依赖源码仓媒体）
+public/media/**
+!public/media/
+!public/media/showreel/
+!public/media/projects/
+!public/media/showreel/.gitkeep
+!public/media/projects/.gitkeep
+# 2026-09-27 Git Release：品牌自有资源必须入库（FolioFrame 自己的 Logo，
+# 不是个人素材）——Demo 模板 tpl-2 的封面/头像就靠这两处。
+!public/media/brand/
+!public/media/brand/*.png
+!public/media/ai-voices/
+!public/media/ai-voices/ff-2.png
+
+# 本地备份与恢复快照（绝不提交：含用户真实数据）
+_backups/
+**/*.previous.json
+**/*.rescued-*.json
+
+# 发布临时 bundle（.folioframe/ 已整体排除，此处兜底）
+.folioframe/_bundle_*/
+
+# Local archives (user-decided retention)
+_archive_legacy_media/
+
+# Browser / test artifacts
+screenshots/
+_*.html
+_*test*.html
+test_*.html
+*.spec.js
+*.test.js
+
+# 2026-09-27 Git Release 隔离（本轮定稿）：
+# 仓库的「模板一 / main」= 本人真实作品集数据 —— 姓名、邮箱、14 个真实作品、
+# 真实排版与上传素材引用，以及公开/上一版快照。这些**一律不入库**。
+# clone 之后 main 为空数据，Demo 内容由正式模板 tpl-2（FolioFrame）提供。
+content/portfolio.json
+content/portfolio.published.json
+content/design.json
+content/design.published.json
+
+# 2026-09-27 Release Readiness：运行时状态一律不入库
+# 发布链接（含 envId / 线上 URL）、模板分享码、Web 预览转码清单 —— 都是本机状态，
+# 提交上去会让别人 clone 后看到你的部署地址和分享码。
+content/public-link*.json
+content/template-share.json
+content/_web_preview_manifest.json
+
+# 2026-09-27：由脚本产出的「用户内容译文」与「真实界面 DOM 快照」。
+# 两者都含本人真实内容（姓名 / 项目原文 / 简历文案），且随时可在应用里重新生成，不入库。
+content/i18n.*.json
+content/templates/*/i18n.*.json
+tools/i18n/dom-snapshot.txt
+
+# Editor / IDE
+.vscode/
+.idea/
+
+# 公网部署配置（含 Cloudflare API Token，绝不可提交）
+.folioframe/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+*.env
+
+# 运行时 PID 文件（仅本机，供启动/停止脚本精确识别进程，绝不入库）
+.foliofold.pid
+# 用户隐私数据（本地保留，不入库）
+public/resume.pdf
+
+# 个人工作 / 审计文档（含真实姓名、作品名、部署地址、数据健康度，绝不入库）
+HANDOFF_给下个Agent.md
+CLEANUP_CANDIDATES.md
+FolioFrame_清理审计.md
+FolioFrame_发布前QA审计报告.md
+FolioFrame_项目剖析与自测.md
+FolioFrame_清理后审计.md
+FolioFrame_清理后人工回归报告.md
+
+# 内部 QA 回归脚本（2026-10-05 发布前清理定稿）
+# 这些 .cjs/.py 依赖本机 playwright-core + 独立 chrome，并硬编码了开发机路径，
+# 既会暴露开发机用户名，也无法在 fresh clone 上直接运行。它们属于本地开发工具，
+# 不随公开仓库发布。如日后要对外开放，应改为可配置路径后再入库。
+qa/
+
+# 归档的旧 FolioFrame 历史文档/脚本（2026-10-06 归档，仅本地保留，不入库）
+_archive/
+WORKSPACE_OWNERSHIP_SCAN.md
+
+# PyInstaller 构建产物（EXE 通过 GitHub Releases 分发，不进源码仓）
+# 源码只保留 launcher.py 与 build_exe.bat；构建缓存与生成的 EXE 一律排除。
+build/
+*.spec
+release/

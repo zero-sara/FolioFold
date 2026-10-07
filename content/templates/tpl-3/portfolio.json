@@ -1,0 +1,107 @@
+{
+  "profile": {
+    "contact": {},
+    "name": "Your Name",
+    "role": "Your Role",
+    "intro": "Your one-line intro",
+    "about": "A few words about you and what you do.",
+    "education": [],
+    "skills": [],
+    "highlights": [],
+    "contactLinks": [
+      {
+        "label": "Email",
+        "value": "you@example.com"
+      }
+    ],
+    "publicLinks": [
+      {
+        "label": "Website",
+        "value": "https://example.com"
+      }
+    ]
+  },
+  "projectGroups": [
+    {
+      "id": "original",
+      "title": "Original Production"
+    },
+    {
+      "id": "redesign",
+      "title": "Film Sound Re-design"
+    },
+    {
+      "id": "music",
+      "title": "Music / MV"
+    },
+    {
+      "id": "other",
+      "title": "Other Works"
+    }
+  ],
+  "projects": [
+    {
+      "name": "Project 01",
+      "type": "Short Film",
+      "summary": "A short description of your first project — what it is and your role in it.",
+      "groupId": "original"
+    },
+    {
+      "name": "Project 02",
+      "type": "Music Video",
+      "summary": "A short description of your second project — replace with your own work.",
+      "groupId": "music"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Company Name",
+      "position": "Your Position",
+      "date": "2023 – 2024",
+      "summary": "What you did and achieved in this role. Replace with your real experience."
+    }
+  ],
+  "showreel": {
+    "projects": []
+  },
+  "aiVoices": {
+    "sections": {},
+    "media": {}
+  },
+  "styles": {
+    "text": "#161616",
+    "background": "#f1eee7",
+    "accent": "#e64e2e"
+  },
+  "theme": {
+    "mode": "light",
+    "preset": "light-01"
+  },
+  "media": {},
+  "settings": {
+    "version": 3
+  },
+  "sectionTitles": {},
+  "sectionTitleTranslations": {
+    "en": {}
+  },
+  "sectionLogos": {},
+  "design": {
+    "theme": {
+      "mode": "light",
+      "preset": "light-01"
+    },
+    "typography": {
+      "text": "#161616",
+      "background": "#f1eee7",
+      "accent": "#e64e2e"
+    },
+    "layout": {},
+    "components": {}
+  },
+  "schemaVersion": 2,
+  "visualEditor": {
+    "project": null,
+    "savedAt": null
+  }
+}

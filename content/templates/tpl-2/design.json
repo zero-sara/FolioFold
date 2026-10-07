@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 2,
+  "designVersion": 557,
+  "savedAt": "2026-10-06T13:55:46Z",
+  "theme": {
+    "mode": "light",
+    "preset": "light-02"
+  },
+  "staticText": {
+    "eyebrow-selected-works": "YOUR WORK, YOUR FLOD."
+  },
+  "imgSizes": {
+    "aiVoices.projects.0.media.image": {
+      "widthPct": 13
+    }
+  },
+  "mediaLayout": {},
+  "spacing": {
+    "footerBottom": 7,
+    "footerTop": 557,
+    "topSpace": 142,
+    "heroPad": 17,
+    "dirGap": 30
+  },
+  "pixel": {
+    "size": 220,
+    "x": null,
+    "y": null,
+    "scale": 1,
+    "xPct": 0.6571428571428571,
+    "yPct": 0.6356877323420075
+  },
+  "imgPos": {
+    "experience.0.media.image": {
+      "place": "free"
+    }
+  },
+  "images": [
+    {
+      "id": "bound_1790802838223",
+      "src": "/media/ai-voices/ff-2.png",
+      "sourcePath": "experience.0.media.image",
+      "inplace": true,
+      "aKind": "item",
+      "aSection": "experience",
+      "aItem": "experience.0",
+      "aLabel": "内容结构",
+      "xPct": 0.6449707470747075,
+      "yPct": 0.13077648538195535,
+      "wPct": 0.3550292529252925,
+      "aspect": 0.9666845370299456,
+      "yMode": "h"
+    }
+  ],
+  "textStyles": {
+    "projects.3.keyWork.3": {
+      "fontSize": "13px"
+    }
+  },
+  "inlineStyles": {},
+  "displayZones": {
+    "hero": [
+      "eyebrow",
+      "name",
+      "role",
+      "intro"
+    ],
+    "secondary": [
+      "publicLinks",
+      "contactLinks"
+    ]
+  }
+}

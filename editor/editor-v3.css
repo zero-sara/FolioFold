@@ -1,0 +1,211 @@
+.ai-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px;margin:18px 0}.ai-result,.ai-source{border:1px solid var(--line);padding:18px;background:var(--surface)}.ai-result{border-top:3px solid var(--ink)}.ai-source{background:var(--surface2)}.ai-result h3,.ai-source h3{margin:0 0 14px;font:500 20px 'Playfair Display',serif}.ai-source textarea{width:100%;min-height:270px;margin:8px 0 16px}.project-picker{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 18px}.main video{width:100%;max-height:520px;background:var(--ink,#171717);margin:14px 0}.timeline{margin:0 0 18px}.timeline input[type=range]{width:100%;margin:8px 0 4px;accent-color:var(--accent)}.timeline p{font:12px 'DM Mono',monospace;color:var(--muted);margin:4px 0 0}.chapter-card{border-left:3px solid var(--accent)}.chapter-card input[readonly]{background:var(--surface2,#efece4);color:var(--muted,#6b6760)}
+/* —— showDetails 开关 —— */
+.detail-toggle{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.detail-toggle-label{font-weight:500;color:var(--ink)}
+.detail-toggle-desc{font-size:12px;color:var(--muted);flex-basis:100%}
+.switch{position:relative;display:inline-block;width:44px;height:24px;flex-shrink:0}
+.switch input{opacity:0;width:0;height:0}
+.slider{position:absolute;cursor:pointer;inset:0;background:var(--line);transition:.25s;border-radius:24px}
+.slider:before{content:'';position:absolute;height:18px;width:18px;left:3px;top:3px;background:var(--ink);transition:.25s;border-radius:50%}
+.switch input:checked+.slider{background:var(--accent)}
+.switch input:checked+.slider:before{transform:translateX(20px)}
+/* —— 分类视图 —— */
+.cat-card{margin-bottom:16px}
+.cat-card summary{font-weight:600;font-size:17px}
+.cat-count{font-size:12px;color:var(--muted);font-weight:400;margin-left:8px}
+.cat-actions{margin-top:10px}
+.cat-projects{list-style:none;padding:0;margin:8px 0 14px;border-top:1px solid var(--line)}
+.cat-projects li{padding:8px 0;border-bottom:1px solid var(--line);font-size:14px;color:var(--muted)}
+
+/* —— Theme Preset Card —— */
+.theme-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin:18px 0}
+.theme-col h3{font:500 18px 'Playfair Display',serif;margin:0 0 12px;color:var(--ink)}
+.theme-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+.theme-card{display:flex;flex-direction:column;gap:8px;padding:14px;border:1px solid var(--line);border-radius:6px;background:var(--card);cursor:pointer;transition:all .2s ease;position:relative}
+.theme-card:hover{border-color:var(--ink);transform:translateY(-1px)}
+.theme-card.selected{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent) inset}
+.theme-card input[type=radio]{position:absolute;opacity:0;pointer-events:none}
+.theme-swatch{display:block;height:78px;border-radius:4px;border:1px solid var(--line);position:relative;overflow:hidden}
+.theme-swatch::before{content:'Aa';position:absolute;left:10px;top:50%;transform:translateY(-50%);font:500 26px 'Playfair Display',serif;color:var(--sw-ink)}
+.theme-swatch::after{content:'';position:absolute;right:0;bottom:0;width:40%;height:14px;background:var(--sw-accent)}
+.theme-swatch[data-mode="dark"]{background:var(--sw-paper)}
+.theme-swatch[data-mode="dark"]::before{color:var(--sw-ink)}
+.theme-swatch[data-mode="light"]{background:var(--sw-paper)}
+.theme-swatch[data-mode="light"]::before{color:var(--sw-ink)}
+.theme-card-label{font-size:13px;color:var(--ink);text-align:center}
+.theme-preview{margin-top:24px;padding:20px;border:1px solid var(--line);border-radius:6px;background:var(--paper);color:var(--ink)}
+.theme-preview-bar{padding:24px;border-radius:4px;background:var(--soft)}
+.kw-chip{display:inline-block;padding:4px 11px;border:1px solid var(--line);border-radius:999px;font:11px 'DM Mono',monospace;letter-spacing:.02em;color:var(--ink);background:transparent}
+.theme-preview-bar .hero-eyebrow{color:var(--accent);font:12px 'DM Mono',monospace;text-transform:uppercase;letter-spacing:.05em}
+.theme-preview-empty{font-size:12px;color:var(--muted);margin:0 0 14px;line-height:1.6}
+
+/* —— Showreel：清零按钮 —— */
+.showreel-actions{margin:18px 0;display:flex;align-items:center;gap:12px}
+.showreel-actions .hint-inline{font-size:13px;color:var(--muted)}
+
+/* —— Contact / Links 编辑 —— */
+.contact-row{display:grid;grid-template-columns:140px 1fr auto;gap:10px;align-items:center;margin-bottom:10px}
+.contact-row input{padding:9px 12px;border:1px solid var(--line);border-radius:4px;font-size:14px;background:var(--field)}
+/* 「上移 / 下移 / 删除」一组：上移·下移用文字（比 ↑↓ 箭头不容易误解成别的意思），
+   首末条的对应按钮 disabled —— 让用户看得见"为什么点不动"。
+   ⚠ 窄屏（<850px）时 .contact-row 只剩 3 列，第三列要能自己换行，否则把输入框挤没。 */
+.row-actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.row-actions .button{padding:9px 10px;white-space:nowrap}
+.row-actions .button:disabled{opacity:.35;cursor:not-allowed;background:transparent}
+
+@media(max-width:850px){.ai-layout{grid-template-columns:1fr}.ai-source textarea{min-height:220px}.theme-grid{grid-template-columns:1fr;gap:20px}.contact-row{grid-template-columns:1fr 1fr;row-gap:8px}.contact-row .row-actions{grid-column:1/-1}}
+
+/* —— 视频压缩卡片 ——
+ * 目的不只是"压小一点"，而是让用户在上传那一刻就看清：这个视频发布出去
+ * 到底能不能在线播放。所以状态用颜色区分：橙=有硬伤、绿=没问题。 */
+.compress-card{border-left:3px solid var(--accent)}
+.compress-card h3{margin-bottom:10px}
+.cc-facts{font-size:13px;color:var(--ink);margin:0 0 10px}
+.cc-facts b{font-size:15px}
+.cc-warn{margin:0 0 10px;padding:10px 12px;background:var(--surface2,#fff6f2);border:1px solid var(--danger,#e8c4b6);border-radius:4px;font-size:13px;line-height:1.75;color:var(--danger,#8a3a28)}
+.cc-ok{margin:0 0 10px;font-size:13px;line-height:1.7;color:var(--ok,#2f6b46)}
+.cc-bad{color:var(--danger,#a62817);font-weight:500}
+.cc-presets{display:grid;gap:8px;margin:12px 0}
+.cc-preset{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1px solid var(--line);border-radius:4px;background:var(--surface,#fff);cursor:pointer}
+.cc-preset:has(input:checked){border-color:var(--accent);background:var(--surface2,#fffaf7)}
+.cc-preset input{width:auto;margin-top:3px}
+.cc-preset span{display:grid;gap:3px}
+.cc-preset b{font-size:13px;font-weight:500}
+.cc-preset em{font-style:normal;font-size:12px;color:var(--muted);line-height:1.6}
+.cc-actions{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.cc-sample{margin:12px 0}
+.cc-sample-video{width:100%;max-width:520px;background:var(--dark,#000);border-radius:4px}
+.cc-progress{width:100%;margin:10px 0}
+.cc-state{margin:6px 0 0;min-height:18px}
+.cc-note{color:var(--muted)}
+.cc-have{margin:12px 0;padding:10px 12px;background:var(--surface2,#f2f7f3);border:1px solid var(--ok,#c2dccb);border-radius:4px;font-size:13px;line-height:2;color:var(--ok,#2f6b46)}
+/* —— 半自动：超阈值时的「一键压缩」CTA + 「已压缩」小标 —— */
+.cc-onetouch{margin:0 0 14px;padding:14px;border:1px solid var(--accent);border-radius:6px;background:var(--surface2,#fffaf7)}
+.cc-over{margin:0 0 10px;font-size:14px;line-height:1.7;color:var(--danger,#8a3a28)}
+.cc-quick{font-size:14px;padding:11px 18px;margin:2px 0 6px}
+.cc-quick:disabled{opacity:.7;cursor:default}
+.cc-badge{margin:0 0 10px;padding:10px 12px;background:var(--surface2,#eef6f0);border:1px solid var(--ok,#bfe0cb);border-radius:4px;font-size:13px;line-height:1.7;color:var(--ok,#2f6b46);font-weight:500}
+.cc-advanced{margin:12px 0;border:1px solid var(--line);border-radius:6px;padding:8px 12px;background:var(--surface,#fbfaf6)}
+.cc-advanced>summary{cursor:pointer;font-weight:500;color:var(--ink);font-size:13px;padding:2px 0}
+.cc-advanced[open] .cc-presets{margin-top:10px}
+/* Web Preview 版本选择器 */
+.cc-versions{margin:14px 0 4px;padding:12px;border:1px solid var(--line);border-radius:6px;background:var(--surface,#fbfaf6)}
+.cc-versions h4{margin:0 0 4px;font-size:13px;color:var(--ink)}
+.cc-versions .vp-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 10px;margin:6px 0;border:1px solid var(--line);border-radius:4px;background:var(--surface,#fff)}
+.cc-versions .vp-row.selected{border-color:var(--accent);background:var(--surface2,#fffaf7)}
+.cc-versions .vp-info{font-size:12.5px;line-height:1.6;color:var(--ink)}
+.cc-versions .vp-ok{color:var(--ok,#2f6b46);font-weight:600}
+.cc-versions .vp-bad{color:var(--warn,#b06a1e);font-weight:600}
+.cc-versions .vp-use{padding:6px 12px;font-size:12.5px}
+
+/* 项目 Logo 点缀图控件（≤2MB，名称前/后可选） */
+.logo-card{grid-column:1/-1;border:1px dashed var(--line);padding:12px;background:var(--surface,#fbfaf6);display:grid;gap:6px}
+.logo-card label{font:11px 'DM Mono',monospace;text-transform:uppercase;color:var(--muted)}
+.logo-card input[type=file]{border:0;padding:4px 0;background:transparent}
+.logo-card select{max-width:160px}
+.logo-card .hint-inline{font-size:12px;line-height:1.6;color:var(--muted);margin:0}
+
+/* Phase 1: locale is browser-only UI state, kept beside editor actions. */
+.ff-locale-switch{--ff-locale-ink:var(--ink);--ff-locale-bg:var(--card,var(--surface,#fff));--ff-locale-line:var(--line);--ff-locale-soft:var(--soft)}
+
+/* —— 字段级「不跟随语言」开关（pin toggle）：常态像普通字段标签，点了变斜体 + 🔒 —— */
+.field-label{font:11px 'DM Mono',monospace;text-transform:uppercase;color:var(--muted);display:block}
+.pin-toggle{background:none;border:0;padding:0;margin:0;font:inherit;color:inherit;cursor:pointer;display:inline-flex;align-items:center;gap:4px;letter-spacing:inherit;text-transform:inherit}
+.pin-toggle::after{content:'🔒';font-size:.8em;opacity:.3;margin-left:2px}
+.pin-toggle.pinned{font-style:italic}
+.pin-toggle.pinned::after{opacity:1}
+.pin-toggle:hover{text-decoration:underline}
+/* —— 设置页（语言设置 + 主题预设 两栏卡片）—— */
+.settings-sections{display:grid;grid-template-columns:1fr;gap:18px}
+.lang-translate-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:10px 0;flex-direction:column;align-items:stretch}
+.lang-tr-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.lang-tr-row .t-status{font-size:12px;color:var(--muted)}
+.translate-all-status{font-size:12px;color:var(--muted)}
+
+/* —— 展示区（Display Zones）配置面板 —— 2026-09-24 新增。
+   两个多选组，各自有「已选 N / 4」计数；选满后未选项变灰且 disabled，
+   让用户一眼看到上限在哪，而不是"点了没反应"。 */
+.zone-group + .zone-group{margin-top:26px;padding-top:22px;border-top:1px solid var(--line)}
+.zone-group-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:6px}
+.zone-group-head h4{margin:0;font-size:15px}
+.zone-count{flex-shrink:0;font-size:12px;color:var(--muted);padding:2px 9px;border:1px solid var(--line);border-radius:999px}
+.zone-count.is-full{color:var(--accent);border-color:var(--accent)}
+.zone-opts{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-top:12px}
+.zone-opt{display:flex;align-items:flex-start;gap:9px;padding:10px 12px;border:1px solid var(--line);border-radius:4px;cursor:pointer;background:var(--field);transition:border-color .15s ease,background .15s ease}
+.zone-opt:hover{border-color:var(--accent)}
+.zone-opt.is-on{border-color:var(--accent);background:var(--soft)}
+.zone-opt.is-disabled{opacity:.42;cursor:not-allowed}
+.zone-opt.is-disabled:hover{border-color:var(--line)}
+/* ⚠ 编辑器全局有 `input{width:100%}`（editor.css），复选框必须被"锁住"：
+   flex:0 0 auto + 固定 14px，否则它会参与 flex 收缩被拉长、甚至挤到行尾，
+   同时把旁边的文字压成一列（实测文字宽度只剩 14px → 逐字竖排）。
+   文字容器给 flex:1 + min-width:0，让它可以正常换行而不是被压扁。 */
+.zone-box{flex:0 0 auto;display:block;width:14px;height:14px;margin-top:2px}
+.zone-opt input[type=checkbox]{width:14px!important;height:14px!important;margin:0;padding:0;flex:0 0 auto;cursor:inherit}
+.zone-opt-text{flex:1 1 auto;min-width:0}
+.zone-opt-label{display:block;font-size:14px;line-height:1.4;white-space:nowrap}
+.zone-opt-note{display:block;font-size:12px;color:var(--muted);margin-top:2px;line-height:1.45}
+/* 这两项的字号较小（编辑器全局 label 是 11px 大写），这里明确覆盖，避免被 UA/全局规则带偏 */
+label.zone-opt{font-size:14px;text-transform:none;letter-spacing:normal;color:inherit}
+
+/* —— 字段组之间的上下间距：全面板统一 24px（2026-09-24）——
+ * 起因（用户原话）：「hero 眉标和上面/下面的这两个框就是白底的框，也离得太近了吧？
+ *   每个板块之间的间距呢？你看 links 和下面 contact 就有间距啊。」
+ * 实测原来同一屏里有**三种**不同的上下间距，所以看起来像"有的板块贴在一起、有的又空一截"：
+ *   · `.fields` 里普通字段组之间 14px（editor.css）
+ *   · `.edit-card`（Contact / Links / Resume…）之间 10px
+ *   · `.fields` 到第一张卡片 **0px**（两张贴死）
+ * 基准取「Contact ↔ Links 的观感」＝ 卡片 15px 内边距 + 10px 外边距 ≈ 25px，统一成 24px。
+ * ⚠ 这两个选择器在 editor.css 里也有（那个文件是压缩成一行的），这里是**覆盖**，别把两处改岔。 */
+.fields{gap:24px;margin-bottom:24px}
+.edit-card{margin:0 0 24px}
+
+
+/* —— Phase 4（2026-09-26）：环境检查卡 —— */
+.env-rows{display:flex;flex-direction:column;gap:8px;margin:10px 0}
+.env-row{display:flex;align-items:flex-start;gap:10px}
+.env-badge{flex:0 0 auto;font-size:12px;font-weight:600;padding:1px 8px;border-radius:10px;line-height:1.6}
+.env-ok{background:rgba(46,125,50,.12);color:#2e7d32}
+.env-fix{background:rgba(230,126,34,.14);color:#b45309}
+.env-opt{background:rgba(100,100,100,.1);color:var(--muted)}
+.env-block{background:rgba(198,40,40,.12);color:#c62828}
+.env-info{display:flex;flex-direction:column;gap:2px;min-width:0}
+.env-info b{font-size:13px;font-weight:600}
+.env-info span{font-size:12px;color:var(--muted);line-height:1.5;overflow-wrap:anywhere}
+#env-repair-run{margin-top:4px}
+
+/* —— Phase 4：意外关闭恢复横幅 —— */
+.recovery-banner{display:flex;flex-wrap:wrap;align-items:center;gap:10px;border:1px solid #e0b252;background:rgba(230,179,82,.12);border-radius:10px;padding:12px 14px;margin:0 0 18px}
+.recovery-banner .rb-text{display:flex;flex-direction:column;gap:4px;flex:1 1 320px;min-width:0}
+.recovery-banner .rb-text b{font-size:14px}
+.recovery-banner .rb-text span{font-size:12px;color:var(--muted)}
+.recovery-banner .rb-text code{font:11px 'DM Mono',monospace;background:var(--surface2,#efece4);padding:1px 5px;border-radius:4px;overflow-wrap:anywhere}
+.recovery-banner .rb-actions{display:flex;gap:8px;flex-wrap:wrap}
+.recovery-banner .button.small{padding:5px 12px;font-size:12px}
+.recovery-banner .rb-diff{flex:1 1 100%;border-top:1px dashed var(--line);margin-top:6px;padding-top:8px}
+.rb-diff-rows{display:flex;flex-direction:column;gap:4px}
+.rb-diff-row{display:flex;align-items:center;gap:10px;font-size:12px}
+.rb-diff-row code{font:11px 'DM Mono',monospace;background:var(--surface2,#efece4);padding:1px 5px;border-radius:4px;min-width:120px}
+.rb-diff-row em{font-style:normal;color:var(--muted);font-size:11px;overflow-wrap:anywhere}
+.rb-st{font-weight:600}
+.rb-st.rb-same{color:var(--muted);font-weight:400}
+.rb-st.rb-changed{color:#b45309}
+.rb-st.rb-onlyRescued,.rb-st.rb-onlyDraft{color:#2e7d32}
+
+/* —— Phase 3R（2026-09-26）：翻译质量二选一 —— */
+.tr-q-title{margin:18px 0 8px;font-size:14px}
+/* —— 翻译模式（2026-09-26 二次调整）：紧凑卡片 = 横向两个选项 + 一行说明 ——
+   ⚠ editor.css（基础层）有全局规则 input,textarea,select{width:100%;padding:10px;border:1px solid}
+   和 label{font:11px 'DM Mono';text-transform:uppercase}。不逐项还原的话，radio 会被拉成
+   整行宽的大空框（大面积空白），说明文字被挤到最右侧压成一字一行（竖排）。 */
+.tr-quality{margin:4px 0 14px}
+.tr-mode-switch{display:flex;gap:10px;flex-wrap:wrap}
+.tr-mode-opt{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line,#c9c3b7);background:var(--field,#fff);padding:9px 14px;cursor:pointer;border-radius:6px;font:13px 'Noto Sans SC',sans-serif;text-transform:none;color:var(--ink,#1b1b19);line-height:1.4}
+.tr-mode-opt input{width:auto;height:auto;margin:0;padding:0;border:0;background:transparent;flex:0 0 auto;accent-color:var(--accent,#e64e2e)}
+.tr-mode-opt b{font-weight:500}
+.tr-mode-opt:hover{border-color:var(--muted,#747068)}
+.tr-mode-opt.active{border-color:var(--accent,#e64e2e);background:var(--surface2,#efe9dd);box-shadow:inset 0 0 0 1px var(--accent,#e64e2e)}
+.tr-mode-desc{margin:9px 0 0;font-size:12px;line-height:1.7;color:var(--muted);max-width:760px}
+
+/* Audio · 音频（2026-10-04 新增）：编辑器卡片内的在线收听播放器占满整行 */
+.audio-intro-player{width:100%;display:block;margin-top:10px}

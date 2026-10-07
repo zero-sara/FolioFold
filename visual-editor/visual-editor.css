@@ -1,0 +1,378 @@
+/* Visual Editor v2 — iframe 模式：画布 = 真实 Portfolio */
+/* ⚠ 品牌字体不再用 @import 加载（渲染阻塞，连不到 Google 时白等约 2 秒，见 styles.css 头部注释）。
+   改由 visual-editor/index.html 顶部的 <link media="print" onload=...> 异步加载。 */
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; overflow: hidden; }
+body {
+  background: var(--paper,#ececec);
+  color: var(--ink,#1c2433);
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 14px;
+}
+
+.ve-loading { display: flex; align-items: center; justify-content: center; height: 100vh; color: var(--muted,#888); font: 14px 'DM Mono', monospace; }
+.ve-error { display: flex; align-items: center; justify-content: center; height: 100vh; color: var(--danger,#c0392b); font-size: 15px; padding: 24px; text-align: center; }
+
+.ve-shell { display: flex; flex-direction: column; height: 100vh; }
+
+.ve-topbar {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 16px; border-bottom: 1px solid var(--line,#d6dce6);
+  background: var(--surface,#fff); flex-shrink: 0; min-height: 52px;
+}
+/* FolioFold 固定字标：与作品集页顶栏 .ff-lockup、工作台顶栏 .st-brand 完全同一套。
+   产品标识，固定不可改（没有任何 data-field），不随模板/内容变化。 */
+.ve-brand { font: 600 15px/1 'Playfair Display', Georgia, serif; color: var(--ink,#1c2433); letter-spacing: .01em; white-space: nowrap; }
+.ve-brand em { font-style: normal; color: var(--accent,#e64e2e); margin-left: 4px; font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
+.ve-title { font-size: 13px; font-weight: 600; color: var(--ink,#1c2433); padding: 4px 10px; background: var(--ink,#1c2433); color: var(--surface,#fff); border-radius: 4px; }
+.ve-status { font: 12px 'Noto Sans SC', sans-serif; color: var(--muted,#5a6477); max-width: 460px; line-height: 1.5; }
+.ve-spacer { flex: 1 1 auto; }
+.ve-actions { display: flex; gap: 6px; }
+.ve-btn {
+  display: inline-block; padding: 7px 12px; border: 1px solid var(--line,#d6dce6);
+  background: var(--surface,#fff); color: var(--ink,#1c2433); font: 12px 'DM Mono', monospace;
+  cursor: pointer; border-radius: 4px; transition: all .15s ease; white-space: nowrap;
+}
+.ve-btn:hover { border-color: var(--ink,#1c2433); }
+.ve-btn.primary { background: var(--ink,#1c2433); color: var(--surface,#fff); border-color: var(--ink,#1c2433); }
+.ve-btn.primary:hover { background: var(--dark,#000); border-color: var(--dark,#000); }
+.ve-btn.danger { color: var(--danger,#c0392b); }
+.ve-btn.danger:hover { border-color: var(--danger,#c0392b); background: var(--danger,#c0392b); color: var(--on-solid,#fff); }
+.ve-btn:disabled { opacity: .4; cursor: not-allowed; }
+/* 2026-09-23 英文界面下的溢出修复（用户截图：右侧面板的 "Image Size & Position"
+   文字伸到方框外面）。根因是两条叠加：① 按钮 `white-space:nowrap`；② 模式按钮所在
+   网格用的是 `minmax(0,1fr)`（允许列被压得比内容还窄）。中文短、看不出来，英文就露馅了。
+   修法：右侧面板里的按钮允许折行（只在这一栏生效，顶栏那些不给改，避免布局变化）。 */
+.ve-panel .ve-btn { white-space: normal; text-align: center; line-height: 1.3; max-width: 100%; overflow-wrap: anywhere; }
+.ve-canvas-modes { align-items: stretch; }
+.ve-btn-icon { padding: 4px 8px; min-width: 26px; font-size: 12px; }
+
+.ve-body { flex: 1; display: grid; grid-template-columns: 280px 1fr 380px; min-height: 0; }
+
+.ve-panel { overflow: auto; background: var(--surface2,#fafafa); border-right: 1px solid var(--line,#d6dce6); padding: 14px; }
+.ve-panel-right { border-right: 0; border-left: 1px solid var(--line,#d6dce6); font-size:14px; }
+.ve-panel-right button, .ve-panel-right input, .ve-panel-right select { min-height:36px; }
+.ve-panel h3 { font: 600 12px 'DM Mono', monospace; text-transform: uppercase; letter-spacing: .04em; color: var(--muted,#5a6477); margin: 0 0 10px; }
+.ve-hint { font: 12px 'Noto Sans SC', sans-serif; color: #777; margin: 0 0 10px; line-height: 1.6; }
+/* 2026-09-23：画布说明原来是一整段长文，用户原话「看的就像是一大段，然后没有重点」。
+   改成分类短条目（文字 / 图片 / 添加图片 / 取消选中），每条一行、不缩进、首字加重。 */
+.ve-hint-list { margin: 0 0 10px; }
+.ve-hint-list p { margin: 0 0 5px; padding-left: 9px; position: relative; }
+.ve-hint-list p::before { content: '·'; position: absolute; left: 0; color: var(--muted,#b0b7c2); font-weight: 700; }
+.ve-hint-list p:last-child { margin-bottom: 0; }
+.ve-hint-list b { color: var(--muted,#4a5261); font-weight: 600; }
+/* 官方口径的小标注（内容位置差异说明）：比普通 hint 更安静，但要有边界提示它是"须知" */
+.ve-note-official {
+  margin: 10px 0 0; padding: 8px 10px; border-left: 2px solid var(--line,#d6dce6); background: var(--surface2,#f7f9fc);
+  font: 11px/1.7 'Noto Sans SC', sans-serif; color: var(--muted,#6b7484); border-radius: 0 4px 4px 0;
+}
+
+/* 画布高度跟着内容长（见 visual-editor-fix.js 的 fitCanvas），所以中部要能纵向滚动，
+   否则页面底部的 Resume / 页脚 / 间距杆滚不到、看不见。 */
+.ve-canvas-wrap { display: flex; background: var(--line,#c5cad3); padding: 12px; min-width: 0; min-height: 0; justify-content: center; align-items:flex-start; overflow: auto; }
+#ve-canvas-stage { position:relative; flex:0 0 auto; overflow:hidden; box-shadow:0 6px 24px rgba(0,0,0,.12); background:var(--surface,#fff); }
+#ve-canvas {
+  position:absolute; left:0; top:0; display:block;
+  border: 0; background: var(--surface,#fff);
+  box-shadow: none;
+  border-radius: 4px;
+}
+/* 画布宽度模式（关键修复 2026-09-08 vR+）：
+   之前电脑模式 width:100% = 父容器（中部 1fr）宽度 ≈ 540px，远小于真实 Portfolio viewport 1280px，
+   导致 .hero 在画布里被压挤（技能换行成两行等）。现在固定 1280px 宽（与发布版浏览器一致），
+   中部容器允许横向滚动，保证 iframe 内 .hero 渲染比例与真实 Portfolio 完全相同。
+   getBoundingClientRect 在 iframe 内部返回真实 px，路径点按 0..1 比例存就自动对齐。 */
+#ve-canvas.ve-cv-mobile { width: 390px; max-width: none; }
+#ve-canvas.ve-cv-desktop { width: 1280px; min-width: 1100px; }
+
+/* 左侧：区块顺序 */
+.ve-section-row {
+  list-style: none;
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 10px; margin-bottom: 6px;
+  background: var(--surface,#fff); border: 1px solid var(--line,#d6dce6); border-radius: 4px;
+  cursor: pointer; transition: all .15s ease;
+}
+.ve-section-row:hover { border-color: var(--ink,#1c2433); }
+.ve-section-row.active { border-color: var(--accent,#1f4e8c); background: var(--surface2,#eaf0fa); }
+.ve-section-row.dragging { opacity: .4; }
+.ve-section-row.drag-over { border-color: var(--accent,#1f4e8c); background: var(--surface2,#f0f5fd); }
+.ve-section-handle { color: var(--muted,#aaa); cursor: grab; }
+.ve-section-title { flex: 1; font-size: 13px; font-weight: 500; }
+.ve-section-actions { display: flex; gap: 2px; }
+
+/* 主题卡片 */
+.ve-theme-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.ve-theme-card {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 6px;
+  padding: 10px; border: 1px solid var(--line,#d6dce6); border-radius: 4px;
+  background: var(--surface,#fff); cursor: pointer; text-align: left;
+  transition: border-color .15s ease;
+}
+.ve-theme-card:hover { border-color: var(--ink,#1c2433); }
+.ve-theme-card.selected { border-color: var(--accent,#1f4e8c); box-shadow: 0 0 0 1px #1f4e8c; }
+.ve-theme-swatch {
+  display: block; width: 100%; height: 28px; border-radius: 3px;
+  background: linear-gradient(135deg, var(--sw-paper) 0% 50%, var(--sw-accent) 50% 100%);
+  border: 1px solid var(--sw-line);
+}
+.ve-theme-label { font: 11px 'Noto Sans SC', sans-serif; color: var(--ink,#1c2433); }
+
+/* 右侧：编辑表单 */
+#ve-edit { display: flex; flex-direction: column; gap: 14px; }
+.ve-edit-head { display: flex; flex-direction: column; gap: 10px; padding-bottom: 12px; border-bottom: 1px solid var(--line,#d6dce6); }
+.ve-edit-head h3 { margin: 0; font: 500 18px 'Noto Sans SC', sans-serif; color: var(--ink,#1c2433); }
+.ve-edit-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+.ve-edit-body { display: flex; flex-direction: column; gap: 14px; }
+.ve-section-block { background: var(--surface,#fff); border: 1px solid var(--line,#d6dce6); border-radius: 4px; padding: 12px; }
+.ve-section-block h4 { margin: 0 0 10px; font: 600 12px 'DM Mono', monospace; text-transform: uppercase; letter-spacing: .04em; color: var(--muted,#5a6477); }
+.ve-field { display: block; margin-bottom: 10px; font-size: 13px; }
+.ve-field span { display: block; font-size: 12px; color: var(--muted,#5a6477); margin-bottom: 4px; }
+.ve-field input, .ve-field textarea, .ve-field select {
+  width: 100%; padding: 6px 8px; border: 1px solid var(--line,#d6dce6); border-radius: 4px;
+  font: 13px 'Noto Sans SC', sans-serif; color: var(--ink,#1c2433); background: var(--surface,#fff);
+  font-family: inherit;
+}
+.ve-field textarea { min-height: 72px; resize: vertical; line-height: 1.6; }
+.ve-edit-card {
+  background: var(--surface,#fff); border: 1px solid var(--line,#d6dce6); border-radius: 4px;
+  padding: 10px 12px; margin-bottom: 10px;
+}
+.ve-edit-card summary { cursor: pointer; font-weight: 600; font-size: 13px; padding: 4px 0; list-style: none; }
+.ve-edit-card summary::-webkit-details-marker { display: none; }
+.ve-edit-card summary::before { content: '▼ '; font-size: 9px; color: var(--muted,#999); }
+.ve-edit-card[open] summary::before { content: '▲ '; }
+.ve-edit-row-actions { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+.ve-link-row { display: grid; grid-template-columns: 100px 1fr 32px; gap: 6px; margin-bottom: 6px; }
+.ve-link-row input { padding: 6px 8px; border: 1px solid var(--line,#d6dce6); border-radius: 4px; font: 13px 'Noto Sans SC', sans-serif; }
+.ve-count { font: 11px 'DM Mono', monospace; color: #777; }
+
+/* Toast */
+.ve-toast {
+  position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+  background: var(--ink,#1c2433); color: var(--surface,#fff); padding: 10px 16px; border-radius: 6px;
+  font-size: 13px; opacity: 0; pointer-events: none; transition: opacity .25s ease;
+  z-index: 9999; max-width: 80%;
+}
+.ve-toast.show { opacity: 1; }
+/* ===== 右侧工具箱 ===== */
+.ve-toolbox { display: flex; flex-direction: column; gap: 18px; }
+.ve-tb-pixel { order: 10; }
+.ve-tb-canvas { border: 1px solid var(--line,#d6dce6); border-radius: 6px; padding: 12px; background: var(--surface,#fff); }
+.ve-tb-page-size .ve-field:last-child{margin-bottom:0}
+.ve-canvas-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.ve-canvas-row .ve-btn { flex: 1 1 auto; }
+.ve-canvas-modes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; margin-top: 10px; }
+.ve-canvas-modes .ve-btn:last-child { grid-column: 1 / -1; }
+.ve-tl-row { grid-template-columns: minmax(56px,96px) minmax(0,1fr); }
+.ve-tl-row-sw { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 12px; color: var(--ink,#1c2433); margin-bottom: 10px; }
+.ve-tl-row-sw > span { color: var(--muted,#5a6477); }
+/* Pixel 活动轨迹 + 动画说明块 */
+.ve-block { display: block; margin-bottom: 12px; }
+.ve-block-label { display: block; font-size: 12px; color: var(--muted,#5a6477); margin-bottom: 4px; }
+.ve-btn-row { display: flex; gap: 6px; flex-wrap: wrap; }
+.ve-chip-row { display: flex; gap: 6px; flex-wrap: wrap; }
+.ve-chip { font: 11px 'DM Mono', monospace; background: var(--surface2,#e9edf3); color: var(--ink,#1c2433); border: 1px solid var(--line,#d6dce6); border-radius: 12px; padding: 2px 9px; }
+
+.ve-btn-danger { color: var(--danger,#c0392b); border-color: #e0b4ac; }
+.ve-btn-danger:hover { border-color: var(--danger,#c0392b); background: var(--danger,#c0392b); color: var(--on-solid,#fff); }
+/* 显隐开关 */
+.ve-switch { position: relative; display: inline-block; width: 42px; height: 22px; }
+.ve-switch input { opacity: 0; width: 0; height: 0; }
+.ve-sw-slider { position: absolute; cursor: pointer; inset: 0; background: var(--line,#c6ccd6); border-radius: 22px; transition: background .15s ease; }
+.ve-sw-slider::before { content: ''; position: absolute; width: 18px; height: 18px; left: 2px; top: 2px; background: var(--surface,#fff); border-radius: 50%; transition: transform .15s ease; box-shadow: 0 1px 2px rgba(0,0,0,.2); }
+.ve-switch input:checked + .ve-sw-slider { background: var(--accent,#1f4e8c); }
+.ve-switch input:checked + .ve-sw-slider::before { transform: translateX(20px); }
+.ve-tb-card h4 {
+  margin: 0 0 10px; font-size: 12px; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--muted,#5a6477); border-bottom: 1px solid var(--line,#e3e8f0); padding-bottom: 6px;
+}
+.ve-tl {
+  display: grid; grid-template-columns: minmax(56px,96px) minmax(0,1fr) 46px; align-items: center;
+  gap: 8px; margin-bottom: 10px; font-size: 12px; color: var(--ink,#1c2433);
+}
+/* 2026-09-23：英文界面文案普遍比中文长（"图片尺寸与位置" → "Image Size & Position"），
+   标签列原来写死 78px + 按钮 `white-space:nowrap` → 英文直接溢出色块外面（用户截图）。
+   现在标签列有上限、超长就地折行；按钮允许折行。中文下仍是原来的一行。 */
+.ve-tl > span, .ve-tl-row > span { overflow-wrap: anywhere; }
+.ve-tl > span { color: var(--muted,#5a6477); }
+.ve-tl input[type="range"] { width: 100%; accent-color: var(--accent,#1f4e8c); }
+.ve-tl b { font: 11px 'DM Mono', monospace; color: var(--accent,#1f4e8c); text-align: right; }
+.ve-tl input[type="color"] {
+  width: 100%; height: 28px; padding: 0; border: 1px solid var(--line,#d6dce6);
+  border-radius: 4px; background: var(--surface,#fff); cursor: pointer;
+}
+.ve-seg { display: flex; gap: 4px; }
+.ve-seg button {
+  flex: 1; padding: 5px 0; font: 12px 'Noto Sans SC', sans-serif; cursor: pointer;
+  border: 1px solid var(--line,#d6dce6); background: var(--surface,#fff); color: var(--ink,#1c2433); border-radius: 4px;
+}
+.ve-seg button:hover { border-color: var(--accent,#1f4e8c); }
+.ve-seg button.on { background: var(--accent,#1f4e8c); border-color: var(--accent,#1f4e8c); color: var(--on-solid,#fff); }
+.ve-sel-info {
+  background: var(--surface2,#f4f6fa); border: 1px solid var(--line,#e3e8f0); border-radius: 5px;
+  padding: 7px 9px; margin-bottom: 12px;
+}
+.ve-sel-info code {
+  display: block; font: 11px 'DM Mono', monospace; color: var(--accent,#1f4e8c);
+  word-break: break-all; margin-bottom: 3px;
+}
+.ve-sel-text {
+  font-size: 12px; color: var(--muted,#5a6477); white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis;
+}
+.ve-add-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.ve-btn-sm { padding: 4px 8px; font-size: 11px; }
+/* 添加图片：文件输入 + 尺寸标签 */
+.ve-tb-file { display:block; width:100%; margin-top:8px; font-size:12px; color:var(--muted,#5a6477); }
+.ve-avatar-size { margin-top:10px; }
+
+/* —— WPS 风格文本工具图标行 —— */
+.ve-tb-iconrow {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 4px;
+  padding: 4px; background: var(--surface2,#fafbfd); border: 1px solid var(--line,#e3e8f0); border-radius: 5px;
+}
+.ve-tb-color-row,.ve-tb-align-row{display:flex;align-items:center;gap:5px;margin-top:8px}
+.ve-tb-align-row{padding-top:8px;border-top:1px solid var(--line,#e3e8f0)}
+.ve-tb-align-row>span{margin-right:auto;font-size:12px;color:var(--muted,#5a6477)}
+#tl-fs-input{width:52px;height:26px;border:1px solid var(--line,#d8dde6);border-radius:3px;padding:0 4px;text-align:center;font:12px 'DM Mono',monospace;color:var(--ink,#2a3344);background:var(--surface,#fff)}
+.ve-ibtn {
+  min-width: 26px; height: 26px; padding: 0 6px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--surface,#fff); border: 1px solid var(--line,#d8dde6); border-radius: 3px;
+  font: 13px/1 -apple-system, 'Helvetica Neue', sans-serif; color: var(--ink,#2a3344);
+  cursor: pointer; transition: background .12s ease, border-color .12s ease, color .12s ease;
+}
+.ve-ibtn:hover { background: var(--surface2,#eef3fb); border-color: var(--line,#b8c4d8); }
+.ve-ibtn.on { background: var(--accent,#1f4e8c); border-color: var(--accent,#1f4e8c); color: var(--on-solid,#fff); }
+.ve-ifs {
+  display: inline-block; min-width: 40px; text-align: center;
+  font: 12px 'DM Mono', monospace; color: var(--ink,#2a3344);
+  padding: 0 4px;
+}
+.ve-isep {
+  display: inline-block; width: 1px; height: 18px; background: var(--line,#d8dde6); margin: 0 3px;
+}
+.ve-icolor {
+  position: relative; display: inline-flex; flex-direction: column; align-items: center;
+  padding: 2px 5px; cursor: pointer; border: 1px solid var(--line,#d8dde6); border-radius: 3px;
+  background: var(--surface,#fff); height: 26px; justify-content: center; gap: 1px;
+}
+.ve-icolor:hover { background: var(--surface2,#eef3fb); border-color: var(--line,#b8c4d8); }
+.ve-icolor input[type=color] {
+  position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+}
+.ve-icolor-A { font: 700 13px/1 serif; color: var(--ink,#2a3344); pointer-events: none; }
+.ve-icolor-bar {
+  width: 16px; height: 3px; background: var(--ink,#1c2433); border-radius: 1px; pointer-events: none;
+  transition: background .12s ease;
+}
+.ve-icolor-bg {
+  width: 16px; height: 12px; background: #fff4a8;
+  border: 1px solid var(--line,#c8b878); border-radius: 2px; pointer-events: none;
+}
+/* 文字色 / 背景色直接使用可见的原生色块：不再通过隐藏 input 强行唤起色盘。 */
+.ve-color-control{display:inline-flex;align-items:center;gap:3px;height:34px;padding:3px 5px;border:1px solid var(--line,#d6dce6);border-radius:4px;background:var(--surface,#fff);cursor:pointer}
+.ve-color-control:hover{border-color:var(--ink,#1c2433)}
+.ve-color-control input[type="color"]{display:block;width:22px;height:22px;padding:0;border:0;background:transparent;cursor:pointer}
+.ve-color-control .ve-icolor-A{font:700 16px 'DM Mono',monospace;color:var(--ink,#2a3344);line-height:1}
+.ve-color-control .ve-icolor-bg{display:block;width:12px;height:12px;border:1px solid var(--line,#9ba5b7);background:#fff4a8}
+.ve-color-clear{width:16px;height:16px;padding:0;border:0;background:transparent;color:var(--muted,#5a6477);font:600 16px/14px Arial,sans-serif;cursor:pointer}
+.ve-color-clear:hover{color:var(--ink,#1c2433)}
+.ve-ibtn-color .ve-icolor-bar { background: var(--ink,#1c2433); }
+
+/* —— 个人形象像素头像网格 —— */
+.ve-avatar-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 4px;
+}
+.ve-avatar-card {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  padding: 8px 4px; background: var(--surface2,#fafbfd); border: 2px solid var(--line,#d8dde6); border-radius: 6px;
+  cursor: pointer; transition: border-color .12s ease, background .12s ease;
+}
+.ve-avatar-card:hover { border-color: var(--accent,#1f4e8c); background: var(--surface2,#f0f5fc); }
+.ve-avatar-card.on { border-color: var(--accent,#1f4e8c); background: var(--surface2,#e6eef9); }
+.ve-avatar-card img {
+  width: 64px; height: 64px; image-rendering: pixelated; image-rendering: crisp-edges;
+  display: block; background: var(--surface,#fff);
+}
+.ve-avatar-card span {
+  font: 11px 'DM Mono', monospace; color: var(--muted,#5a6477); letter-spacing: .02em;
+}
+
+/* —— 添加内容的层级提示 / 媒体位置尺寸卡片（2026-09-12）—— */
+.ve-ctx {
+  font: 12px 'Noto Sans SC', sans-serif; color: var(--ink,#1c2433);
+  background: var(--surface2,#eef3fb); border: 1px solid var(--line,#cfe0f5); border-radius: 6px;
+  padding: 7px 10px; margin: 0 0 10px; line-height: 1.6;
+}
+.ve-ctx b { color: var(--accent,#1f4e8c); }
+.ve-tb-flash { box-shadow: 0 0 0 2px #1f4e8c inset; }
+.ve-tb-media .ve-tl output,
+.ve-tb-media .ve-tl b { min-width: 40px; text-align: right; }
+.ve-tb-media .ve-block-label { font: 12px 'Noto Sans SC', sans-serif; color: var(--muted,#5a6477); }
+.ve-tb-media .ve-tl input[type="range"] { width: 100%; accent-color: var(--accent,#1f4e8c); }
+
+/* —— 已添加媒体「统筹区」（2026-09-14）：缩略图 + 所属区块 + 一键删除 —— */
+.ve-tb-images .ve-ov-list { display: flex; flex-direction: column; gap: 6px; max-height: 248px; overflow: auto; margin-top: 2px; }
+.ve-ov-group { font: 11px/1 'DM Mono',monospace; color: var(--muted,#6b7a8d); margin: 8px 0 2px; letter-spacing: .04em; }
+.ve-ov-group:first-child { margin-top: 0; }
+.ve-ov-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px; border: 1px solid var(--line,#e3e7ee); border-radius: 6px; background: var(--surface,#fff);
+}
+.ve-ov-item:hover { border-color: var(--line,#c3ccd9); }
+.ve-ov-thumb {
+  width: 44px; height: 30px; border-radius: 4px; flex: 0 0 auto; display: block;
+  background-color: var(--surface2,#eef1f6); background-size: cover; background-position: center;
+  background-repeat: no-repeat; border: 1px solid var(--line,#e8ecf2);
+}
+.ve-ov-meta { flex: 1 1 auto; min-width: 0; line-height: 1.3; }
+.ve-ov-type { font: 11px 'DM Mono', monospace; color: var(--muted,#5a6477); text-transform: uppercase; letter-spacing: .03em; }
+.ve-ov-loc {
+  font: 12px 'Noto Sans SC', sans-serif; color: var(--ink,#1c2433);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%;
+}
+.ve-ov-del {
+  flex: 0 0 auto; padding: 4px 9px; border: 1px solid var(--line,#e3e7ee); background: var(--surface,#fff);
+  color: var(--danger,#c0392b); border-radius: 4px; cursor: pointer; font-size: 12px;
+}
+.ve-ov-del:hover { background: var(--danger,#c0392b); color: var(--on-solid,#fff); border-color: var(--danger,#c0392b); }
+/* 2026-09-23：整行可点 = 「在画布上定位这张图」。光有个悬停态不够 ——
+   用户需要一眼看出这一行是能点的，所以给一个常驻的小瞄准标记 + 明确的指针。 */
+.ve-ov-click { cursor: pointer; }
+.ve-ov-click:hover { border-color: var(--accent,#e64e2e); background: var(--surface2,#fff8f5); }
+.ve-ov-find {
+  flex: 0 0 auto; width: 20px; text-align: center; color: var(--muted,#9aa6b8); font-size: 13px;
+}
+.ve-ov-click:hover .ve-ov-find { color: var(--accent,#e64e2e); }
+.ve-ov-click:focus-visible { outline: 2px solid var(--accent,#e64e2e); outline-offset: 1px; }
+
+/* Phase 1: locale is browser-only UI state, kept in the Visual Editor toolbar. */
+.ff-locale-switch{--ff-locale-ink:#1d2736;--ff-locale-bg:#fff;--ff-locale-line:#cfd7e3;--ff-locale-soft:#eef2f7}
+
+/* ★ 2026-09-22：画布连不上本地服务时的说人话提示。
+   服务没在跑的时候，iframe 里显示的是 Chrome 自己的「127.0.0.1 拒绝连接」错误页，
+   用户会以为模板坏了（原话："模板 2 的排版编辑里，我不知道为什么看不了，然后它
+   显示是 local 拒绝连接"）。现在在画布上盖一层说明 + 一个重试按钮。
+   #ve-canvas-stage 本来就是 position:relative + overflow:hidden，直接 inset:0 铺满。 */
+#ve-canvas-offline[hidden] { display: none; }
+#ve-canvas-offline {
+  position: absolute; inset: 0; z-index: 5;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 10px; padding: 28px 24px; background: var(--surface2,#f7f8fa); text-align: center;
+}
+#ve-canvas-offline .ve-offline-block { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+#ve-canvas-offline .ve-offline-block[hidden] { display: none; }
+#ve-canvas-offline .ve-offline-title { margin: 0; font: 600 16px/1.3 'Noto Sans SC', sans-serif; color: var(--ink,#1c2433); }
+#ve-canvas-offline .ve-offline-note { margin: 0; max-width: 430px; font: 13px/1.75 'Noto Sans SC', sans-serif; color: var(--muted,#5a6477); }
+#ve-canvas-offline .ve-offline-note b { color: var(--ink,#1c2433); }
+#ve-canvas-retry {
+  margin-top: 6px; padding: 8px 18px; border-radius: 5px; cursor: pointer;
+  border: 1px solid var(--ink,#1d2736); background: var(--ink,#1d2736); color: var(--surface,#fff);
+  font: 13px 'Noto Sans SC', sans-serif;
+}
+#ve-canvas-retry:hover { background: var(--ink,#33415a); border-color: var(--ink,#33415a); }
+
+/* —— Phase 4：页面高度 clamp 后的持久行内警示（提示不消失、不阻塞编辑）—— */
+.ve-warn{color:#b45309;font-weight:600}

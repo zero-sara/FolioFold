@@ -1,0 +1,781 @@
+{
+  "profile": {
+    "contact": {},
+    "name": "FolioFold",
+    "role": "Portfolio Editor / Publishing Tool",
+    "intro": "HELLO!👋\nLet me help you turn your work into a portfolio you can share.",
+    "about": "我诞生于一个简单的想法：让制作个人简历/作品集变得更轻松。\n我把文字、页面布局、图片视频及最终发布放在同一个工作流程中，专属链接随时分享、视频媒体无需下载在线可见。",
+    "education": [],
+    "skills": [
+      "Python",
+      "JavaScript",
+      "HTML / CSS",
+      "GrapesJS",
+      "Ollama / Qwen3"
+    ],
+    "highlights": [
+      "Local-first",
+      "可视化编辑",
+      "模板系统",
+      "多媒体展示",
+      "一体化发布"
+    ],
+    "contactLinks": [
+      {
+        "label": "邮箱",
+        "value": "you@example.com"
+      }
+    ],
+    "avatar": {
+      "preset": "folioframe",
+      "src": "/media/brand/folioframe-icon-256.png",
+      "size": 72
+    },
+    "publicLinks": [
+      {
+        "label": "GitHub",
+        "value": "https://zero-sara.github.io/folioframe/"
+      }
+    ]
+  },
+  "projectGroups": [
+    {
+      "id": "original",
+      "title": "Content & Intelligence",
+      "description": "整理、结构化和理解"
+    },
+    {
+      "id": "redesign",
+      "title": "Composition & Templates",
+      "description": "视觉编辑、模板和页面编排"
+    },
+    {
+      "id": "music",
+      "title": "Media & Publishing",
+      "description": "预览、发布和导出"
+    }
+  ],
+  "projects": [
+    {
+      "name": "From Content to Portfolio",
+      "groupId": "original",
+      "date": "",
+      "role": "Content Architecture / Portfolio Design",
+      "rawMaterial": "Project Name: From Content to Portfolio\nDate: 2026\nType: Portfolio Content Architecture\nRole: Content Architecture / Portfolio Design\n\n将个人资料、项目经历与作品内容整理为结构化 Portfolio，通过清晰的信息层级将原始内容转换为可浏览、可编辑并适合最终展示的作品集结构。\n\n\n内容整理 · 结构设计 · 项目组织 · 信息编排\n\n\n建立 Section、Category 与 Project 之间的内容层级；将不同类型的信息组织到统一的数据结构中；让内容结构能够对应不同的最终展示方式。\n\nShow Details: 是\n\n",
+      "structuredContent": {
+        "summary": "将个人资料、项目经历与作品内容整理为结构化作品集，通过清晰的信息层级实现内容可浏览、可编辑及最终展示的适配。",
+        "keyWork": [
+          "内容整理",
+          "结构设计",
+          "项目组织",
+          "信息编排"
+        ],
+        "highlights": [
+          "建立 Section、Category 与 Project 之间的内容层级关系",
+          "将不同类型信息统一组织到数据结构中",
+          "实现内容结构与多场景展示方式的对应"
+        ]
+      },
+      "media": {
+        "mainVisual": {
+          "url": "/media/projects/W1.png",
+          "name": "W1.png"
+        },
+        "processImages": [],
+        "video": null,
+        "audio": null,
+        "externalVideoUrl": "",
+        "externalLink": ""
+      },
+      "type": "",
+      "summary": "将个人资料、项目经历与作品内容整理为结构化作品集，通过清晰的信息层级实现内容可浏览、可编辑及最终展示的适配。",
+      "keyWork": [
+        "内容整理",
+        "结构设计",
+        "项目组织",
+        "信息编排"
+      ],
+      "highlights": [
+        "建立 Section、Category 与 Project 之间的内容层级关系",
+        "将不同类型信息统一组织到数据结构中",
+        "实现内容结构与多场景展示方式的对应"
+      ],
+      "localeKey": "0383f04d-8b25-4648-921a-4deb67dca261"
+    },
+    {
+      "name": "AI-Assisted Content Organization",
+      "groupId": "original",
+      "date": "",
+      "role": "AI Content Organization / Editorial Workflow",
+      "rawMaterial": "Project Name: AI-Assisted Content Organization\nDate: 2026\nType: AI Content Workflow\nRole: AI Content Organization / Editorial Workflow\n\nProject Summary:\n通过 AI 理解原始项目与工作经历内容，将非结构化文字重新整理为适合 Portfolio 使用的项目名称、角色、项目介绍、核心工作与项目亮点，并在应用前保留可预览的编辑结果。\n\nKey Work:\nAI 整理 · 语义提取 · 内容重组 · 信息提炼\n\nHighlights:\n理解完整原始材料而非简单拆分文字；重新组织 Summary、Key Work 与 Highlights；AI 结果先作为 Draft 预览，不直接覆盖原始内容。\n\nShow Details: 是\n\n建议媒体：\n放“原始文字 → AI 整理结果”的前后对比截图。",
+      "structuredContent": {
+        "summary": "该项目通过AI技术将非结构化文字重新组织为适合Portfolio展示的项目信息，核心在于语义理解与内容结构化处理，确保原始材料完整保留并提供可预览的编辑结果。",
+        "keyWork": [
+          "语义提取",
+          "内容重组",
+          "信息提炼",
+          "AI整理"
+        ],
+        "highlights": [
+          "基于完整原始材料进行语义理解，而非简单拆分文字",
+          "AI生成内容先作为Draft预览，不直接覆盖原始信息",
+          "实现项目信息结构化与可预览编辑流程"
+        ]
+      },
+      "media": {
+        "mainVisual": {
+          "url": "/media/projects/W2.png",
+          "name": "W2.png"
+        },
+        "processImages": [],
+        "video": null,
+        "audio": null,
+        "externalVideoUrl": "",
+        "externalLink": ""
+      },
+      "summary": "该项目通过AI技术将非结构化文字重新组织为适合Portfolio展示的项目信息，核心在于语义理解与内容结构化处理，确保原始材料完整保留并提供可预览的编辑结果。",
+      "keyWork": [
+        "语义提取",
+        "内容重组",
+        "信息提炼",
+        "AI整理"
+      ],
+      "highlights": [
+        "基于完整原始材料进行语义理解，而非简单拆分文字",
+        "AI生成内容先作为Draft预览，不直接覆盖原始信息",
+        "实现项目信息结构化与可预览编辑流程"
+      ],
+      "type": "",
+      "localeKey": "4661206b-ad08-44c9-ac42-5ca7afb750f5"
+    },
+    {
+      "name": "Visual Portfolio Editing",
+      "groupId": "redesign",
+      "date": "",
+      "role": "Visual Editor / Layout Design",
+      "rawMaterial": "Project Name: Visual Portfolio Editing\nDate: 2026\nType: Visual Editing\nRole: Visual Editor / Layout Design\n\nProject Summary:\n在可视化编辑环境中直接调整 Portfolio 的页面结构与视觉表现，使文字、图片、视频和不同内容模块能够按照实际展示需求进行布局与编辑。\n\nKey Work:\n视觉编辑 · 自由排版 · 布局调整 · 样式控制\n\nHighlights:\n直接选择页面元素进行视觉调整；控制字体、尺寸、间距、位置与布局；让编辑状态与最终 Portfolio 页面保持一致。\n\nShow Details: 是\n\n建议媒体：\n放 Visual Editor 截图，最好同时看到 Canvas、被选中的元素和右侧编辑面板。",
+      "structuredContent": {
+        "summary": "在可视化编辑环境中直接调整 Portfolio 页面结构与视觉表现，使文字、图片、视频和不同内容模块能够按照实际展示需求进行布局与编辑。",
+        "keyWork": [
+          "视觉编辑",
+          "自由排版",
+          "布局调整",
+          "样式控制"
+        ],
+        "highlights": [
+          "直接选择页面元素进行视觉调整",
+          "控制字体、尺寸、间距、位置与布局",
+          "让编辑状态与最终 Portfolio 页面保持一致。"
+        ]
+      },
+      "media": {
+        "mainVisual": {
+          "url": "/media/projects/W3.png",
+          "name": "W3.png",
+          "type": "image/png"
+        },
+        "processImages": [],
+        "video": null,
+        "audio": null,
+        "externalVideoUrl": "",
+        "externalLink": ""
+      },
+      "summary": "在可视化编辑环境中直接调整 Portfolio 页面结构与视觉表现，使文字、图片、视频和不同内容模块能够按照实际展示需求进行布局与编辑。",
+      "keyWork": [
+        "视觉编辑",
+        "自由排版",
+        "布局调整",
+        "样式控制"
+      ],
+      "highlights": [
+        "直接选择页面元素进行视觉调整",
+        "控制字体、尺寸、间距、位置与布局",
+        "让编辑状态与最终 Portfolio 页面保持一致。"
+      ],
+      "type": "",
+      "localeKey": "57319c12-826b-4b79-9d44-5c8aee932c6f"
+    },
+    {
+      "name": "Content & Design Separation",
+      "groupId": "redesign",
+      "date": "",
+      "role": "Template / Visual System",
+      "rawMaterial": "Project Name: Content & Design Separation\nType: Template System\nRole: Template / Visual System\n\nProject Summary:\n将 Portfolio 的内容数据与视觉设计分离，使同一套内容能够适配不同模板、布局与展示方式，同时保持原始内容本身不被改变。\n\nKey Work:\n设计分离 · 模板复用 · 结构迁移 · 主题调整\n\nHighlights:\n内容数据与视觉布局独立管理；支持重新组织视觉结构而不改变原始内容；设计数据可以作为独立模板进行保存与迁移。\n\nShow Details: 否\n\n建议媒体：\n做一张“同一内容 → 两种不同模板”的对比图。",
+      "structuredContent": {
+        "summary": "该项目通过分离Portfolio的内容数据与视觉设计，实现同一套内容在不同模板、布局及展示方式下的灵活适配，同时确保原始内容保持不变。其核心在于构建可复用的结构迁移机制，支持视觉系统的动态调整与独立管理。",
+        "keyWork": [
+          "设计分离",
+          "模板复用",
+          "结构迁移",
+          "主题调整"
+        ],
+        "highlights": [
+          "内容数据与视觉布局独立管理",
+          "支持重新组织视觉结构而不改变原始内容",
+          "设计数据可作为独立模板进行保存与迁移"
+        ]
+      },
+      "media": {
+        "mainVisual": null,
+        "processImages": [],
+        "video": null,
+        "audio": null,
+        "externalVideoUrl": "",
+        "externalLink": ""
+      },
+      "summary": "该项目通过分离Portfolio的内容数据与视觉设计，实现同一套内容在不同模板、布局及展示方式下的灵活适配，同时确保原始内容保持不变。其核心在于构建可复用的结构迁移机制，支持视觉系统的动态调整与独立管理。",
+      "keyWork": [
+        "设计分离",
+        "模板复用",
+        "结构迁移",
+        "主题调整"
+      ],
+      "highlights": [
+        "内容数据与视觉布局独立管理",
+        "支持重新组织视觉结构而不改变原始内容",
+        "设计数据可作为独立模板进行保存与迁移"
+      ],
+      "showDetails": false,
+      "type": "",
+      "localeKey": "bfbb113b-43d9-4be1-b757-d9345c22e75b"
+    },
+    {
+      "name": "Rich Media Portfolio",
+      "groupId": "music",
+      "date": "",
+      "role": "Media Integration / Portfolio Design",
+      "rawMaterial": "Project Name: Rich Media Portfolio\nType: Media Integration\nRole: Media Integration / Portfolio Design\n\nProject Summary:\n将文字、图片、视频与音频等不同媒体内容整合到 Portfolio 项目中，根据项目内容选择合适的媒体形式，并通过统一的页面结构进行展示。\n\nKey Work:\n媒体整合 · 图片编排 · 视频展示 · 音频整合\n\nHighlights:\n支持多种媒体内容进入同一项目结构；根据项目特点灵活组合不同媒体形式；保持媒体内容与项目数据之间的关联。\n\nShow Details: 是\n\n建议媒体：\n这里可以直接放一个同时包含图片、视频或音频的真实项目截图，不需要另外制作复杂页面。",
+      "structuredContent": {
+        "summary": "这是一个将文字、图片、视频与音频等多类型媒体内容整合到统一页面结构中的项目，通过灵活选择媒体形式实现跨媒体协同展示。",
+        "keyWork": [
+          "媒体整合",
+          "图片编排",
+          "视频展示",
+          "音频整合"
+        ],
+        "highlights": [
+          "支持多种媒体内容进入同一项目结构",
+          "根据项目特点灵活组合不同媒体形式",
+          "保持媒体内容与项目数据之间的关联"
+        ]
+      },
+      "media": {
+        "mainVisual": {
+          "url": "/media/projects/W5-1.png",
+          "name": "W5-1.png",
+          "type": "image/png"
+        },
+        "processImages": [],
+        "video": null,
+        "audio": null,
+        "externalVideoUrl": "",
+        "externalLink": ""
+      },
+      "summary": "这是一个将文字、图片、视频与音频等多类型媒体内容整合到统一页面结构中的项目，通过灵活选择媒体形式实现跨媒体协同展示。",
+      "keyWork": [
+        "媒体整合",
+        "图片编排",
+        "视频展示",
+        "音频整合"
+      ],
+      "highlights": [
+        "支持多种媒体内容进入同一项目结构",
+        "根据项目特点灵活组合不同媒体形式",
+        "保持媒体内容与项目数据之间的关联"
+      ],
+      "type": "",
+      "localeKey": "48dd5c04-9199-4526-8915-03c3a7c92baf"
+    },
+    {
+      "name": "Draft to Published Portfolio",
+      "groupId": "music",
+      "date": "",
+      "role": "Preview / Publishing / Template Export",
+      "rawMaterial": "Project Name: Draft to Published Portfolio\nDate: 2026\nType: Publishing Workflow\nRole: Preview / Publishing / Template Export\n\nProject Summary:\n将完成的 Portfolio 从内容编辑与视觉设计阶段输出为可预览、可发布和可迁移的最终版本，并保持内容结构与视觉设计之间的一致性。\n\nKey Work:\n草稿预览 · 网页发布 · 静态输出 · 模板导出\n\nHighlights:\n保持 Draft、Preview 与 Published 状态之间的独立性；支持生成可浏览的 Portfolio 展示版本；支持轻量模板数据导出与恢复。\n\nShow Details: 是\n\n建议媒体：\n直接做一张三段式图片：Editor → Preview → Published Portfolio。",
+      "structuredContent": {
+        "summary": "将完成的Portfolio从内容编辑与视觉设计阶段输出为可预览、可发布和可迁移的最终版本，确保内容结构与视觉设计的一致性。",
+        "keyWork": [
+          "草稿预览",
+          "网页发布",
+          "静态输出",
+          "模板导出"
+        ],
+        "highlights": [
+          "保持Draft、Preview与Published状态之间的独立性",
+          "支持生成可浏览的Portfolio展示版本",
+          "支持轻量模板数据导出与恢复"
+        ]
+      },
+      "media": {
+        "mainVisual": {
+          "url": "/media/projects/W6.png",
+          "name": "W6.png",
+          "type": "image/png"
+        },
+        "processImages": [],
+        "video": null,
+        "audio": null,
+        "externalVideoUrl": "",
+        "externalLink": ""
+      },
+      "summary": "将完成的Portfolio从内容编辑与视觉设计阶段输出为可预览、可发布和可迁移的最终版本，确保内容结构与视觉设计的一致性。",
+      "keyWork": [
+        "草稿预览",
+        "网页发布",
+        "静态输出",
+        "模板导出"
+      ],
+      "highlights": [
+        "保持Draft、Preview与Published状态之间的独立性",
+        "支持生成可浏览的Portfolio展示版本",
+        "支持轻量模板数据导出与恢复"
+      ],
+      "type": "",
+      "localeKey": "7b0723e8-95f5-48f2-863b-f87d3dc8d45b"
+    }
+  ],
+  "experience": [
+    {
+      "company": "内容结构",
+      "position": "Content Structure",
+      "date": "",
+      "rawMaterial": "",
+      "structuredContent": {
+        "summary": "文本编辑-页面结构\n自由组织作品集内容结构，并根据不同展示需求定义栏目、项目与信息层级。\n",
+        "responsibilities": [],
+        "highlights": [
+          "结构编辑",
+          "栏目自定义",
+          "内容组织",
+          "层级管理"
+        ]
+      },
+      "summary": "文本编辑-页面结构\n自由组织作品集内容结构，并根据不同展示需求定义栏目、项目与信息层级。\n",
+      "responsibilities": [],
+      "highlights": [
+        "结构编辑",
+        "栏目自定义",
+        "内容组织",
+        "层级管理"
+      ],
+      "localeKey": "6bad4ed5-a3e2-4e39-81f1-e8791667cad8",
+      "media": {
+        "image": {
+          "url": "/media/experience/C1-1.png",
+          "name": "C1-1.png",
+          "type": "image/png"
+        }
+      }
+    },
+    {
+      "company": "视觉编排",
+      "position": "Visual Composition",
+      "date": "",
+      "rawMaterial": "",
+      "structuredContent": {
+        "summary": "在可视化编辑环境中调整内容的位置、尺寸、间距、字体与视觉层级，使内容结构与最终展示保持一致。",
+        "responsibilities": [],
+        "highlights": [
+          "视觉编辑",
+          "自由排版",
+          "样式控制",
+          "布局调整"
+        ]
+      },
+      "summary": "在可视化编辑环境中调整内容的位置、尺寸、间距、字体与视觉层级，使内容结构与最终展示保持一致。",
+      "responsibilities": [],
+      "highlights": [
+        "视觉编辑",
+        "自由排版",
+        "样式控制",
+        "布局调整"
+      ],
+      "localeKey": "f65642ff-8041-468f-851a-9686b45a449f",
+      "media": {
+        "image": {
+          "url": "/media/experience/C2.png",
+          "name": "C2.png"
+        }
+      }
+    },
+    {
+      "company": "模板复用",
+      "position": "Template System",
+      "date": "",
+      "rawMaterial": "",
+      "structuredContent": {
+        "summary": "将内容与视觉设计分离，使同一套内容可以适配不同模板、布局与展示方式。",
+        "responsibilities": [],
+        "highlights": [
+          "模板复用",
+          "设计分离",
+          "结构迁移",
+          "主题切换"
+        ]
+      },
+      "summary": "将内容与视觉设计分离，使同一套内容可以适配不同模板、布局与展示方式。",
+      "responsibilities": [],
+      "highlights": [
+        "模板复用",
+        "设计分离",
+        "结构迁移",
+        "主题切换"
+      ],
+      "localeKey": "39d1a404-8943-471f-9736-d978266ed1db",
+      "media": {
+        "image": {
+          "url": "/media/experience/C3.png",
+          "name": "C3.png"
+        }
+      }
+    },
+    {
+      "company": "媒体整合",
+      "position": "Media Integration",
+      "date": "",
+      "rawMaterial": "",
+      "structuredContent": {
+        "summary": "将文字、图片、视频及其他媒体内容组合到统一的作品集展示结构中，并根据页面布局进行灵活编排。",
+        "responsibilities": [],
+        "highlights": [
+          "媒体整合",
+          "视频展示",
+          "图片编排",
+          "动态内容"
+        ]
+      },
+      "summary": "将文字、图片、视频及其他媒体内容组合到统一的作品集展示结构中，并根据页面布局进行灵活编排。",
+      "responsibilities": [],
+      "highlights": [
+        "媒体整合",
+        "视频展示",
+        "图片编排",
+        "动态内容"
+      ],
+      "localeKey": "d878f792-d8f4-440e-9c37-7268adae39c9",
+      "media": {
+        "image": {
+          "url": "/media/experience/C4.png",
+          "name": "C4.png"
+        }
+      }
+    },
+    {
+      "company": "发布与输出",
+      "position": "Publishing",
+      "date": "",
+      "rawMaterial": "",
+      "structuredContent": {
+        "summary": "将完成的作品集输出为可浏览、可分享或可迁移的展示版本，并保持内容与视觉设计的一致性。",
+        "responsibilities": [],
+        "highlights": [
+          "网页发布",
+          "静态输出",
+          "模板导出",
+          "版本管理"
+        ]
+      },
+      "summary": "将完成的作品集输出为可浏览、可分享或可迁移的展示版本，并保持内容与视觉设计的一致性。",
+      "responsibilities": [],
+      "highlights": [
+        "网页发布",
+        "静态输出",
+        "模板导出",
+        "版本管理"
+      ],
+      "localeKey": "6ba1564d-8c6b-4124-a739-a5b6ee83ba4f",
+      "media": {
+        "image": {
+          "url": "/media/experience/C5.png",
+          "name": "C5.png"
+        }
+      }
+    }
+  ],
+  "showreel": {
+    "projects": [
+      {
+        "id": "sr_mukvrk3m",
+        "name": "Folio Fold",
+        "role": "showreel",
+        "media": {
+          "url": "/media/showreel/FolioFold-1.mp4",
+          "name": "FolioFold-1.mp4",
+          "type": "video/mp4"
+        },
+        "externalVideoUrl": "",
+        "chapters": [
+          {
+            "projectId": 0,
+            "title": "From Content to Portfolio",
+            "role": "Content Architecture / Portfolio Design",
+            "start": "00:00:04.164",
+            "end": "00:00:08.014"
+          },
+          {
+            "projectId": 2,
+            "title": "Visual Portfolio Editing",
+            "role": "Visual Editor / Layout Design",
+            "start": "00:00:08.014",
+            "end": "00:00:14.077"
+          },
+          {
+            "projectId": 5,
+            "title": "Draft to Published Portfolio",
+            "role": "Preview / Publishing / Template Export",
+            "start": "00:00:14.077",
+            "end": "00:00:20.420"
+          },
+          {
+            "projectId": 4,
+            "title": "Rich Media Portfolio",
+            "role": "Media Integration / Portfolio Design",
+            "start": "00:00:20.420",
+            "end": "00:00:28.350"
+          },
+          {
+            "projectId": 3,
+            "title": "Content & Design Separation",
+            "role": "Template / Visual System",
+            "start": "00:00:28.350",
+            "end": "00:00:32.460"
+          },
+          {
+            "title": "Start with FolioFold",
+            "role": "User",
+            "start": "00:00:32.460",
+            "end": "00:00:35.605",
+            "projectId": null
+          }
+        ]
+      }
+    ]
+  },
+  "aiVoices": {
+    "sections": {},
+    "media": {},
+    "projects": [
+      {
+        "name": "FolioFold",
+        "summary": "FolioFold 是一个以本地编辑为基础的作品集工具，将内容管理、可视化排版、多媒体展示和可复用模板整合到同一个编辑与发布流程中。",
+        "role": "Local-first Portfolio Editor / Publishing Tool",
+        "tech": [
+          "Python",
+          "JavaScript",
+          "HTML / CSS",
+          "GrapesJS",
+          "Ollama / Qwen3"
+        ],
+        "highlights": [
+          "支持基于浏览器的本地作品集编辑与预览",
+          "将内容编辑与页面排版整合到同一个工作流程中",
+          "通过可复用的模板，适应不同的展示需求",
+          "支持文字、图片和视频等多媒体内容",
+          "支持将完成的作品集整理为可分享的网页"
+        ],
+        "githubUrl": "",
+        "liveDemoUrl": "",
+        "media": {
+          "image": {
+            "url": "/media/ai-voices/ff-2.png",
+            "name": "ff-2.png",
+            "type": "image/png"
+          },
+          "screenshots": [],
+          "video": {
+            "url": "/media/ai-voices/FolioFold-2.mp4",
+            "name": "FolioFold-2.mp4",
+            "type": "video/mp4"
+          }
+        }
+      }
+    ]
+  },
+  "styles": {
+    "text": "#161616",
+    "background": "#f1eee7",
+    "accent": "#e64e2e"
+  },
+  "theme": {
+    "mode": "light",
+    "preset": "light-02"
+  },
+  "media": {},
+  "settings": {
+    "version": 3,
+    "sectionVisibility": {
+      "experience": true,
+      "works": true,
+      "showreel": true,
+      "aiVoices": false
+    }
+  },
+  "sectionTitles": {
+    "about": "Identity",
+    "experience": "Capabilities",
+    "works": "Workflow",
+    "showreel": "In Action",
+    "aiVoices": "AI Lab"
+  },
+  "design": {
+    "theme": {
+      "mode": "light",
+      "preset": "light-01"
+    },
+    "typography": {
+      "text": "#161616",
+      "background": "#f1eee7",
+      "accent": "#e64e2e"
+    },
+    "layout": {},
+    "components": {}
+  },
+  "schemaVersion": 2,
+  "visualEditor": {
+    "project": null,
+    "savedAt": null
+  },
+  "sectionLogos": {},
+  "sectionTitleTranslations": {
+    "en": {}
+  },
+  "localizedContent": {
+    "en": {
+      "projects": {
+        "0383f04d-8b25-4648-921a-4deb67dca261": {
+          "summary": {
+            "sourceLanguage": "zh-CN",
+            "targetLanguage": "en",
+            "draft": "",
+            "reviewed": "",
+            "error": "尚未配置翻译服务",
+            "sourceHash": "sha256:acdc84af90d9cca43842ade3e2acd7ff71eaacad5050f59bc1a2c7e5f3bbb120",
+            "status": "unconfigured"
+          }
+        },
+        "4661206b-ad08-44c9-ac42-5ca7afb750f5": {
+          "summary": {
+            "sourceLanguage": "zh-CN",
+            "targetLanguage": "en",
+            "draft": "",
+            "reviewed": "",
+            "error": "尚未配置翻译服务",
+            "sourceHash": "sha256:89b6a55e73c820fc5f9e0f5f475afff86ed53cb713de1fc7d0c12fb1aa675c9c",
+            "status": "unconfigured"
+          }
+        },
+        "57319c12-826b-4b79-9d44-5c8aee932c6f": {
+          "summary": {
+            "sourceLanguage": "zh-CN",
+            "targetLanguage": "en",
+            "draft": "",
+            "reviewed": "",
+            "error": "尚未配置翻译服务",
+            "sourceHash": "sha256:0573195904f74a37ae763617306052dcb031b146e8275893d3a3763ecbb4a7f8",
+            "status": "unconfigured"
+          }
+        },
+        "bfbb113b-43d9-4be1-b757-d9345c22e75b": {
+          "summary": {
+            "sourceLanguage": "zh-CN",
+            "targetLanguage": "en",
+            "draft": "",
+            "reviewed": "",
+            "error": "尚未配置翻译服务",
+            "sourceHash": "sha256:1b9752064e16af9e32711e2e545af177732c574123a6bf5a0eb52acedb9465a7",
+            "status": "unconfigured"
+          }
+        },
+        "48dd5c04-9199-4526-8915-03c3a7c92baf": {
+          "summary": {
+            "sourceLanguage": "zh-CN",
+            "targetLanguage": "en",
+            "draft": "",
+            "reviewed": "",
+            "error": "尚未配置翻译服务",
+            "sourceHash": "sha256:d2746e8b911fc0dd0f617c1fe99e99f1dbcff57ee72c3affd1eac0b80dd9793e",
+            "status": "unconfigured"
+          }
+        },
+        "7b0723e8-95f5-48f2-863b-f87d3dc8d45b": {
+          "summary": {
+            "sourceLanguage": "zh-CN",
+            "targetLanguage": "en",
+            "draft": "",
+            "reviewed": "",
+            "error": "尚未配置翻译服务",
+            "sourceHash": "sha256:ab5a3cfd918d504f6c84820af824f1cb2ce957ae4a7e3eab25d4f527276a738c",
+            "status": "unconfigured"
+          }
+        }
+      },
+      "experience": {
+        "6bad4ed5-a3e2-4e39-81f1-e8791667cad8": {
+          "summary": {
+            "sourceLanguage": "zh-CN",
+            "targetLanguage": "en",
+            "draft": "",
+            "reviewed": "",
+            "error": "尚未配置翻译服务",
+            "sourceHash": "sha256:bd6d8a4a0097087b858417c4614d3be6f0caf4c53eb3f5742e4bc8755044bea6",
+            "status": "unconfigured"
+          }
+        },
+        "f65642ff-8041-468f-851a-9686b45a449f": {
+          "summary": {
+            "sourceLanguage": "zh-CN",
+            "targetLanguage": "en",
+            "draft": "",
+            "reviewed": "",
+            "error": "尚未配置翻译服务",
+            "sourceHash": "sha256:73c2ffb9d3281878b97bdc2243ef69868bbb8b4eee01f146bf2aea28438ecc38",
+            "status": "unconfigured"
+          }
+        },
+        "39d1a404-8943-471f-9736-d978266ed1db": {
+          "summary": {
+            "sourceLanguage": "zh-CN",
+            "targetLanguage": "en",
+            "draft": "",
+            "reviewed": "",
+            "error": "尚未配置翻译服务",
+            "sourceHash": "sha256:11d207ae19666ed6cbab1aee90ad947b5cc9cb623b557ac70d13bb98dd899cd9",
+            "status": "unconfigured"
+          }
+        },
+        "d878f792-d8f4-440e-9c37-7268adae39c9": {
+          "summary": {
+            "sourceLanguage": "zh-CN",
+            "targetLanguage": "en",
+            "draft": "",
+            "reviewed": "",
+            "error": "尚未配置翻译服务",
+            "sourceHash": "sha256:6257d7aa777a47fbe5a46833add4e1801bdd5528904142f378fa6b2e68f587aa",
+            "status": "unconfigured"
+          }
+        },
+        "6ba1564d-8c6b-4124-a739-a5b6ee83ba4f": {
+          "summary": {
+            "sourceLanguage": "zh-CN",
+            "targetLanguage": "en",
+            "draft": "",
+            "reviewed": "",
+            "error": "尚未配置翻译服务",
+            "sourceHash": "sha256:d57303f8c3a0e7781912e3fecb93274c0872fcd7a3dc196b089123bd24bbb73a",
+            "status": "unconfigured"
+          }
+        }
+      }
+    }
+  },
+  "localePins": {
+    "profile.name": 1,
+    "profile.skills": 1,
+    "staticText.eyebrow-selected-works": 1,
+    "aiVoices.projects.0.name": 1
+  },
+  "audioIntro": {
+    "url": "/media/audioIntro/ok.wav",
+    "name": "ok.wav"
+  }
+}

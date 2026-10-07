@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 2,
+  "designVersion": 2,
+  "savedAt": "2026-10-04T11:12:20Z",
+  "theme": {
+    "preset": "light-02",
+    "mode": "light"
+  },
+  "spacing": {
+    "topSpace": 160,
+    "heroNameGap": 7,
+    "heroPad": 0,
+    "metaTop": 40,
+    "dirGap": 42,
+    "entryGap": 0,
+    "footerTop": 437,
+    "footerBottom": 20
+  },
+  "displayZones": {
+    "hero": [
+      "eyebrow",
+      "name",
+      "role",
+      "intro"
+    ],
+    "secondary": [
+      "highlights",
+      "contactLinks",
+      "publicLinks",
+      "skills"
+    ]
+  },
+  "pixel": {
+    "size": 134,
+    "x": null,
+    "y": null,
+    "scale": 1.0,
+    "xPct": 1.0,
+    "yPct": 0.486
+  },
+  "sectionOrder": [
+    "about",
+    "experience",
+    "works",
+    "showreel",
+    "aiVoices"
+  ]
+}

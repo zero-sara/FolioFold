@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="zh-CN" translate="no">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="google" content="notranslate">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FolioFold</title>
+    <link rel="icon" type="image/png" href="/media/brand/folioframe-icon-256.png" />
+    <link rel="apple-touch-icon" href="/media/brand/folioframe-icon-256.png" />
+    <meta name="description" content="FolioFold 统一工作台：作品集预览 / 文本编辑 / 排版编辑，共用同一份草稿数据。个人内容与模板版式分离，可导出 / 导入模板。" />
+    <link rel="stylesheet" href="/studio/studio.css?v=20261003r9" />
+    <link rel="stylesheet" href="/i18n.css?v=20260927r2" />
+  </head>
+  <!-- data-ff-locale-scope：告诉 i18n.js 这是「编辑器」界面（语言存 folioframe.locale.editor）。
+       作品集页面是 public scope，两者可以不同 —— 允许「中文编辑器 + 英文简历」。 -->
+  <body data-ff-locale-scope="editor">
+    <div class="st-app">
+      <header class="st-bar">
+        <span class="st-brand ff-no-i18n"><img class="st-brand-icon" src="/media/brand/folioframe-icon-256.png" alt="FolioFold" />Folio<em>Fold</em></span>
+        <nav class="st-tabs" id="st-tabs">
+          <button class="st-tab on" data-tab="portfolio"><span class="st-tab-num" aria-hidden="true">①</span><span data-i18n="nav.portfolio">作品集</span></button>
+          <button class="st-tab" data-tab="editor"><span class="st-tab-num" aria-hidden="true">②</span><span data-i18n="nav.editor">文本编辑</span></button>
+          <button class="st-tab" data-tab="visual"><span class="st-tab-num" aria-hidden="true">③</span><span data-i18n="nav.visual">排版编辑</span></button>
+        </nav>
+        <span class="st-tpl-bar">
+          <select class="st-tpl" id="st-tpl" title="切换模板：每个模板是一套完全独立的作品集数据"></select>
+          <button class="st-btn st-tpl-btn" id="st-tpl-new" title="新建一个内容全空的模板">＋ 新建</button>
+          <button class="st-btn st-tpl-btn" id="st-tpl-import" title="粘贴模板码或选择模板文件，只换版式、不动个人内容">⬇ 导入模板</button>
+          <button class="st-btn st-tpl-btn" id="st-tpl-rename" title="给当前模板改名">重命名</button>
+          <button class="st-btn st-tpl-btn" id="st-tpl-del" title="删除当前模板（模板一不可删除）">删除</button>
+        </span>
+        <span class="st-spacer"></span>
+        <span id="st-locale" aria-label="语言"></span>
+        <span class="st-status" id="st-status">读取中…</span>
+        <span class="st-final-bar">
+          <button class="st-btn" id="st-reload" title="重新载入当前面板，拿到最新数据">刷新当前</button>
+          <a class="st-btn" id="st-open-published" href="/portfolio/?mode=published" target="_blank" rel="noopener" title="新窗口打开最新版本">最新版本 ↗</a>
+          <button class="st-btn" id="st-publish" title="把当前草稿（内容 + 排版）更新到最新版本">更新到最新版本</button>
+          <button class="st-btn primary" id="st-publish-options" title="发布、导出与分享选项">发布</button>
+        </span>
+      </header>
+
+      <main class="st-stage" id="st-stage">
+        <div class="st-pane on" data-pane="portfolio">
+          <iframe class="st-frame" data-panel="portfolio" title="作品集预览"></iframe>
+        </div>
+        <div class="st-pane" data-pane="editor">
+          <iframe class="st-frame" data-panel="editor" title="文本编辑"></iframe>
+        </div>
+        <div class="st-pane" data-pane="visual">
+          <iframe class="st-frame" data-panel="visual" title="排版编辑"></iframe>
+        </div>
+      </main>
+
+      <div class="st-toast" id="st-toast"></div>
+      <dialog class="st-publish-dialog" id="st-publish-dialog">
+        <div class="st-publish-head"><h2>发布与分享</h2><button class="st-dialog-close" id="st-publish-close" aria-label="关闭">×</button></div>
+        <p>“更新到最新版本”只会把当前 Draft 固化为本地最新版本；不会上传公网。</p>
+        <div class="st-publish-actions">
+          <a class="st-btn" id="st-dlg-published" href="/portfolio/?mode=published" target="_blank" rel="noopener">打开最新版本 ↗</a>
+          <a class="st-btn" id="st-dlg-print" href="/portfolio/?mode=published&amp;print=1" target="_blank" rel="noopener">打印 / 保存 PDF</a>
+          <button class="st-btn" id="st-open-publink">公开链接（Public Link）</button>
+        </div>
+        <div class="st-publish-section">
+          <h3>模板（只含版式，不含个人内容）</h3>
+          <p>把你现在的版式（主题 / 字体 / 间距 / 布局 / 媒体排版位置 / <b>区块顺序</b>）导出成一个通用模板，别人拿到就能用在自己的作品集上。<b>姓名、简介、经历、作品、联系方式、图片视频都不会被导出。</b></p>
+          <div class="st-publish-actions">
+            <button class="st-btn" id="st-tpl-gen">⬆ 生成模板</button>
+            <button class="st-btn" id="st-tpl-gen-file">⬇ 下载模板文件</button>
+          </div>
+          <div class="st-share-code" id="st-share-code" hidden>
+            <div class="st-code-tabs">
+              <button class="st-btn st-code-tab on" id="st-code-tab-short" type="button">短码（几十个字符）</button>
+              <button class="st-btn st-code-tab" id="st-code-tab-full" type="button">完整码（含逐项微调）</button>
+            </div>
+            <label for="st-code-input">自包含模板码 — 版式就在码里，发给任何 FolioFold 用户粘贴即可（不需要服务器 / 不需要 GitHub）</label>
+            <div class="st-code-row">
+              <textarea class="st-code-input st-code-textarea" id="st-code-input" rows="3" readonly></textarea>
+              <button class="st-btn" id="st-code-copy">复制</button>
+            </div>
+            <p class="st-code-hint" id="st-code-hint"></p>
+          </div>
+        </div>
+        <p class="st-publish-note">模板导出 / 导入全程离线：不需要服务器、不需要 GitHub、不需要账号。</p>
+      </dialog>
+
+      <dialog class="st-publish-dialog" id="st-publink-dialog">
+        <div class="st-publish-head"><h2>公开链接（Public Link）</h2><button class="st-dialog-close" id="st-publink-close" aria-label="关闭">×</button></div>
+        <div id="st-publink-body"><p class="st-publish-note">读取部署状态中…</p></div>
+      </dialog>
+
+      <dialog class="st-publish-dialog" id="st-import-dialog">
+        <div class="st-publish-head"><h2>导入模板</h2><button class="st-dialog-close" id="st-import-close" aria-label="关闭">×</button></div>
+        <p class="st-import-note">导入的<b>只有版式</b>：主题 / 明暗 / 区块顺序 / 间距 / 展示区 / 像素形象，以及语言设置。<b>模板里的姓名、简介、经历、作品、联系方式、图片视频、译文一个都不会进来</b>，新模板的内容会是空的，你之后再往里填。</p>
+        <label class="st-field-label" for="st-import-name">给导入的模板起个名字（必填）</label>
+        <input class="st-code-input" id="st-import-name" maxlength="40" placeholder="例如：极简作品集 / 深色版式 / 我的新模板" />
+        <label class="st-field-label" for="st-import-code">方式一：粘贴模板码（短码 FF2- 或完整码 FF1- 开头）</label>
+        <div class="st-code-row">
+          <textarea class="st-code-input st-code-textarea" id="st-import-code" rows="3" placeholder="FF1-..."></textarea>
+        </div>
+        <label class="st-field-label" for="st-import-file">方式二：选择模板文件（folioframe-template.json）</label>
+        <input class="st-file-input" id="st-import-file" type="file" accept=".json,application/json" />
+        <label class="st-field-label" for="st-import-json">方式三：直接粘贴模板 JSON</label>
+        <textarea class="st-json-input" id="st-import-json" rows="4" placeholder='{"type":"folioframe-template", ...}'></textarea>
+        <div class="st-publish-actions st-import-actions">
+          <button class="st-btn" id="st-import-cancel">取消</button>
+          <button class="st-btn primary" id="st-import-go">导入为新模板</button>
+        </div>
+      </dialog>
+      <noscript>请启用 JavaScript。</noscript>
+    </div>
+    <script src="/i18n-zh-en.js?v=20260927r6"></script>
+<script src="/i18n.js?v=20260927r6"></script>
+    <script src="/editor/themes.js?v=20260925r3"></script>
+    <script src="/studio/studio.js?v=20261006a1"></script>
+  </body>
+</html>

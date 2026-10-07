@@ -1,0 +1,157 @@
+/* ⚠ 品牌字体（Noto Sans SC / Playfair Display / DM Mono）**不再用 @import 在这里加载**。
+   @import 是渲染阻塞的：这台机器连不到 fonts.googleapis.com 时，浏览器会白等约 2 秒才放弃
+   （实测 transferSize=0、字体表 0 条，等于从来没加载成功过，白卡 2 秒）。
+   发布包又是把本文件**原样内联**进静态 index.html 的，访客也一起等。
+   → 现在改由各 HTML 入口用 `<link ... media="print" onload="this.media='all'">` 异步加载：
+     网络好就用得上、连不上也不拖慢首屏（字体本来就有系统兜底）。改回来务必同步改 HTML 入口。 */
+
+* { box-sizing:border-box; } html { scroll-behavior:smooth; }
+body { margin:0; background:var(--paper); color:var(--ink); font-family:var(--editor-font,'Noto Sans SC'),sans-serif; font-size:var(--editor-body-size,16px); font-weight:var(--editor-font-weight,400); }
+button,a { font:inherit; } button { color:inherit; }
+/* 页面底边留白：脚注是整页最后一个元素，所以这段 padding 就是「脚注到页面底边」的距离。
+ * 以前固定 80px，看起来像脚注永远悬在离底边一段的位置、怎么调间距都贴不到底；
+ * 现在由「页脚下方留白」这根间距杆控制（--ff-page-bottom），默认 28px，脚注紧贴页面底边。 */
+.shell { max-width:1440px; margin:auto; padding:24px 42px var(--ff-page-bottom,28px); }
+.top { display:flex; justify-content:space-between; align-items:center; padding-bottom:75px; font:12px 'DM Mono',monospace; text-transform:uppercase; letter-spacing:.04em; }
+.status { color:var(--accent); }
+/* —— FolioFold 固定字标 ——
+ * 与工作台顶栏 .st-brand 完全同款（Playfair Display 600 的 "Folio" + 强调色大写 "FOLD"）。
+ * 这是产品标识，不是用户内容：刻意不挂任何 data-field / data-ve-item，
+ * 所以任何编辑模式、任何模板、任何人来用，它都固定是 FolioFold，改不掉也不会被导出成别人的东西。
+ * .top 上的 text-transform:uppercase 会污染 Playfair 的大小写，这里显式收回。 */
+.top-brand { display:inline-flex; align-items:baseline; gap:8px; text-transform:none; }
+.top-brand-sep { color:var(--muted); }
+.ff-lockup { font:600 15px/1 'Playfair Display',Georgia,serif; letter-spacing:.01em; white-space:nowrap; text-transform:none; }
+/* ⚠ 这里的强调色必须写死 #e64e2e（= 工作台的 --st-accent），**不能用 var(--accent)**：
+ * 作品集页的 --accent 是主题变量，换主题会变成墨蓝/橄榄等其他颜色，
+ * 品牌标识就跟着内容主题漂移了 —— 实测在深色主题下会渲染成 rgb(31,78,140)。
+ * 产品标识必须恒定，所以在哪套主题下都是同一个橙色。 */
+.ff-lockup em { font-style:normal; color:#e64e2e; margin-left:4px; font-family:'DM Mono',monospace; font-size:12px; letter-spacing:.08em; text-transform:uppercase; }
+
+/* —— 页脚品牌标记 ——
+ * 用户要求在页脚署名行前固定显示一个小 Logo，**不可删除**，属发布内容的一部分。
+ * 刻意"小面积、低调"：18px 图形 + 常规 12px 文字，不抢主体内容、不遮挡任何素材。
+ * 与 .ff-lockup / .st-brand / .ve-brand 同一套品牌语言（深色字 + 固定橘红点缀）。 */
+.ff-foot-brand { display:inline-flex; align-items:center; gap:7px; }
+.ff-foot-mark {
+  width:18px; height:18px; flex:0 0 18px;
+  border-radius:5px; object-fit:cover;
+  /* 深色方块图标压在浅色页面上需要一点边界，否则边缘会"糊"进背景 */
+  box-shadow:0 0 0 1px rgba(28,36,51,.14);
+  vertical-align:middle;
+}
+.ff-foot-text { letter-spacing:.02em; }
+/* 移动端：整页变窄时标记不跟着放大（避免"画布缩放把 Logo 顶大了"） */
+@media (max-width:640px){
+  .ff-foot-mark { width:16px; height:16px; flex-basis:16px; border-radius:4px; }
+  .ff-foot-brand { gap:6px; }
+}
+/* 深色主题下，深色方块图标会与背景融为一体 → 换成亮描边保证可辨认 */
+html[data-theme="dark"] .ff-foot-mark,
+body.theme-dark .ff-foot-mark { box-shadow:0 0 0 1px rgba(255,255,255,.30); }
+/* 打印（导出 PDF）时页脚本就被隐藏，这里一并兜底，避免残留孤立图形 */
+@media print { .ff-foot-brand { display:none !important; } }
+
+/* Hero — 不再展示 About Me 全文，只展示一句 intro，避免重复 */
+.hero { min-height:0; display:flex; flex-direction:column; justify-content:flex-end; padding-bottom:var(--editor-spacing,48px); border-bottom:1px solid var(--ink); }
+/* 眉标(Selected works) 与姓名同属「Hero 标题块」：眉标在下方的间距由间距杆控制
+   （.heroNameGap → .eyebrow 的 margin-bottom），保证两者作为一个整体随顶部留白一起移动。 */
+.hero .hero-text > .eyebrow { display:block; margin-bottom:8px; }
+.eyebrow { display:block; margin-bottom:8px; }
+h1 { margin:0; max-width:900px; text-align:var(--editor-align,left); }
+
+/* Directory */
+.directory { margin-top:42px; }
+.entry { border-top:1px solid var(--ink); }
+.entry:last-child { border-bottom:1px solid var(--ink); }
+.entry-btn { width:100%; border:0; background:none; padding:22px 0; display:grid; grid-template-columns:70px 1fr auto; align-items:center; text-align:left; cursor:pointer; }
+.entry-no { font:13px 'DM Mono',monospace; color:var(--accent); }
+/* 区块标题包裹层：编号列之后、展开列之前的那一列；把 Logo 点缀图与标题排成一行 */
+.entry-title-wrap { display:flex; align-items:center; gap:10px; min-width:0; }
+.entry-title-wrap .entry-title { min-width:0; }
+/* 区块级 Logo 与项目级共用基准，但区块标题更大 → 稍微放宽上限，仍锁在标题行内、不撑高 */
+.pf-logo-section { max-height:30px; max-width:150px; }
+/* ⚠ 2026-09-24：上边距原为 0 —— 区块标题条与它自己的内容**贴死**，而内容底部到
+   下一个区块却有 42px。用户截图对比后投诉：「为什么教育经历下面离下一个区块有间距，
+   而 Highlights 和 Identity 标题条却没有任何间距？」间距必须**首尾一致**：
+   标题条下沿到内容 = 内容末尾到下一个区块 = 42px。 */
+.entry-panel { display:none; padding:42px 0 42px 70px; }
+/* 标题条到内容的间距必须**每个区块都一样**。panel 一旦有自己的 padding，
+   首个子元素的 margin-top 就不再与父元素折叠 → 有自带 margin 的区块（AI Project 首块）
+   会变成 42+30=72px，跟别的区块不一致。这里统一清零，间距只由 padding 决定。 */
+.entry-panel > *:first-child { margin-top:0; }
+.entry.open .entry-panel { display:block; }
+
+.experience { border-top:1px solid var(--line); }
+
+/* Works */
+.works-group { border-top:1px solid var(--line); padding:30px 0 14px; }
+.works-group:first-child { border-top:0; padding-top:0; }
+
+/* Showreel */
+.showreel { background:var(--dark); color:#f4f0e8; padding:36px; margin-top:60px; }
+
+/* Case */
+.case-head { display:flex; justify-content:space-between; gap:30px; margin-bottom:28px; }
+.case-head h2 { font:500 34px 'Playfair Display',serif; margin:8px 0; }
+.case-cover { width:100%; max-height:450px; object-fit:cover; background:var(--soft); }
+.case-flow { border-top:1px solid var(--line); margin-top:24px; }
+.case-step { display:grid; grid-template-columns:230px 1fr; padding:20px 0; border-bottom:1px solid var(--line); }
+.case-step strong { font-weight:500; }
+.case-step p { margin:0; color:#55514a; line-height:1.7; }
+.buttons { display:flex; gap:10px; margin-top:28px; }
+.button { display:inline-block; padding:12px 18px; border:1px solid var(--ink); text-decoration:none; color:var(--ink); font:12px 'DM Mono',monospace; }
+.button:hover { background:var(--ink); color:var(--paper); }
+.resume { display:flex; justify-content:space-between; align-items:end; gap:30px; }
+.resume h2 { font:500 30px 'Playfair Display',serif; margin:8px 0; }
+.contact { margin-top:28px; padding-top:20px; border-top:1px solid var(--line); line-height:2; font-size:14px; }
+.contact a { color:inherit; }
+.footer { margin-top:80px; font:12px 'DM Mono',monospace; color:var(--muted); }
+/* Resume 弹窗（View Resume） */
+/* z-index 要高于底部状态条(#version-bar, 9999)：弹窗打开时应当独占屏幕，遮住页面上的浮层 */
+.resume-modal { position:fixed; inset:0; z-index:10001; display:flex; align-items:center; justify-content:center; }
+.resume-modal[hidden] { display:none; }
+.resume-modal-backdrop { position:absolute; inset:0; background:rgba(20,18,16,.55); cursor:pointer; }
+/* 弹窗外框：默认就尽量大（JS 再按文件比例调整宽度，且只放大不缩小），高度 = head + 预览区 */
+.resume-modal-card { position:relative; width:min(1200px,96vw); max-width:96vw; max-height:95vh; display:flex; flex-direction:column; background:var(--paper); color:var(--ink); border:1px solid var(--ink); box-shadow:0 24px 70px rgba(0,0,0,.4); }
+.resume-modal-head { flex:0 0 auto; display:flex; justify-content:space-between; align-items:center; gap:16px; padding:8px 14px; border-bottom:1px solid var(--line); min-width:0; }
+/* 标题禁止换行：宽度变化时不改变头部高度，JS 才能算出稳定的预览区尺寸 */
+.resume-modal-title { font:500 17px 'Playfair Display',serif; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0; }
+.resume-modal-actions { display:flex; gap:10px; align-items:center; flex:0 0 auto; }
+/* 头部按钮压缩一档：头部每省 1px，预览区（正文字号）就多 1px */
+.resume-modal-actions .button { padding:7px 12px; }
+/* 查看方式切换（仅 PDF）：适应宽度 = 字大但要滚动；整页 = 一屏看全但字小。物理上不可兼得，交给用户选 */
+.resume-mode { display:flex; align-items:stretch; border:1px solid var(--line); flex:0 0 auto; }
+.resume-mode button { padding:7px 10px; font:12px 'DM Mono',monospace; background:transparent; color:var(--ink); border:0; cursor:pointer; white-space:nowrap; }
+.resume-mode button + button { border-left:1px solid var(--line); }
+.resume-mode button.active { background:var(--ink); color:var(--paper); }
+/* 预览区高度由 JS 写入（FF_resumeApplyFit：吃满视口高度，文件越大越好读）；72vh 只是未跑 JS 时的兜底。
+   overflow:hidden —— 文件应当整页缩放进这块区域，不该出现滚动条。
+   底色用浅灰（不是纯白）：PDF 查看器自带的页面底色就是灰的，「整页」模式下两侧留白才不会连成一片白。 */
+.resume-modal-body { flex:0 0 auto; height:72vh; min-height:0; display:flex; align-items:center; justify-content:center; background:#e9e9ea; overflow:hidden; }
+.resume-frame { width:100%; height:100%; border:0; background:#fff; display:block; }
+.resume-image { width:100%; height:100%; object-fit:contain; background:#fff; display:block; }
+.resume-nopreview { width:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; padding:48px; text-align:center; }
+.resume-open-link { color:var(--accent); text-decoration:underline; }
+/* 下载按钮：允许=随主题强调色高亮；不允许=灰色禁用 */
+.button.resume-download:not(.resume-disabled) { background:var(--accent); color:var(--paper); border-color:var(--accent); }
+.button.resume-download:not(.resume-disabled):hover { filter:brightness(.92); }
+.button.resume-download.resume-disabled { background:transparent; color:var(--muted); border-color:var(--line); cursor:not-allowed; opacity:.7; }
+.resume-close { padding:8px 12px; }
+.ai-media { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; }
+.ai-media img { width:100%; aspect-ratio:16/9; object-fit:cover; background:var(--soft); }
+
+@media(max-width:720px){
+  .shell{padding:18px 20px var(--ff-page-bottom,28px)}
+  .top{padding-bottom:52px}
+  .hero{min-height:0}
+  .entry-btn{grid-template-columns:48px 1fr auto}
+  .entry-panel{padding-left:0}
+  .case-head,.resume{display:block}
+  .case-step{grid-template-columns:1fr;gap:8px}
+  .case-head h2{font-size:28px}
+  .ai-media{grid-template-columns:1fr}
+  .showreel{padding:20px;margin-left:-20px;margin-right:-20px}
+  .chapter{grid-template-columns:96px 1fr}
+  .ch-role{grid-column:2}
+}

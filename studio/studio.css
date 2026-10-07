@@ -1,0 +1,217 @@
+/* FolioFold —— 统一工作台外壳（三个板块同一个链接，共用同一份草稿数据） */
+:root{
+  --st-ink:#161616; --st-paper:#f1eee7; --st-soft:#e7e3da; --st-line:#cac5ba;
+  --st-muted:#77736b; --st-accent:#e64e2e; --st-card:#fffdf9;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;background:var(--st-paper);color:var(--st-ink);
+  font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',system-ui,sans-serif;
+}
+.st-app{display:flex;flex-direction:column;height:100vh}
+
+/* —— 顶栏 —— */
+.st-bar{
+  display:flex;align-items:center;gap:9px;flex-wrap:nowrap;
+  padding:9px 12px;border-bottom:1px solid var(--st-line);background:var(--st-card);
+  position:relative;z-index:5;
+}
+
+/* Phase 1 language switcher: local UI state, deliberately separate from template content. */
+.ff-locale-switch{--ff-locale-ink:var(--st-ink);--ff-locale-bg:var(--st-card);--ff-locale-line:var(--st-line);--ff-locale-soft:var(--st-soft)}
+/* 单行顶栏：品牌 / 导航 / 模板组 / 发布组都固定不缩，只有状态文字可压缩（省略号） */
+.st-brand{font:600 15px/1 'Playfair Display',Georgia,serif;letter-spacing:.01em;white-space:nowrap;flex:0 0 auto}
+/* ⚠ 这里的强调色必须**写死** #e64e2e（品牌橘红），不能用 var(--st-accent)。
+ * --st-accent 会跟着画布主题走（如 Light 02 是墨蓝 #1f4e8c），品牌字标就跟着漂移了
+ * —— 实测 Light 02 下顶栏 Logo 的 "FOLD" 渲染成了墨蓝，与页脚/作品集页的橘红不一致。
+ * 产品标识必须恒定：字体（Playfair Display 600 + DM Mono）、颜色、大小写都不随主题/语言变化。
+ * 见 styles.css 的 .ff-lockup em 与 visual-editor.css 的 .ve-brand em，三处保持同一套。 */
+.st-brand em{font-style:normal;color:#e64e2e;margin-left:4px;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+/* 品牌图标：工作室左上角字标前的应用图标（与浏览器标签图标同一个文件）。
+   刻意保持小尺寸，不做大面积铺放。 */
+.st-brand-icon{width:18px;height:18px;border-radius:5px;vertical-align:-4px;margin-right:7px;display:inline-block;object-fit:cover}
+.st-tabs{display:flex;gap:2px;background:var(--st-soft);border-radius:9px;padding:3px;flex:0 0 auto}
+.st-tab{
+  border:0;background:none;color:var(--st-muted);cursor:pointer;border-radius:7px;
+  font:500 13px/1 'DM Mono',monospace;padding:8px 11px;white-space:nowrap;transition:background .15s,color .15s;
+}
+.st-tab:hover{color:var(--st-ink)}
+.st-tab.on{background:var(--st-card);color:var(--st-ink);box-shadow:0 1px 3px rgba(0,0,0,.10)}
+/* 导航标签的序号单独一个 span：中英切换时只换后面的文字，序号不会被吃掉。 */
+.st-tab-num{font-family:'DM Mono',monospace;font-size:11px;opacity:.6;margin-right:5px}
+.st-tab.on .st-tab-num{opacity:1;color:var(--st-accent)}
+
+/* —— 模板选择器（每个模板是一套完全独立的数据）—— */
+.st-tpl-bar{display:flex;align-items:center;gap:5px;background:var(--st-soft);border-radius:9px;padding:3px;flex:0 0 auto}
+.st-tpl{
+  border:1px solid var(--st-line);background:var(--st-card);color:var(--st-ink);
+  border-radius:7px;font:12px/1 'DM Mono',monospace;padding:8px 10px;cursor:pointer;
+  max-width:132px;height:30px;
+}
+.st-tpl:focus-visible{outline:2px solid var(--st-accent);outline-offset:1px}
+.st-tpl-btn{padding:8px 7px;font-size:11px;background:transparent;border-color:transparent}
+.st-tpl-btn:hover{background:var(--st-card);border-color:var(--st-line)}
+/* —— 版本操作 + 发布（最终操作组，与模板组对称）—— */
+.st-final-bar{display:flex;align-items:center;gap:5px;background:var(--st-soft);border-radius:9px;padding:3px;flex-wrap:nowrap;flex:0 0 auto;margin-left:auto}
+.st-final-bar .st-btn{background:transparent;border-color:transparent;padding:8px 10px}
+.st-final-bar .st-btn:hover{background:var(--st-card);border-color:var(--st-line)}
+.st-final-bar .st-btn.primary{background:var(--st-ink);border-color:var(--st-ink);color:var(--st-paper);margin-left:3px}
+.st-final-bar .st-btn.primary:hover{background:var(--st-accent);border-color:var(--st-accent)}
+/* 状态文字可压缩（省略号），保证整条顶栏在窄窗口下仍是一行 */
+.st-spacer{flex:1 1 auto;min-width:0}
+.st-status{
+  font:12px/1.4 'DM Mono',monospace;color:var(--st-muted);
+  max-width:34vw;min-width:0;flex:0 1 auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.st-status b{color:var(--st-accent)}
+.st-btn{
+  border:1px solid var(--st-line);background:var(--st-card);color:var(--st-ink);border-radius:7px;
+  font:12px/1 'DM Mono',monospace;padding:8px 12px;cursor:pointer;text-decoration:none;white-space:nowrap;
+  transition:background .15s,color .15s,border-color .15s;
+}
+.st-btn:hover{border-color:var(--st-ink)}
+.st-btn.primary{background:var(--st-ink);border-color:var(--st-ink);color:var(--st-paper)}
+.st-btn.primary:hover{background:var(--st-accent);border-color:var(--st-accent)}
+.st-btn[disabled]{opacity:.5;cursor:default}
+.st-btn.st-done{background:#1a7f37;border-color:#1a7f37;color:#fff}
+.st-btn.st-done:hover{background:#15672c;border-color:#15672c}
+/* —— 发布实时进度（大视频要传好几分钟，必须让用户看到在动） —— */
+.st-pub-progress{margin:12px 0 0;border:1px solid var(--st-line);border-radius:8px;background:var(--st-soft);padding:10px 12px}
+.st-pub-prog-stage{font-size:13px;font-weight:600;color:var(--st-ink);margin-bottom:8px;line-height:1.5}
+.st-pub-prog-bar{height:8px;border-radius:5px;background:#e4e4ea;overflow:hidden}
+.st-pub-prog-bar i{display:block;height:100%;background:linear-gradient(90deg,#1a7f37,#2ea043);transition:width .6s ease;min-width:2px}
+.st-pub-prog-pct{font-size:12px;color:var(--st-muted);margin-top:5px;text-align:right;font-variant-numeric:tabular-nums}
+/* —— 发布失败：醒目红色卡片，插到面板最顶部，确保不会被长面板盖住 —— */
+.st-pub-err-box{margin:8px 0 14px;padding:12px 14px;border:1px solid #e6a3a3;border-left:4px solid #c0392b;border-radius:8px;background:#fdecec;color:#9a1f1f;line-height:1.65;white-space:pre-wrap;word-break:break-word}
+.st-pub-err-title{font-size:14px;font-weight:700;margin-bottom:4px}
+.st-pub-err-body{font-size:13px;font-weight:400}
+/* 失败卡片内部结构：修复引导 + 下一步按钮 + 权限体检结果（改这里必须同步 public-v2.css 的 .pub-err-*） */
+.st-pub-err-box .st-pub-err-fix{margin-top:8px;padding-top:8px;border-top:1px dashed #e6a3a3}
+.st-pub-err-box .st-pub-err-fix a{color:#9a1f1f;text-decoration:underline}
+.st-pub-err-box .st-pub-err-actions{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
+.st-pub-err-box .st-pub-err-report{margin-top:10px;padding-top:10px;border-top:1px dashed #e6a3a3;font-size:13px;font-weight:400;white-space:normal}
+.st-pub-err-box .st-pub-err-report[hidden]{display:none}
+.st-pub-err-box .st-pub-err-report-line{margin:3px 0;line-height:1.6}
+.st-pub-err-box .st-pub-err-report-line ol{margin:4px 0 0;padding-left:20px}
+.st-pub-err-box .st-pub-err-report-line li{margin:2px 0}
+.st-publish-dialog{
+  width:min(720px,calc(100vw - 32px));max-height:calc(100dvh - 32px);
+  border:1px solid var(--st-line);border-radius:10px;background:var(--st-card);color:var(--st-ink);
+  /* 正文左右内边距只在这里给一次（24px），头部/段落/分节全部对齐到同一条基线。
+     之前是头部 margin:0 20px + 自身 padding:20px（≈40px 内缩），而正文 <p> 是 0 ——
+     用户看到的就是「有的文字贴边框、有的又缩进去两格」，整块排版像坏了。 */
+  padding:0 24px 20px;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2);
+}
+/* showModal() 把 dialog 放进浏览器 top layer；不靠一个武断的巨大 z-index。
+   头部固定、正文自己滚动，长说明不会再把真实配置项推到视口外。
+   ⚠ `inset:auto` 会让 dialog 停在**静态位置**（实测就是贴在视口左上角、还不居中，
+   用户原话「它为什么在靠显示屏的左上角…整个显得感觉跟故障了一样」）。
+   `inset:0;margin:auto` 才是 top layer 里的居中写法：宽高都有上限 → 两个方向都居中。 */
+.st-publish-dialog[open]{position:fixed;display:flex;flex-direction:column;inset:0;margin:auto}
+/* 弹窗是 flex 列：除「公开链接」的滚动体外全部固定高度，滚动交给容器自己 */
+.st-publish-dialog>*{flex:0 0 auto}
+.st-publish-dialog>#st-publink-body{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:0}
+.st-publish-dialog>.st-publish-head{padding:20px 0 12px}
+.st-publish-dialog::backdrop{background:rgba(22,22,22,.28)}
+.st-publish-head{display:flex;align-items:center;justify-content:space-between;gap:16px;border-bottom:1px solid var(--st-line);padding-bottom:12px}
+.st-publish-head h2{margin:0;font:600 19px/1.2 Georgia,serif}.st-dialog-close{border:0;background:none;font-size:26px;line-height:1;cursor:pointer;color:var(--st-muted)}
+.st-publish-dialog p{font-size:13px;line-height:1.8;color:var(--st-muted);margin:10px 0}
+.st-publish-dialog>.st-publish-head+p{margin-top:14px}
+.st-publish-actions{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 6px}
+.st-publish-note{border-top:1px solid var(--st-line);padding-top:12px;margin:16px 0 0}
+/* —— 已发布链接列表：分割线画在「每条」之间（包裹 .st-code-row + 路径/时间/按钮行），
+   不再画在路径行的上方（旧版会让人误以为路径行属于「下一条」）。 */
+.st-dep-item{padding-bottom:14px;margin-bottom:14px;border-bottom:1px solid var(--st-line)}
+.st-dep-item:last-child{padding-bottom:0;margin-bottom:0;border-bottom:none}
+.st-dep-item .st-publish-note{border-top:none;padding-top:2px}
+/* —— 模板导出 / 导入 —— */
+.st-publish-section{border-top:1px solid var(--st-line);margin-top:14px;padding-top:16px}
+.st-publish-section h3{margin:0 0 8px;font:600 15px/1.3 Georgia,serif;color:var(--st-ink)}
+.st-publish-section p{margin:0}
+.st-publish-section .st-publish-actions{margin:12px 0 0}
+.st-cb-config-card{margin:14px 0;padding:14px;border:1px solid var(--st-line);border-radius:8px;background:var(--st-soft)}
+.st-cb-config-card h3{margin:0 0 4px;font:600 15px/1.3 Georgia,serif;color:var(--st-ink)}
+.st-cb-config-card p{margin:0 0 10px;font-size:12px;line-height:1.65}
+.st-share-code{margin-top:14px;background:var(--st-soft);border:1px solid var(--st-line);border-radius:8px;padding:12px}
+.st-share-code label{display:block;font-size:12px;color:var(--st-muted);margin-bottom:8px}
+.st-code-row{display:flex;gap:8px;align-items:stretch}
+/* —— Provider 切换（GitHub Pages 默认 / CloudBase 可选 / 导出 ZIP） —— */
+.st-publink-tabs{display:flex;gap:6px;margin:2px 0 14px;border-bottom:1px solid var(--st-line)}
+.st-publink-tab{padding:7px 14px;border:1px solid transparent;border-bottom:none;background:none;color:var(--st-ink);opacity:.6;font:12px ui-monospace,SFMono-Regular,Menlo,monospace;cursor:pointer;border-radius:7px 7px 0 0;margin-bottom:-1px}
+.st-publink-tab:hover{opacity:.9}
+.st-publink-tab.active{opacity:1;border-color:var(--st-line);background:var(--st-card);font-weight:600}
+.st-code-input{flex:1 1 auto;min-width:0;padding:9px 10px;border:1px solid var(--st-line);border-radius:7px;background:var(--st-card);color:var(--st-ink);font:13px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.06em}
+/* 自包含模板码长达几百~上千字符，必须用可换行的 textarea，单行 input 会看不到内容 */
+.st-code-textarea{width:100%;box-sizing:border-box;word-break:break-all;white-space:pre-wrap;letter-spacing:.02em;resize:vertical;line-height:1.5}
+.st-code-tabs{display:flex;gap:6px;margin-bottom:4px}
+.st-code-tab{padding:5px 10px;font-size:12px;opacity:.62}
+.st-code-tab.on{opacity:1;border-color:var(--st-ink);background:var(--st-card)}
+.st-select{display:block;width:100%;box-sizing:border-box;padding:8px 10px;border:1px solid var(--st-line);border-radius:7px;background:var(--st-card);color:var(--st-ink);font-size:13px}
+.st-code-hint{margin:8px 0 0;font-size:11px;color:var(--st-muted)}
+.st-field-label{display:block;font-size:12px;color:var(--st-muted);margin:14px 0 6px}
+.st-file-input{display:block;width:100%;font-size:13px;color:var(--st-muted)}
+.st-json-input{width:100%;box-sizing:border-box;padding:9px 10px;border:1px solid var(--st-line);border-radius:7px;background:var(--st-card);color:var(--st-ink);font:12px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;resize:vertical}
+.st-import-actions{justify-content:flex-end;margin-bottom:0}
+.st-import-note{border-left:3px solid var(--st-accent);padding-left:10px;margin:12px 0 0}
+/* —— 「选一个模板」弹窗（stPickTpl）——
+   必须用原生 <dialog>：showModal() 后进浏览器 **top layer**，天然压住同样在 top layer 里的发布对话框
+   （后开在上）；旧版 z-index:99999 的遮罩永远比 top layer 低 → 用户点不到（2026-09-24 修）。 */
+dialog.st-pick-dialog{
+  width:min(420px,calc(100vw - 32px));padding:18px 20px 16px;
+  border:1px solid var(--st-line);border-radius:10px;background:var(--st-card);color:var(--st-ink);
+  box-shadow:0 20px 60px rgba(0,0,0,.24);
+}
+dialog.st-pick-dialog[open]{position:fixed;inset:0;margin:auto;max-height:calc(100dvh - 32px);overflow:auto}
+dialog.st-pick-dialog::backdrop{background:rgba(22,22,22,.38)}
+dialog.st-pick-dialog h3{margin:0 0 6px;font:600 16px/1.3 Georgia,serif}
+dialog.st-pick-dialog>p{margin:0 0 12px;font-size:12px;line-height:1.6;color:var(--st-muted)}
+.st-pick-list{margin:6px 0 14px;max-height:48vh;overflow:auto}
+.st-pick-row{display:flex;align-items:center;gap:8px;padding:7px 10px;border:1px solid var(--st-line);border-radius:8px;cursor:pointer;margin-bottom:6px}
+.st-pick-row code{margin-left:auto;font-size:11px;opacity:.5}
+.st-pick-name{flex:1;min-width:0}
+.st-pick-empty{margin:0 0 12px;font-size:12px;opacity:.7}
+.st-pick-actions{display:flex;gap:8px;justify-content:flex-end}
+
+/* —— 舞台 —— */
+.st-stage{position:relative;flex:1 1 auto;min-height:0;background:var(--st-soft)}
+.st-pane{position:absolute;inset:0;display:none}
+.st-pane.on{display:block}
+.st-frame{width:100%;height:100%;border:0;display:block;background:var(--st-paper)}
+.st-error{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  padding:30px;text-align:left;font-size:14px;line-height:1.9;
+}
+.st-error code{background:var(--st-soft);padding:1px 5px;border-radius:4px}
+
+/* —— 提示 —— */
+.st-toast{
+  position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(14px);
+  background:var(--st-ink);color:var(--st-paper);border-radius:8px;padding:10px 16px;
+  font:12px/1.4 'DM Mono',monospace;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:20;
+}
+.st-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* 1200 以下先让出品牌名的位置，保证「导航 + 模板组 + 发布组」仍在同一行 */
+@media(max-width:1200px){ .st-brand{display:none} }
+/* 1140 以下实在排不下了：允许整条顶栏换行（整组一起换，不会横向溢出） */
+@media(max-width:1140px){
+  .st-bar{flex-wrap:wrap}
+  .st-final-bar{flex-wrap:wrap;margin-left:0}
+}
+@media(max-width:900px){
+  .st-bar{gap:8px;padding:8px}
+  .st-status{max-width:none;font-size:11px}
+  .st-tpl{max-width:110px}
+  .st-tpl-btn{display:none}
+}
+
+/* 出网方式提示（2026-09-25 加）：系统代理"开着但已失效"会让两个渠道同时发布失败，
+   以前界面上完全看不出来，只能被误导去重新授权。现在如实显示当前是怎么出网的。 */
+.st-pub-net{
+  margin:10px 0 0;padding:7px 10px;border-radius:6px;font-size:11.5px;line-height:1.5;
+  background:var(--st-panel-2,#f3f3f1);color:var(--st-ink-2,#5c5c58);border:1px solid var(--st-line,#e3e3df);
+}
+.st-pub-net.warn{
+  background:#fff6e5;border-color:#f0c675;color:#7a4b00;
+}

@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="zh-CN" translate="no">
+<head><meta charset="UTF-8"><meta name="google" content="notranslate"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>FolioFold Editor</title><link rel="icon" type="image/png" href="/media/brand/folioframe-icon-256.png"><!-- 品牌字体异步加载：media="print" 让它不阻塞首屏，拿到后再换成 all 才生效。 原写法是在 editor.css 里 @import —— 渲染阻塞，连不到 Google 时白等约 2 秒（详见 styles.css 头部注释）。 --><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&amp;family=Noto+Sans+SC:wght@400;500;700&amp;family=Playfair+Display:ital,wght@0,500;0,600;1,500&amp;display=swap" media="print" onload="this.media='all'"><link rel="stylesheet" href="/editor/editor.css?v=20260925r4"><link rel="stylesheet" href="/editor/editor-v3.css?v=20261006a3"><link rel="stylesheet" href="/i18n.css?v=20260927r2">
+<script>
+/* 多模板：把当前地址里的 ?tpl= 自动附加到本页发出的所有 /api/ 请求上。 */
+(function () {
+  var tpl = new URLSearchParams(location.search).get('tpl') || 'main';
+  window.__TPL__ = tpl;
+  function withTpl(u) {
+    if (typeof u !== 'string' || u.indexOf('/api/') !== 0) return u;
+    if (/[?&]tpl=/.test(u)) return u;
+    return u + (u.indexOf('?') >= 0 ? '&' : '?') + 'tpl=' + encodeURIComponent(tpl);
+  }
+  window.__apiUrl = withTpl;
+  var raw = window.fetch.bind(window);
+  window.fetch = function (input, init) {
+    if (typeof input === 'string') input = withTpl(input);
+    return raw(input, init);
+  };
+})();
+</script>
+</head>
+<body data-ff-locale-scope="editor"><div id="editor-app" class="editor-loading">正在加载 FolioFold Editor…</div>
+<script>
+/* 看门狗：任何原因导致没渲染出来，都会显示明确的错误和自救步骤，而不是永远"正在加载"。 */
+(function () {
+  var shown = false;
+  function fail(title, detail) {
+    if (shown) return; shown = true;
+    var el = document.getElementById('editor-app');
+    if (!el) return;
+    el.className = 'editor-error';
+    el.innerHTML =
+      '<h2 style="margin:0 0 10px;font:500 22px/1.3 serif">' + title + '</h2>' +
+      '<p style="margin:0 0 12px">请按顺序试这三步（90% 的情况第 1 步就好）：</p>' +
+      '<ol style="margin:0 0 14px 20px;padding:0;line-height:1.9">' +
+      '<li>看一眼有没有一个黑色命令行窗口标题写着 <code>FolioFold</code>。没有就是服务没开 → 双击 <b>FolioFold 启动.bat</b>。</li>' +
+      '<li>服务开着 → 按 <b>Ctrl + Shift + R</b>（强制刷新，绕过缓存）。</li>' +
+      '<li>还不行 → 双击 <b>FolioFold 修复.bat</b>（一键修复：重启服务 + 打开页面）。</li>' +
+      '</ol>' +
+      '<pre id="err-detail" style="white-space:pre-wrap;background:#fff;border:1px solid #e5cdc5;padding:10px;font-size:12px;color:#8a3a28">' + detail + '</pre>' +
+      '<button class="button primary" onclick="location.reload()">重新加载本页</button>';
+  }
+  window.addEventListener('error', function (e) {
+    var t = e && e.target;
+    if (t && t !== window) {
+      // 资源加载失败不会中断脚本运行。
+      if (t.tagName === 'SCRIPT' || t.tagName === 'LINK') {
+        /* ⚠ 只有**本站自己的**脚本/样式挂了才算致命。
+           第三方资源连不上是常态（本机系统代理可能是死的、或防火墙拦了）——
+           品牌字体（fonts.googleapis.com）加载失败只少一个字体，绝不该把整个编辑器
+           替换成"有个文件没加载成功"的错误页。 */
+        var url = t.src || t.href || '';
+        var own = !url || url.indexOf(location.origin) === 0 || url.charAt(0) === '/' || url.charAt(0) === '.';
+        if (own) { fail('有个文件没加载成功', url); return; }
+        try { console.warn('[FolioFold] 第三方资源没加载出来（不影响使用）：', url); } catch (_) {}
+        return;
+      }
+      // ★ 2026-09-22：以前 img/video/audio 之类也会掉进下面"脚本出错"的分支 ——
+      // 于是一张图 404 就把整个编辑器替换成错误页，还谎报"页面脚本出错了"。
+      // 资源缺失只是少一张图，绝不该替换界面；留一条控制台记录就够。
+      try { console.warn('[FolioFold] 资源没加载出来（不影响使用）：', t.currentSrc || t.src || t.tagName); } catch (_) {}
+      return;
+    }
+    var msg = (e && e.message) || '';
+    var line = (e && e.lineno) || 0;
+    // 信息为空的 error 事件（跨域脚本、扩展注入等）不该把界面换成错误页。
+    if (!msg && !line) { try { console.warn('[FolioFold] 收到信息为空的 error 事件，已忽略'); } catch (_) {} return; }
+    fail('页面脚本出错了', msg + '\n' + ((e && e.filename) || '') + ' 第 ' + line + ' 行');
+  }, true);
+  window.addEventListener('unhandledrejection', function (e) {
+    fail('数据没取回来', String((e.reason && e.reason.message) || e.reason || ''));
+  });
+  setTimeout(function () {
+    var el = document.getElementById('editor-app');
+    if (el && !el.querySelector('.editor') && !el.classList.contains('editor-error')) {
+      fail('等了 10 秒还没加载完', '本地服务可能没在跑，或浏览器还在用旧缓存页面。\n（自检地址：http://localhost:3000/api/health）');
+    }
+  }, 10000);
+})();
+</script>
+<script src="/i18n-zh-en.js?v=20260927r6"></script>
+<script src="/i18n.js?v=20260927r6"></script>
+<script src="/editor/themes.js?v=20260925r3"></script>
+<script src="/editor/ai-organizer.js?v=20261003r1" defer></script>
+<script src="/display-zones.js?v=20261006a3" defer></script>
+<script src="/sections.js?v=20260924struct2" defer></script>
+<script src="/editor/editor-v3.js?v=20261006a3" defer></script>
+</body>
+</html>

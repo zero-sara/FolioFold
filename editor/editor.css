@@ -1,0 +1,40 @@
+/* ⚠ 品牌字体不再用 @import 加载（渲染阻塞，连不到 Google 时白等约 2 秒，见 styles.css 头部注释）。
+   改由 editor/index.html 顶部的 <link media="print" onload=...> 异步加载。 */
+:root{--ink:#1b1b19;--paper:#f3f0e9;--soft:#e5e0d6;--line:#c9c3b7;--accent:#e64e2e;--muted:#747068;--dark:#20201e;--surface:#f8f5ee;--surface2:#efe9dd;--field:#ffffff;--card:#ffffff;--danger:#b3261e;--ok:#2f6b46;--warn:#9a6b1e;--hero-eyebrow:#e64e2e;--on-solid:#ffffff}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:14px 'Noto Sans SC',sans-serif}.editor-loading{padding:30px 44px;font:14px 'Noto Sans SC',sans-serif;color:var(--muted)}.editor-error{max-width:720px;margin:10vh auto;padding:28px;border:1px solid var(--danger,#a62817);background:var(--surface2,#fff8f5);color:var(--danger,#6f1c0f);line-height:1.7}.editor{display:grid;grid-template-columns:250px minmax(0,1fr);min-height:100vh}.side{background:var(--dark);color:#f3f0e9;padding:24px 16px;position:sticky;top:0;height:100vh}.brand{font:500 23px 'Playfair Display',serif;margin:0 8px 46px}.brand small,.eyebrow{display:block;font:11px 'DM Mono',monospace;letter-spacing:.07em;text-transform:uppercase;color:#aaa49b;margin-bottom:8px}.nav{display:block;width:100%;border:0;background:none;color:inherit;text-align:left;padding:12px 9px;cursor:pointer;font:13px 'DM Mono',monospace}.nav:hover,.nav.active{background:rgba(255,255,255,.16)}.side-bottom{position:absolute;bottom:22px;left:24px;right:24px;color:#aaa49b;font:11px 'DM Mono',monospace}.main{padding:30px 44px 72px;max-width:1300px}.bar{display:flex;justify-content:space-between;gap:16px;align-items:start;border-bottom:1px solid var(--ink);padding-bottom:24px;margin-bottom:28px}.bar h1{font:500 38px 'Playfair Display',serif;margin:0}.actions{display:flex;gap:8px;flex-wrap:wrap}.button{border:1px solid var(--ink);background:transparent;color:var(--ink);padding:10px 13px;cursor:pointer;font:11px 'DM Mono',monospace;text-transform:uppercase}.button.primary{background:var(--ink);color:var(--paper)}.button.danger{border-color:var(--danger);color:var(--danger)}.button:hover{background:var(--soft)}.button.primary:hover{background:var(--accent);color:var(--paper)}.status{font:11px 'DM Mono',monospace;color:var(--muted);margin-top:9px}.grid{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:36px}.panel{border-top:1px solid var(--ink);padding:18px 0 24px}.panel h2{font:500 24px 'Playfair Display',serif;margin:0 0 18px}.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.field{display:grid;gap:6px}.field.full{grid-column:1/-1}label{font:11px 'DM Mono',monospace;text-transform:uppercase;color:var(--muted)}input,textarea,select{font:inherit;border:1px solid var(--line);background:var(--field);padding:10px;width:100%;color:var(--ink)}textarea{min-height:94px;resize:vertical}.edit-card{border:1px solid var(--line);padding:15px;margin:0 0 10px;background:var(--surface)}.edit-card summary{cursor:pointer;font:500 14px 'Noto Sans SC',sans-serif;margin-bottom:14px}.edit-card summary span{float:right;color:var(--muted);font:11px 'DM Mono',monospace}.thumb{width:100px;height:68px;object-fit:cover;border:1px solid var(--line);margin:8px 8px 0 0}.media-controls label{margin:10px 0 0}.list-item{border:1px solid var(--line);padding:15px;margin-bottom:10px;background:var(--surface)}.item-top{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:12px}.item-top strong{font-weight:500}.controls{display:flex;gap:6px}.icon{border:1px solid var(--line);background:transparent;width:29px;height:29px;cursor:pointer}.icon:hover{background:var(--soft)}.add{margin-top:4px}.aside{border-left:1px solid var(--line);padding-left:25px}.aside h3{font:500 18px 'Playfair Display',serif;margin:0 0 12px}.structure{list-style:none;padding:0;margin:0 0 28px;border-top:1px solid var(--line)}.structure li{display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--line);font:12px 'DM Mono',monospace}.hint{font-size:12px;line-height:1.7;color:var(--muted)}.upload{border:1px dashed var(--line);padding:13px;background:var(--surface)}.upload input{border:0;padding:4px 0;background:transparent}.media-name{font:12px 'DM Mono',monospace;margin-top:8px;word-break:break-all}.chapter-time{display:grid;grid-template-columns:1fr 1fr;gap:10px}.preview-frame{width:100%;height:70vh;border:1px solid var(--line);background:var(--surface,#fff)}.toast{position:fixed;right:22px;bottom:22px;background:var(--ink);color:var(--paper);padding:11px 15px;font:12px 'DM Mono',monospace;opacity:0;transition:.2s}.toast.show{opacity:1}@media(max-width:850px){.editor{grid-template-columns:1fr}.side{position:static;height:auto;padding:18px}.brand{margin:0 0 14px}.nav{display:inline-block;width:33.333%}.side-bottom{display:none}.main{padding:22px}.grid{grid-template-columns:1fr}.aside{border-left:0;border-top:1px solid var(--line);padding:18px 0}.fields{grid-template-columns:1fr}.bar{display:block}.actions{margin-top:16px}}
+/* —— 未保存提示 —— */
+.save-flag{font:11px 'DM Mono',monospace;font-weight:500;margin-right:4px;align-self:center}
+.save-flag:not(:empty){color:var(--danger)}
+/* —— 页面结构面板 —— */
+/* 每行 = 左「名称/显示/排序」+ 右「区块 Logo 控件」，所以 struct-row 改成纵向容器 */
+.struct-row{display:flex;flex-direction:column;gap:10px;padding:12px 14px;border:1px solid var(--line);border-radius:6px;margin-bottom:10px;background:var(--surface)}
+.struct-main{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.struct-title{font-size:15px;font-weight:600;color:var(--ink);display:flex;align-items:center;gap:8px}
+.struct-title input{font-weight:400;width:180px}
+.struct-visible{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);white-space:nowrap}
+.struct-actions{display:flex;gap:8px}
+.struct-actions .button[disabled]{opacity:.35;cursor:not-allowed}
+.struct-actions .button[disabled]:hover{background:transparent}
+/* —— 稳定代号 + 功能点（2026-09-24 第六版）——
+   ⚠ 用户要求：**不给模块贴"它是什么区域"的标签，也不写区域简介**。
+   「不需要有明确称呼，比如个人档案与信息区、任职经历区，这些什么都不要……
+     真正要让它作为什么区域，是使用者他自己决定的。」
+   所以这一条只放三样东西：大字母代号 + 当前显示名称（可直接改）+ 该模块的功能点。
+   代号要"一眼可读"：等宽字体 + 反白方块；功能点弱化字色，不抢戏。 */
+.struct-code{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;padding:0 0 10px;border-bottom:1px dashed var(--line)}
+.struct-code-badge{flex:0 0 auto;width:34px;height:34px;display:flex;align-items:center;justify-content:center;border:1px solid var(--ink);border-radius:6px;background:var(--ink);color:var(--paper);font:500 17px 'DM Mono',monospace;letter-spacing:.02em}
+.struct-code .struct-title{flex:0 1 auto;margin:0}
+.struct-title-cap{font-size:12px;font-weight:400;color:var(--muted);white-space:nowrap}
+.struct-code-feats{flex:1 1 100%;display:flex;flex-wrap:wrap;gap:5px}
+.struct-feat{font:11px 'DM Mono',monospace;color:var(--muted);background:var(--soft);border-radius:999px;padding:2px 9px;white-space:nowrap}
+/* 区块 Logo 控件比项目级更扁（一格宽），单独收一收内边距 */
+.section-logo-card{padding:10px 12px}
+.thumb{width:100%;max-width:720px;height:auto;max-height:320px;object-fit:contain;border:1px solid var(--line);margin:8px 8px 0 0;background:var(--soft)}
+.thumb-row{display:flex;align-items:center;gap:10px;margin-top:8px;flex-wrap:wrap}
+.thumb-row .thumb{margin:0;max-height:120px;max-width:180px}
+.thumb-row .button{padding:6px 10px}
+.translation-draft{margin:14px 0;padding:13px;border:1px solid var(--line);background:var(--soft)}
+.translation-draft h4{margin:0 0 8px;font:500 14px 'Noto Sans SC',sans-serif}
+.translation-draft textarea{min-height:72px;background:var(--surface);color:var(--muted)}
+.translation-draft .button:disabled{cursor:not-allowed;opacity:.55}
+.translation-source{font-size:12px;color:var(--muted);margin:0 0 5px}.translation-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.translation-note{min-height:1.4em}
+.translation-status{margin:0 0 7px;font:11px 'DM Mono',monospace;color:var(--muted)}
