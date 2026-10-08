@@ -1291,7 +1291,8 @@
 
   // 「访问须知」：只陈述访问稳定性可能存在差异，不断言任何地区一定无法访问。
   // ⚠ 改这里必须同步 app-v3.js 的 ghAccessNoteHtml()。
-  const ghAccessNoteHtml = () => `<p class="st-publish-note" style="opacity:.7"><b>访问须知：</b>GitHub Pages 的公开链接在不同网络环境下的访问稳定性可能存在差异。如在你所在环境打开不畅，可改用「导出 ZIP」或 CloudBase，按实际访问环境选择合适的发布方式。</p>`;
+  const ghAccessNoteHtml = () => `<p class="st-publish-note" style="opacity:.7"><b>访问须知：</b>GitHub Pages 的公开链接在不同网络环境下的访问稳定性可能存在差异。如在你所在环境打开不畅，可改用「导出 ZIP」或 CloudBase，按实际访问环境选择合适的发布方式。</p>`
+    + `<p class="st-publish-note" style="opacity:.7;margin-top:6px"><b>⚠ 仓库维护：</b>这个用来发布的仓库建好后，<b>建议不要改名、也不要设为私有</b>——改名会让旧 Pages 链接直接失效（GitHub 不对项目站点做重定向），设为私有会让 Pages 返回 404。若确需改名，改名后重新发布一次并更新已分享的链接即可。</p>`;
   /* —— 上次发布时间 + 「公开版是不是最新」判据（用户原话：想知道上一次更新发布是什么时间，
    *    这样才知道当前是不是最新、需不需要再次点击更新）——
    * 时间来自 /api/deploy/status 的发布记录（deployedAt）；
