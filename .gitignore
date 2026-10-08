@@ -116,3 +116,8 @@ WORKSPACE_OWNERSHIP_SCAN.md
 build/
 *.spec
 release/
+
+# Clean 安全清理暂存区：仅占位文件（.gitkeep + README.md）入库；
+# 真实暂存的废弃内容（build-caches/、media-unref/）不入库，避免误提交大文件。
+Clean/build-caches/
+Clean/media-unref/
