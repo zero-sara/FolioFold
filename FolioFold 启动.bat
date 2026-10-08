@@ -17,7 +17,7 @@ if not errorlevel 1 (
     goto :eof
 )
 
-rem --- 1. Pick Python 3.11 (cgi dependency; 3.13 will not work) ---
+rem --- 1. Pick a compatible Python: 3.11 or 3.12 (both work; 3.13+ removed the cgi module) ---
 set "PY="
 where py >nul 2>nul
 if not errorlevel 1 (
@@ -25,15 +25,24 @@ if not errorlevel 1 (
     if not errorlevel 1 set "PY=py -3.11"
 )
 if not defined PY (
-    where python >nul 2>nul
+    where py >nul 2>nul
     if not errorlevel 1 (
-for /f "tokens=2" %%v in ('python --version 2^>^&1') do echo %%v | findstr /b "3.11" >nul 2>nul && set "PY=python"
+        py -3.12 --version >nul 2>nul
+        if not errorlevel 1 set "PY=py -3.12"
     )
 )
 if not defined PY (
-    echo [Error] Python 3.11 was not found.
-    echo Please install Python 3.11 ^(https://www.python.org/downloads/^) with "Add to PATH" checked.
-    echo Or run manually:  py -3.11 server.py
+    where python >nul 2>nul
+    if not errorlevel 1 (
+for /f "tokens=2" %%v in ('python --version 2^>^&1') do echo %%v | findstr /b /c:"3.11" >nul 2>nul && set "PY=python"
+for /f "tokens=2" %%v in ('python --version 2^>^&1') do echo %%v | findstr /b /c:"3.12" >nul 2>nul && set "PY=python"
+    )
+)
+if not defined PY (
+    echo [Error] Python 3.11 or 3.12 was not found.
+    echo FolioFold needs Python 3.11 or 3.12 ^(3.13 and newer removed a module it relies on^).
+    echo Install one from https://www.python.org/downloads/ with "Add to PATH" checked.
+    echo Or run manually:  py -3.11 server.py    or    py -3.12 server.py
     pause
     goto :eof
 )
