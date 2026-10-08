@@ -540,7 +540,8 @@ GH_REPO_MAX_BYTES = 90 * 1000 * 1000
 # tpl-2（FolioFold Demo）的名字是 "FolioFold"，会派生出已弃用的 foliofold 仓，
 # 导致 Demo 误发到旧仓库。现在统一回落到 GH_PUBLISH_REPO，且永不复用
 # GH_PUBLISH_REPO_DEPRECATED（foliofold，已弃用，只读保留）。
-GH_PUBLISH_REPO = 'FolioFrame'
+# 2026-10-08：默认发布仓库由 FolioFrame 统一更名为 FolioFoldPages（旧名仅作历史记录）。
+GH_PUBLISH_REPO = 'FolioFoldPages'
 GH_PUBLISH_REPO_DEPRECATED = 'foliofold'
 
 def format_mb(nbytes, digits=1):
@@ -1603,11 +1604,12 @@ def _dep_key(d):
 def _gh_repo_name(tpl):
     """推算 GitHub 仓库名（与 github_publish 同口径）：上次发布的仓库（已弃用名除外）> 固定默认仓。
     ⚠ 2026-10-06：不再按 profile.name 的 slug 派生 —— tpl-2 的名字 "FolioFold" 会派生出
-    已弃用的 foliofold 仓。当前环境不设置时一律回落 GH_PUBLISH_REPO。"""
+    已弃用的 foliofold 仓。当前环境不设置时一律回落 GH_PUBLISH_REPO。
+    ⚠ 2026-10-08：旧名 'folioframe'（FolioFrame）也视为弃用，避免改名后回落到已不存在的旧仓库。"""
     try:
         prev = load_public_link()
         r = ((prev.get('meta') or {}).get('repoName') or '') if prev.get('provider') == 'github' else ''
-        if r and r.strip().lower() != GH_PUBLISH_REPO_DEPRECATED:
+        if r and r.strip().lower() not in (GH_PUBLISH_REPO_DEPRECATED, 'folioframe'):
             return r[:50]
         return GH_PUBLISH_REPO
     except Exception:
@@ -1998,8 +2000,8 @@ def slugify_project(name):
     s = re.sub(r'[^a-z0-9-]', '-', str(name or '').lower()).strip('-')
     s = re.sub(r'-+', '-', s)
     if not s or not re.match(r'^[a-z0-9]', s):
-        s = 'FolioFrame'
-    return s[:50] or 'FolioFrame'
+        s = 'portfolio'
+    return s[:50] or 'portfolio'
 
 def collect_media_refs(published, design):
     """收集 Published 数据 + Design 里所有指向本地 /media/ 的引用（头像 / 项目图视频 / Showreel / AI 封面…）。"""
@@ -4131,12 +4133,13 @@ def github_publish(tpl, meta, sub='', reserved=()):
                       + '。请点「断开 GitHub」后重新「连接 GitHub」完成一次授权。')
     login = cap.get('login') or tok.get('login') or ''
     # 仓库名优先级（⚠ 2026-10-06 发布收口）：
-    # 上次发布用的仓库（重复发布必须落到同一个仓库；已弃用的 foliofold 除外）
+    # 上次发布用的仓库（重复发布必须落到同一个仓库；已弃用的 foliofold / folioframe 除外）
     # > 固定默认仓 GH_PUBLISH_REPO。不再按 profile.name 的 slug 自动派生 ——
     # tpl-2 的名字是 "FolioFold"，会派生出已弃用的 foliofold 仓。
+    # ⚠ 2026-10-08：旧名 folioframe（FolioFrame）一并排除，避免改名后回落到已不存在的旧仓库。
     prev = load_public_link()
     prev_repo = ((prev.get('meta') or {}).get('repoName') or '') if prev.get('provider') == 'github' else ''
-    if (prev_repo or '').strip().lower() == GH_PUBLISH_REPO_DEPRECATED:
+    if (prev_repo or '').strip().lower() in (GH_PUBLISH_REPO_DEPRECATED, 'folioframe'):
         prev_repo = ''
     repo_name = (prev_repo or GH_PUBLISH_REPO)[:50] or GH_PUBLISH_REPO
     # ⚠ 每次发布用独立的临时目录，避免两次发布并发跑时互相 rmtree 掉对方的打包目录
