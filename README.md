@@ -164,22 +164,6 @@ FolioFold 没有自己的服务器。内容、媒体和令牌都只存在你的�
 - **源码仓库（FolioFold 本体）不能包含任何私人信息**：所有私人内容都在你本机 `content/` 下（已被 `.gitignore` 排除），不会进入公开源码。
 - **私人的 Main 工作区绝不能误发到公开的 Pages 仓库**：发布面板只发布你选择发布的模板；若发现 Main 被误发布，属于需要修正的问题。
 
-### 以后怎么自己改这份说明 / 项目
-
-有两种方式，按需选择：
-
-**方式 A · 本地 git 工作流（推荐，能保留完整历史）**
-1. 克隆仓库：`git clone https://github.com/zero-sara/FolioFold.git` 然后 `cd FolioFold`
-2. 用任意编辑器改文件（例如这份 `README.md`）
-3. 提交并推送：`git add -A && git commit -m "你的说明" && git push origin master`（`master` 是源码分支；Pages 站点由 `FolioFoldPages` 仓库承载）
-4. 改动几秒后就会出现在 GitHub 上
-
-**方式 B · GitHub 网页编辑器（最快，但不便管理历史）**
-1. 在 GitHub 打开文件（如 `README.md`），点铅笔图标直接改
-2. 页面底部填提交说明并提交
-
-> ⚠️ **网页改不会自动同步回你本机**：方式 B 的改动只存在于 GitHub，你的本地仓库不会自动更新。要让本机和 GitHub 保持一致，需要 `git pull` 把网页上的改动拉回来（本地有未推送改动时先 `git push`，再 `pull` 或处理冲突）。两种方式改的是同一份文件，最终都要靠 `pull` / `push` 来对齐。
-
 ---
 
 ## English
@@ -271,22 +255,6 @@ FolioFold has no server of its own. Your content, media and tokens stay on your 
 - **Seeing your real name, contact info, or work inside the publish repository (FolioFoldPages) is normal and expected** — that is content you chose to publish, not a leak.
 - **The source repository (FolioFold itself) must contain no personal information**: all private content lives in `content/` on your machine (excluded by `.gitignore`) and never enters the public source.
 - **The private Main workspace must never be published to the public Pages repository by mistake**: the publish panel only publishes the template you choose; if Main is ever published, that is a bug to fix.
-
-### Editing this project yourself later
-
-Two ways, pick what fits:
-
-**Option A · Local git workflow (recommended; keeps full history)**
-1. Clone: `git clone https://github.com/zero-sara/FolioFold.git` then `cd FolioFold`
-2. Edit any file (this `README.md`, for example) in your editor
-3. Commit and push: `git add -A && git commit -m "your note" && git push origin master` (`master` is the source branch; the Pages site lives in the `FolioFoldPages` repo)
-4. Changes appear on GitHub within seconds
-
-**Option B · GitHub web editor (fastest, but harder to manage history)**
-1. Open the file on GitHub (e.g. `README.md`) and click the pencil icon to edit in place
-2. Fill in a commit note at the bottom and commit
-
-> ⚠️ **Web edits do NOT sync back to your machine automatically**: changes made via Option B live only on GitHub — your local clone is not updated for you. To keep local and GitHub in sync, run `git pull` to bring web edits down (if you have unpushed local changes, push first, then pull or resolve the conflict). Both paths edit the same file; `pull`/`push` is what keeps them aligned.
 
 ---
 
