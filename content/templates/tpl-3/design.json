@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "designVersion": 2,
-  "savedAt": "2026-10-04T11:12:20Z",
+  "designVersion": 17,
+  "savedAt": "2026-10-08T07:19:21Z",
   "theme": {
     "preset": "light-02",
     "mode": "light"
@@ -18,16 +18,16 @@
   },
   "displayZones": {
     "hero": [
-      "eyebrow",
       "name",
+      "eyebrow",
       "role",
       "intro"
     ],
     "secondary": [
+      "audioIntro",
       "highlights",
-      "contactLinks",
       "publicLinks",
-      "skills"
+      "contactLinks"
     ]
   },
   "pixel": {

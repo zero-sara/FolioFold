@@ -34,7 +34,7 @@
     "publicLinks": [
       {
         "label": "GitHub",
-        "value": "https://zero-sara.github.io/FolioFrame/"
+        "value": "https://zero-sara.github.io/FolioFoldPages/"
       }
     ]
   },
@@ -361,8 +361,8 @@
       "localeKey": "6bad4ed5-a3e2-4e39-81f1-e8791667cad8",
       "media": {
         "image": {
-          "url": "/media/experience/C1-2.png",
-          "name": "C1-2.png",
+          "url": "/media/experience/C1.png",
+          "name": "C1.png",
           "type": "image/png"
         }
       }
@@ -769,10 +769,10 @@
     }
   },
   "localePins": {
-    "profile.name": 1,
     "profile.skills": 1,
     "staticText.eyebrow-selected-works": 1,
-    "aiVoices.projects.0.name": 1
+    "aiVoices.projects.0.name": 1,
+    "profile.name": 1
   },
   "audioIntro": {
     "url": "/media/audioIntro/ok.wav",

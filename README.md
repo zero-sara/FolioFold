@@ -11,23 +11,28 @@ FolioFold helps you turn scattered experience, work and ideas into a **résumé/
 ## ✨ Try the FolioFold Demo
 
 - **[打开 FolioFold Demo](https://zero-sara.github.io/FolioFoldPages/)**
-- **[备用入口 / Mirror](https://folioframe-site-d4f57yrt27bf927f-1486162327.tcloudbaseapp.com/FolioFrame-2/)**
 
 这是公开的展示示例，可以看 FolioFold 做出来的实际效果。
+
+### 🖼️ 产品截图 / Screenshots
+
+| 作品集 Portfolio | 排版编辑 Visual editor | 文本编辑 Text editor |
+|:--:|:--:|:--:|
+| ![作品集页面](docs/images/portfolio.png) | ![排版编辑页面](docs/images/visual-editor.png) | ![文本编辑页面](docs/images/text-editor.png) |
 
 ---
 
 ## ⚡ Quick Start
 
-> ⚠️ **两种启动方式其实是同一个软件**：方式一是双击 `FolioFold.exe` 启动器（Windows 一键），方式二是双击 `FolioFold 启动.bat` / `停止.bat`。两者都会启动同一套本地服务，只是入口不同，效果完全一样。**两种方式都要求本机已安装 Python 3.11**。
+> ⚠️ **两种启动方式其实是同一个软件**：方式一是双击 `FolioFold.exe` 启动器（Windows 一键），方式二是双击 `FolioFold 启动.bat` / `停止.bat`。两者都会启动同一套本地服务，只是入口不同，效果完全一样。**两种方式都要求本机已安装 Python 3.11 或 3.12**。
 
 **方式一 · EXE 启动器（Windows 一键）**
-1. 确保本机已装 **Python 3.11**（服务器依赖 Python 3.12 之后被移除的 `cgi` 模块，3.12+ 不可用）
+1. 确保本机已装 **Python 3.11 或 3.12**（服务器用到 Python 3.13 才移除的 `cgi` 模块，3.13 及以上无法运行）
 2. 双击项目根目录的 **`FolioFold.exe`** 启动，浏览器自动打开 <http://127.0.0.1:3000/>
 3. 关闭时双击 **`FolioFold 停止.bat`**
 
 **方式二 · BAT（最稳妥的兜底，推荐先用这个）**
-1. 确保本机已装 **Python 3.11**
+1. 确保本机已装 **Python 3.11 或 3.12**
 2. 双击项目根目录的 **`FolioFold 启动.bat`**
 3. 浏览器自动打开 <http://127.0.0.1:3000/>
 4. 关闭时双击 **`FolioFold 停止.bat`**（只停 FolioFold 自己的服务，不影响其他程序）
@@ -40,13 +45,16 @@ FolioFold helps you turn scattered experience, work and ideas into a **résumé/
 
 不想自己敲命令？把下面**对应的一段**整段复制给任意 AI 助手（如 ChatGPT / Claude / 本机 AI 助手），它就能照着在你的电脑上装好并跑起来。
 
+当前支持 **10** 种语言：中文 / 繁體中文 / English / 日本語 / 한국어 / Français / Español / Italiano / Deutsch / Português
+<sub>语言代码：zh-CN · zh-TW · en · ja · ko · fr · es · it · de · pt（以仓库 `i18n.js` 的 `LANGS` 为准）</sub>
+
 **单语言版（界面固定一种语言，没有语言切换入口）**：
 
 ```
 请帮我在我的电脑上安装并启动 FolioFold（一个本地运行的简历/作品集编辑器，做成单语言版）。
 步骤：
 1. 打开终端，运行：git clone https://github.com/zero-sara/FolioFold.git  然后 cd FolioFold
-2. 确认本机已安装 Python 3.11（不是 3.12+，因为服务器依赖已被移除的 cgi 模块；没装的话先去 python.org 装 3.11）
+2. 确认本机已安装 Python 3.11 或 3.12（3.13+ 不行，因为服务器依赖 3.13 才移除的 cgi 模块；没装的话去 python.org 装 3.11 或 3.12）
 3. 编辑仓库里的 dist-config.js，把 langMode 设为 'single'、defaultLang 设为 'zh-CN'（中文单语言；想要英文就填 'en'）
 4. 双击项目根目录的「FolioFold 启动.bat」启动，浏览器会自动打开 http://127.0.0.1:3000/
 5. 关闭时双击「FolioFold 停止.bat」
@@ -59,14 +67,14 @@ FolioFold helps you turn scattered experience, work and ideas into a **résumé/
 请帮我在我的电脑上安装并启动 FolioFold（一个本地运行的简历/作品集编辑器，支持多语言）。
 步骤：
 1. 打开终端，运行：git clone https://github.com/zero-sara/FolioFold.git  然后 cd FolioFold
-2. 确认本机已安装 Python 3.11（不是 3.12+，因为服务器依赖已被移除的 cgi 模块；没装的话先去 python.org 装 3.11）
+2. 确认本机已安装 Python 3.11 或 3.12（3.13+ 不行，因为服务器依赖 3.13 才移除的 cgi 模块；没装的话去 python.org 装 3.11 或 3.12）
 3. 保持 dist-config.js 默认（langMode: 'multi'，完整 i18n，保留语言切换入口）
 4. 双击项目根目录的「FolioFold 启动.bat」启动，浏览器会自动打开 http://127.0.0.1:3000/
 5. 关闭时双击「FolioFold 停止.bat」
 如果遇到端口被占用或 Python 报错，请把报错原样贴给我。
 ```
 
-> 说明：FolioFold 不是"下载完 EXE 就能直接跑、无需任何环境"的软件——它的启动器依赖本机 **Python 3.11**。仓库里没有预编译的 Release 安装包下载链接，请直接 `git clone` 源码后用上面的方式启动。单语言/多语言只是同一份代码的一个开关（`dist-config.js`），切换不需要改任何其它文件。
+> 说明：FolioFold 不是"下载完 EXE 就能直接跑、无需任何环境"的软件——它的启动器依赖本机 **Python 3.11 或 3.12**。仓库里没有预编译的 Release 安装包下载链接，请直接 `git clone` 源码后用上面的方式启动。单语言/多语言只是同一份代码的一个开关（`dist-config.js`），切换不需要改任何其它文件。
 
 ---
 
@@ -109,7 +117,7 @@ Starter 是你开始制作自己的简历/作品集的起点；FolioFold Demo �
 
 ### 🛠️ 开始使用
 
-需要 **Python 3.11**。FolioFold 本身没有第三方依赖，但服务器用到了 Python 3.12 之后被移除的 `cgi` 模块。
+需要 **Python 3.11 或 3.12**。FolioFold 本身没有第三方依赖，但服务器用到了 Python 3.13 才移除的 `cgi` 模块（3.13 及以上无法运行）。
 
 ```bash
 git clone https://github.com/zero-sara/FolioFold.git
@@ -136,7 +144,7 @@ Windows 用户直接双击项目根目录的 **`FolioFold 启动.bat`**（端口
 https://<你的 GitHub 用户名>.github.io/FolioFoldPages/<子路径>/
 ```
 
-- **仓库名**默认是 `FolioFoldPages`（在 `server.py` 的 `GH_PUBLISH_REPO` 里固定；旧名 `FolioFrame` 已于 2026-10-08 退役，仅作历史记录，不再使用）。它建在**你自己**的 GitHub 账号下，不会占用别人的空间。1.0 暂不支持在发布面板里自定义仓库名（这是计划中的增强项）；GitHub 的仓库名是按「账号命名空间」独立的——不同用户可以用同名仓库，但同一账号下不能重名。
+- **仓库名**默认是 `FolioFoldPages`（在 `server.py` 的 `GH_PUBLISH_REPO` 里固定）。它建在**你自己**的 GitHub 账号下，不会占用别人的空间。1.0 暂不支持在发布面板里自定义仓库名（这是计划中的增强项）；GitHub 的仓库名是按「账号命名空间」独立的——不同用户可以用同名仓库，但同一账号下不能重名。
 - **子路径**可以在发布面板里自己填，用来区分多份简历/作品集；留空就是仓库根目录。
 - Pages 的启用是 FolioFold 自动做的，你不需要手动去 GitHub 设置里开。
 - ⚠ **发布用的这个仓库建好后，建议不要改名、也不要设为私有**：改名会让旧的 Pages 链接直接失效（GitHub 不会对项目站点做重定向），设为私有会让 Pages 返回 404；如果确实需要改名，改名后请重新发布一次，并更新你发出去的所有旧链接。
@@ -201,7 +209,7 @@ You can also import or make other templates: export a look as a template file (v
 
 ### 🛠️ Getting started
 
-Requires **Python 3.11**. FolioFold itself has no third-party dependencies, but the server uses the `cgi` module, which was removed in Python 3.12.
+Requires **Python 3.11 or 3.12**. FolioFold itself has no third-party dependencies, but the server uses the `cgi` module, which was removed in Python 3.13 (so 3.13 and later cannot run).
 
 ```bash
 git clone https://github.com/zero-sara/FolioFold.git
@@ -228,7 +236,7 @@ When your résumé/portfolio is ready:
 https://<your-github-username>.github.io/FolioFoldPages/<sub-path>/
 ```
 
-- The **repository name** defaults to `FolioFoldPages` (fixed in `GH_PUBLISH_REPO` in `server.py`; the old name `FolioFrame` was retired on 2026-10-08 and is kept only as a historical note, no longer used). It is created under **your own** account. Customizing the repo name from the publish panel is not in 1.0 (planned enhancement); GitHub repo names are per-account namespace — different users may share a name, but one account cannot have two repos with the same name.
+- The **repository name** defaults to `FolioFoldPages` (fixed in `GH_PUBLISH_REPO` in `server.py`). It is created under **your own** account. Customizing the repo name from the publish panel is not in 1.0 (planned enhancement); GitHub repo names are per-account namespace — different users may share a name, but one account cannot have two repos with the same name.
 - The **sub-path** is editable in the publish panel — use it to keep several résumés/portfolios apart; leave it empty to publish at the repository root.
 - FolioFold enables GitHub Pages for you. You don't have to flip anything in GitHub's settings.
 - ⚠ **Once this publish repository is created, we recommend you do not rename it and do not make it private**: renaming breaks the old Pages link immediately (GitHub does not redirect project sites), and making it private makes Pages return 404. If you must rename, republish afterwards and update any links you shared.

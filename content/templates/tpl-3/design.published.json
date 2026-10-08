@@ -1,4 +1,11 @@
 {
+  "schemaVersion": 2,
+  "designVersion": 17,
+  "savedAt": "2026-10-08T07:19:21Z",
+  "theme": {
+    "preset": "light-02",
+    "mode": "light"
+  },
   "spacing": {
     "topSpace": 160,
     "heroNameGap": 7,
@@ -9,13 +16,20 @@
     "footerTop": 437,
     "footerBottom": 20
   },
-  "sectionOrder": [
-    "about",
-    "experience",
-    "works",
-    "showreel",
-    "aiVoices"
-  ],
+  "displayZones": {
+    "hero": [
+      "name",
+      "eyebrow",
+      "role",
+      "intro"
+    ],
+    "secondary": [
+      "audioIntro",
+      "highlights",
+      "publicLinks",
+      "contactLinks"
+    ]
+  },
   "pixel": {
     "size": 134,
     "x": null,
@@ -24,20 +38,11 @@
     "xPct": 1.0,
     "yPct": 0.486
   },
-  "displayZones": {
-    "hero": [
-      "eyebrow",
-      "name",
-      "role",
-      "intro"
-    ],
-    "secondary": [
-      "highlights",
-      "contactLinks",
-      "publicLinks",
-      "skills"
-    ]
-  },
-  "schemaVersion": 2,
-  "savedAt": "2026-10-04T11:12:20Z"
+  "sectionOrder": [
+    "about",
+    "experience",
+    "works",
+    "showreel",
+    "aiVoices"
+  ]
 }
