@@ -5487,7 +5487,8 @@ function renderCloudBaseSection(pb, cb){
 // 「访问须知」：只陈述访问稳定性可能存在差异，不断言任何地区一定无法访问。
 // ⚠ 改这里必须同步 studio/studio.js 的同名文案。
 function ghAccessNoteHtml(){
-  return `<p class="publish-desc" style="margin-top:10px;font-size:12px;opacity:.72"><b>访问须知：</b>GitHub Pages 的公开链接在不同网络环境下的访问稳定性可能存在差异。如在你所在环境打开不畅，可改用「导出 ZIP」或 CloudBase，按实际访问环境选择合适的发布方式。</p>`;
+  return `<p class="publish-desc" style="margin-top:10px;font-size:12px;opacity:.72"><b>访问须知：</b>GitHub Pages 的公开链接在不同网络环境下的访问稳定性可能存在差异。如在你所在环境打开不畅，可改用「导出 ZIP」或 CloudBase，按实际访问环境选择合适的发布方式。</p>`
+    + `<p class="publish-desc" style="margin-top:6px;font-size:12px;opacity:.72"><b>⚠ 仓库维护：</b>这个用来发布的仓库建好后，<b>建议不要改名、也不要设为私有</b>——改名会让旧 Pages 链接直接失效（GitHub 不对项目站点做重定向），设为私有会让 Pages 返回 404。若确需改名，改名后重新发布一次并更新已分享的链接即可。</p>`;
 }
 
 // ============ 多模板多路径：已发布列表 + 「新增发布」 ============
