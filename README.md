@@ -10,7 +10,7 @@ FolioFold is a local-first **résumé/portfolio builder and publisher**. Write i
 
 ## ✨ Try the FolioFold Demo
 
-- **[打开 FolioFold Demo](https://zero-sara.github.io/FolioFrame/)**
+- **[打开 FolioFold Demo](https://zero-sara.github.io/FolioFoldPages/)**
 - **[备用入口 / Mirror](https://folioframe-site-d4f57yrt27bf927f-1486162327.tcloudbaseapp.com/FolioFrame-2/)**
 
 这是公开的展示示例，可以看 FolioFold 做出来的实际效果。
@@ -133,27 +133,36 @@ Windows 用户直接双击项目根目录的 **`FolioFold 启动.bat`**（端口
 #### 发布后的网址长什么样
 
 ```
-https://<你的 GitHub 用户名>.github.io/FolioFrame/<子路径>/
+https://<你的 GitHub 用户名>.github.io/FolioFoldPages/<子路径>/
 ```
 
-- **仓库名**默认是 `FolioFrame`（在 `server.py` 的 `GH_PUBLISH_REPO` 里改）。它建在**你自己**的 GitHub 账号下，不会占用别人的空间。
+- **仓库名**默认是 `FolioFoldPages`（在 `server.py` 的 `GH_PUBLISH_REPO` 里固定；旧名 `FolioFrame` 已于 2026-10-08 退役，仅作历史记录，不再使用）。它建在**你自己**的 GitHub 账号下，不会占用别人的空间。1.0 暂不支持在发布面板里自定义仓库名（这是计划中的增强项）；GitHub 的仓库名是按「账号命名空间」独立的——不同用户可以用同名仓库，但同一账号下不能重名。
 - **子路径**可以在发布面板里自己填，用来区分多份简历/作品集；留空就是仓库根目录。
 - Pages 的启用是 FolioFold 自动做的，你不需要手动去 GitHub 设置里开。
+- ⚠ **发布用的这个仓库建好后，建议不要改名、也不要设为私有**：改名会让旧的 Pages 链接直接失效（GitHub 不会对项目站点做重定向），设为私有会让 Pages 返回 404；如果确实需要改名，改名后请重新发布一次，并更新你发出去的所有旧链接。
 
 ⚠️ **改名的后果（GitHub 的真实行为，不是猜测）**：
 
-- **改 GitHub 用户名** → 仓库链接会自动跳转，但**旧的用户主页和 gist 链接会 404**。Pages 网址会跟着你**新**的用户名变。下次发布时 FolioFold 会自动取到新用户名，但**已经存在本机发布记录里的旧网址需要重新发布一次才会更新**。
+- **改 GitHub 用户名** → 你名下仓库的引用会自动跳转到新用户名，但**旧的个人主页和 gist 链接会 404**。Pages 站点**不在**自动重定向范围内：旧的 `https://旧用户名.github.io/FolioFoldPages/` 会直接失效（返回 404），只有新用户名下的 `https://新用户名.github.io/FolioFoldPages/` 能用。FolioFold 在「重新发布 / 更新当前发布」时会用实时授权身份取到新用户名并更新本机发布记录，所以改完用户名后点一次「重新发布」即可让链接回到最新。
 - **改 Pages 仓库名** → 按 GitHub 官方文档，**项目站网址不在重定向范围内**，旧的 `https://<用户名>.github.io/<旧仓库名>/` 会直接失效。改名后请重新发布，并更新你发出去的旧链接。
 
 ### 媒体文件放在哪
 
 上传的图片、音频、视频**都保存在本机项目目录 `public/media/` 下**，按用途分好类：`experience/`（经历）、`projects/`（作品）、`showreel/`（片头视频）、`ai-voices/`（配音）、`brand/`（品牌图标）、`uploads/`（原始上传）。
 
-发布时只会上传**当前内容真正引用到的**那部分媒体，未被引用的文件不会跟着上线。反过来，你在本机删掉某个媒体后，它在 `public/media/` 里的文件会保留下来，方便你随时恢复 —— 需要彻底清理磁盘时，手动删除 `public/media/` 里不再需要的文件即可。
+发布时只会上传**当前内容真正引用到的**那部分媒体，未被引用的文件不会跟着上线。反过来，你在本机删掉某个媒体后，它在 `public/media/` 里的文件会保留下来，方便你随时恢复。
+
+⚠ **`public/media/` 不能整目录删除**：里面既有当前内容正在引用的媒体，也有大量历史遗留文件。删除前请先用引用检查确认某个文件已无任何内容引用——当前内容正在引用的媒体（本机实测约 870MB）一旦删除，会导致线上页面缺图 / 缺视频。未被引用的历史遗留媒体（本机实测约 800MB）可以安全归档 / 删除，但不会因「发布」而被自动清除。构建缓存目录（`release/`、`build/`、`__pycache__/`）同样可以直接删除，不影响任何内容。
 
 ### 你的数据留在本机
 
 FolioFold 没有自己的服务器。内容、媒体和令牌都只存在你的电脑上，涉及凭据的文件都不会进入仓库。内容与设计分开保存，每次保存都会留一份上一版，方便回滚。
+
+### 隐私边界（概念澄清）
+
+- **发布仓库（FolioFoldPages）里出现你的真实姓名、联系方式、作品，是正常且预期的**——那是你主动发布的内容，不是泄露。
+- **源码仓库（FolioFold 本体）不能包含任何私人信息**：所有私人内容都在你本机 `content/` 下（已被 `.gitignore` 排除），不会进入公开源码。
+- **私人的 Main 工作区绝不能误发到公开的 Pages 仓库**：发布面板只发布你选择发布的模板；若发现 Main 被误发布，属于需要修正的问题。
 
 ---
 
@@ -216,27 +225,36 @@ When your résumé/portfolio is ready:
 #### What your published URL looks like
 
 ```
-https://<your-github-username>.github.io/FolioFrame/<sub-path>/
+https://<your-github-username>.github.io/FolioFoldPages/<sub-path>/
 ```
 
-- The **repository name** defaults to `FolioFrame` (change `GH_PUBLISH_REPO` in `server.py`). It is created under **your own** account.
+- The **repository name** defaults to `FolioFoldPages` (fixed in `GH_PUBLISH_REPO` in `server.py`; the old name `FolioFrame` was retired on 2026-10-08 and is kept only as a historical note, no longer used). It is created under **your own** account. Customizing the repo name from the publish panel is not in 1.0 (planned enhancement); GitHub repo names are per-account namespace — different users may share a name, but one account cannot have two repos with the same name.
 - The **sub-path** is editable in the publish panel — use it to keep several résumés/portfolios apart; leave it empty to publish at the repository root.
 - FolioFold enables GitHub Pages for you. You don't have to flip anything in GitHub's settings.
+- ⚠ **Once this publish repository is created, we recommend you do not rename it and do not make it private**: renaming breaks the old Pages link immediately (GitHub does not redirect project sites), and making it private makes Pages return 404. If you must rename, republish afterwards and update any links you shared.
 
 ⚠️ **What renaming actually does (GitHub's documented behaviour, not guesswork)**:
 
-- **Renaming your GitHub username** — references to your repositories redirect automatically, but links to your **old profile page and old gists return 404**. Your Pages URL moves to the new username. FolioFold picks up the new username automatically on your next publish, but **stored links already in your local publish history only refresh after you republish**.
+- **Renaming your GitHub username** — references to your repositories redirect automatically, but your **old profile page and old gists return 404**. GitHub Pages sites are **not** redirected: the old `https://old-username.github.io/FolioFoldPages/` stops working (404) and only `https://new-username.github.io/FolioFoldPages/` works. FolioFold reads the live authenticated username when you **republish / update current publish**, so doing that once after a username change refreshes your stored link.
 - **Renaming the Pages repository** — per GitHub's docs, **project site URLs are not included in the redirect**, so `https://<username>.github.io/<old-repo>/` breaks immediately. Republish afterwards and update any links you shared.
 
 ### Where media files live
 
 Uploaded images, audio and video are stored locally under `public/media/`, sorted by purpose: `experience/`, `projects/`, `showreel/`, `ai-voices/`, `brand/`, `uploads/`.
 
-Publishing uploads **only the media your content actually references** — unreferenced files never go online. Conversely, removing a media item from your portfolio leaves its file on disk for easy recovery; delete files under `public/media/` manually when you want the space back.
+Publishing uploads **only the media your content actually references** — unreferenced files never go online. Conversely, removing a media item from your portfolio leaves its file on disk for easy recovery.
+
+⚠ **Do not delete `public/media/` as a whole**: it holds both media your current content references and a large amount of legacy files. Before deleting anything, confirm via a reference check that the file is no longer referenced — the media your current content references (≈870MB on this machine) must stay or your live pages will lose images/videos. Unreferenced legacy media (≈800MB on this machine) is safe to archive/delete, but it is never removed automatically by publishing. Build-cache directories (`release/`, `build/`, `__pycache__/`) can also be deleted freely without affecting any content.
 
 ### Your data stays local
 
 FolioFold has no server of its own. Your content, media and tokens stay on your machine, and credential files never enter the repository. Each save keeps a previous version you can roll back to.
+
+### Privacy boundary (concept clarification)
+
+- **Seeing your real name, contact info, or work inside the publish repository (FolioFoldPages) is normal and expected** — that is content you chose to publish, not a leak.
+- **The source repository (FolioFold itself) must contain no personal information**: all private content lives in `content/` on your machine (excluded by `.gitignore`) and never enters the public source.
+- **The private Main workspace must never be published to the public Pages repository by mistake**: the publish panel only publishes the template you choose; if Main is ever published, that is a bug to fix.
 
 ---
 
