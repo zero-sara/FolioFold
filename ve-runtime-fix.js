@@ -20,7 +20,20 @@
     const ruleTop = rule ? rule.getBoundingClientRect().top : heroRect.bottom;
     // 角色脚底固定在真正的第一条横线；不再从 hero 高度推算近似值。
     const pixelHeight = Math.max(1, pixel?.offsetHeight || 72);
-    const y = Math.max(0, ruleTop - heroRect.top - pixelHeight);
+    /* 角色的脚底必须**永远**踩在真正的第一条横线上 —— 哪怕这意味着形象要伸到 hero 顶边以上。
+     * 2026-10-08 修复（用户报「隐藏主展示区文字后形象脱离基准线 / 穿模」）：
+     *   原先这里写的是 `Math.max(0, ruleTop - heroRect.top - pixelHeight)`。
+     *   ruleTop - heroRect.top 就是 hero 自身的高度（横线是 hero 的紧邻后继兄弟）。
+     *   当主展示区的姓名/定位/简介被隐藏、hero 缩到**比形象本身还矮**时，这个差值是负数，
+     *   被 0 截断 → 形象顶端被钉死在 hero 顶端，而横线在它上方 → 脚底掉到横线下面（穿模）。
+     *   ⚠ 这不是"没有重新计算"：ResizeObserver 每次都算对了，是被这一行截断掉了。
+     *   把 0 下限去掉，脚底就永远锚在横线上；hero 矮时形象自然往上探出 hero 顶边
+     *   （右侧那一列本来就是空的，不会压到正文）。
+     * 唯一保留的物理兜底：不许把形象画到文档顶端以上（滚动区之外），否则它的头顶
+     *   永远看不到、也没法再操作。这项兜底只在「形象尺寸拉满 + hero 几乎为空 + 页顶无留白」
+     *   的极端配置下才会触发。 */
+    const docTop = heroRect.top + (window.pageYOffset || 0);
+    const y = Math.max(-docTop, ruleTop - heroRect.top - pixelHeight);
     const left = Math.max(0, width * 0.60);
     const right = Math.max(left, width - Math.max(1, pixel?.offsetWidth || 72) - 16);
     return { y, left, right };
