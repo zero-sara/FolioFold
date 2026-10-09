@@ -24,7 +24,7 @@ if /I not "%TARGET%"=="%EXPECTED%" (
 REM --- 2. Explicit confirmation ---
 echo This will PERMANENTLY DELETE all content inside:
 echo   %TARGET%
-echo (the .gitkeep and README.md placeholders are kept)
+echo (the .gitkeep placeholder is kept)
 echo.
 set "ANS="
 set /p ANS=Type YES to continue, or anything else to cancel: 
@@ -41,11 +41,9 @@ for /D %%D in ("%TARGET%\*") do (
 )
 for %%F in ("%TARGET%\*") do (
   if /I not "%%~nxF"==".gitkeep" (
-    if /I not "%%~nxF"=="README.md" (
-      echo del /f /q "%%F"
-      del /f /q "%%F" >nul 2>&1
-    )
+    echo del /f /q "%%F"
+    del /f /q "%%F" >nul 2>&1
   )
 )
-echo [DONE] Clean staging area emptied. Placeholders kept.
+echo [DONE] Clean staging area emptied. The .gitkeep placeholder was kept.
 pause

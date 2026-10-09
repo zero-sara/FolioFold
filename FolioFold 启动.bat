@@ -1,7 +1,7 @@
 @echo off
 setlocal EnableExtensions
 rem ============================================================
-rem  FolioFold Launcher (must ship with the repo, at project root)
+rem  FolioFold start script (must ship with the repo, at project root)
 rem  Uses only %~dp0 to locate the project root. No hardcoded
 rem  machine path / username / token. Portable: clone it to
 rem  C:\FolioFold, D:\FolioFold, E:\MyProjects\FolioFold -> still works.
@@ -17,32 +17,28 @@ if not errorlevel 1 (
     goto :eof
 )
 
-rem --- 1. Pick a compatible Python: 3.11 or 3.12 (both work; 3.13+ removed the cgi module) ---
+rem --- 1. Pick a verified compatible Python: 3.8 through 3.12. ---
 set "PY="
 where py >nul 2>nul
 if not errorlevel 1 (
-    py -3.11 --version >nul 2>nul
-    if not errorlevel 1 set "PY=py -3.11"
-)
-if not defined PY (
-    where py >nul 2>nul
-    if not errorlevel 1 (
-        py -3.12 --version >nul 2>nul
-        if not errorlevel 1 set "PY=py -3.12"
+    for %%V in (3.12 3.11 3.10 3.9 3.8) do (
+        if not defined PY (
+            py -%%V --version >nul 2>nul
+            if not errorlevel 1 set "PY=py -%%V"
+        )
     )
 )
 if not defined PY (
     where python >nul 2>nul
     if not errorlevel 1 (
-for /f "tokens=2" %%v in ('python --version 2^>^&1') do echo %%v | findstr /b /c:"3.11" >nul 2>nul && set "PY=python"
-for /f "tokens=2" %%v in ('python --version 2^>^&1') do echo %%v | findstr /b /c:"3.12" >nul 2>nul && set "PY=python"
+for /f "tokens=2" %%v in ('python --version 2^>^&1') do echo %%v | findstr /r /b /c:"3\.8" /c:"3\.9" /c:"3\.10" /c:"3\.11" /c:"3\.12" >nul 2>nul && set "PY=python"
     )
 )
 if not defined PY (
-    echo [Error] Python 3.11 or 3.12 was not found.
-    echo FolioFold needs Python 3.11 or 3.12 ^(3.13 and newer removed a module it relies on^).
+    echo [Error] A compatible Python 3.8 through 3.12 was not found.
+    echo FolioFold needs Python 3.8 through 3.12 ^(3.13 and newer removed a module it relies on^).
     echo Install one from https://www.python.org/downloads/ with "Add to PATH" checked.
-    echo Or run manually:  py -3.11 server.py    or    py -3.12 server.py
+    echo Or run manually:  py -3.12 server.py
     pause
     goto :eof
 )

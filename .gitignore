@@ -111,13 +111,8 @@ qa/
 _archive/
 WORKSPACE_OWNERSHIP_SCAN.md
 
-# PyInstaller 构建产物（EXE 通过 GitHub Releases 分发，不进源码仓）
-# 源码只保留 launcher.py 与 build_exe.bat；构建缓存与生成的 EXE 一律排除。
-build/
-*.spec
-release/
-
-# Clean 安全清理暂存区：仅占位文件（.gitkeep + README.md）入库；
-# 真实暂存的废弃内容（build-caches/、media-unref/）不入库，避免误提交大文件。
-Clean/build-caches/
-Clean/media-unref/
+# 本地归档与安全清理区：永不进入 Git。
+# Other 用于保留但不适合发布的素材；Clean 仅保留占位文件。
+Other/
+Clean/*
+!Clean/.gitkeep

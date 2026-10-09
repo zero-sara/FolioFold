@@ -30,84 +30,68 @@ FolioFold helps you turn scattered experience, work and ideas into a **résumé/
 
 > FolioFold 是**本地运行**的软件，需要你本机有 **Git** 和 **Python**。**不需要**手动 `pip install` 任何东西——FolioFold 自身没有第三方依赖。
 >
-> **建议使用 Python 3.11 或 3.12**（本项目已实际验证 3.11.6 与 3.12.14）。**Python 3.13 及以上目前无法运行**：项目依赖的 `cgi` 模块已在 3.13 移除；3.8 / 3.9 / 3.10 本机未安装、未验证，请使用 3.11 或 3.12。
+> **已验证支持 Python 3.8–3.12**（已在真机逐一启动并通过健康检查：3.8.20、3.9.25、3.10.21、3.11.6、3.12.14）。**Python 3.13 及以上目前无法运行**：项目依赖的 `cgi` 模块已在 3.13 移除。
 
-**方式一 · BAT 启动脚本（推荐，clone 下来就能用）**
-1. 确认本机已装 **Python 3.11 或 3.12**（启动脚本会在两者之间自动挑选）
-2. 双击项目根目录的 **`FolioFold 启动.bat`**
-3. 浏览器自动打开 <http://127.0.0.1:3000/>
+1. 安装 [Git](https://git-scm.com/downloads) 与[官方 Python](https://www.python.org/downloads/windows/) **3.8–3.12** 中的任一版本
+2. `git clone https://github.com/zero-sara/FolioFold.git`，然后进入 `FolioFold` 目录
+3. 双击 **`FolioFold 启动.bat`**，浏览器会打开 <http://127.0.0.1:3000/>
 4. 关闭时双击 **`FolioFold 停止.bat`**（只停 FolioFold 自己的服务，不影响其他程序）
-
-**方式二 · EXE 启动器（可选，非必需）**
-`FolioFold.exe` 是一个**可选的一键启动器**，它**不是独立软件**——运行它同样要求本机装有 Python 3.11 或 3.12。它**不在源码仓库里**（通过 GitHub Releases 单独分发），也可以运行 `build_exe.bat` 自行构建；拿到后放进项目根目录双击即可。
-
-> 简单说：**`git clone` 之后请用方式一**；方式二只是给想要一键图标的用户准备的替代入口。两者运行的是同一套本地服务，效果完全一样。
 
 ---
 
 ## 🤖 让 AI 帮我安装
 
-不想自己敲命令？把**下面整段**复制给任意 AI 助手（ChatGPT / Claude / 本机 AI 助手等）。它会先检查你的电脑环境，再决定怎么装、怎么启动——而不是一上来就假定环境已经就绪。
+不想自己敲命令？按你要制作的版本，复制**其中一整段**给任意 AI 助手（ChatGPT / Claude / 本机 AI 助手等）。两段不能混用。
 
-当前支持 **10** 种语言：中文 / 繁體中文 / English / 日本語 / 한국어 / Français / Español / Italiano / Deutsch / Português
-<sub>语言代码：zh-CN · zh-TW · en · ja · ko · fr · es · it · de · pt（以仓库 `i18n.js` 的 `LANGS` 为准）</sub>
+### A. 单语言固定版（隐藏语言切换）
+
+> **请先填写：`<固定语言代码>`**。可选：`zh-CN`、`zh-TW`、`en`、`ja`、`ko`、`fr`、`es`、`it`、`de`、`pt`。
 
 ```
-请帮我在我的电脑上检查环境、安装并启动 FolioFold（一个本地运行的简历 / 作品集编辑器）。
+请帮我在我的电脑上安装并启动 FolioFold 的“单语言固定版”（本地运行的简历 / 作品集编辑器）。
+我要固定的语言是：<固定语言代码>。这个版本必须隐藏语言切换入口；不需要、也不要保留语言切换。
 
-请按“先检测 → 再判断 → 缺什么装什么 → 安装后复检 → 最后启动”的顺序进行，
-不要一上来就假定环境已经就绪。
+按“检测 → 安装/复检 → clone → 配置 → 端口保护 → 启动 → 健康检查 → 说明停止方式”的顺序完成。不要假定环境已经就绪。
 
 1) 检测环境
-   - 告诉我当前的操作系统与版本。
    - 检查是否安装了 Git（git --version）。
-   - 列出本机所有已安装的 Python 版本（Windows 可先跑 `py -0p`，再用
-     `python --version` / `python3 --version` 交叉确认；必要时扫描常见安装路径）。
-
-2) 判断版本
-   - FolioFold 需要 Python 3.11 或 3.12，二者都可以。
-   - 如果本机只有 3.13 / 3.14：说明服务器用到的 cgi 模块在 3.13 已被移除，
-     这些版本无法运行，需要安装 3.11 或 3.12。
-   - 如果本机没有任何 Python：需要先安装 3.11 或 3.12（去 Python.org 官方下载页下载 3.11 或 3.12 的 Windows installer）。
-   - 无论哪种情况，都请明确告诉我：现在是什么状态、需要什么、为什么、下一步做什么；
-     不要只丢一句“你自己去装 Python”。
-
-3) 安装缺失项（如需要）
-   - 动手前先把我需要安装的东西列出来，并征得我同意。
-   - Windows 可用 winget（例如 winget install Python.Python.3.12）或去 Python.org 官方下载页
-     https://www.python.org/downloads/windows/ 手动下载 3.11 / 3.12 的 Windows installer；
-     macOS 可用 Homebrew；Linux 可用系统包管理器。安装完成后重新执行第 1、2 步复检，确认 3.11 或 3.12 可用。
-   - 不要假装安装完成；如果需要管理员权限或需要我手动点确认，请明确告诉我。
-
-4) 检查目录与代码
-   - 检查我打算存放 FolioFold 的目录里是否已经有 FolioFold，避免重复克隆。
-   - 若没有，执行：git clone https://github.com/zero-sara/FolioFold.git  然后进入该目录。
-
-5) 检查端口 3000
+   - 列出已安装的 Python 版本（Windows 先跑 `py -0p`，并用 `python --version` / `python3 --version` 复检）。
+   - 可用版本是 Python 3.8–3.12；3.13 及以上不能运行。
+2) 安装并复检缺失项
+   - 缺 Git 或兼容 Python 时，先告诉我需要安装什么并征得同意；Windows 可用 winget 或 Python 官方下载页：https://www.python.org/downloads/windows/
+   - 安装后重新检测，确认 Git 与 Python 3.8–3.12 确实可用。
+3) Clone 与单语言配置
+   - 在我选择的位置检查是否已有 FolioFold；没有才执行 `git clone https://github.com/zero-sara/FolioFold.git` 并进入目录。
+   - 在 `dist-config.js` 设置 `langMode: 'single'` 与 `defaultLang: '<固定语言代码>'`；确认界面没有语言切换入口。
+4) 端口保护与启动
    - 检查 127.0.0.1:3000 是否被占用。
    - 若占用者是已经在运行的 FolioFold，直接打开浏览器即可，不要重复启动。
    - 若是别的程序占用，不要结束它；请告诉我，并给出可行的解决办法。
-
-6) 启动
    - Windows：运行项目根目录的「FolioFold 启动.bat」。
-   - 也可以在仓库目录手动运行：`py -3.11 server.py` 或 `py -3.12 server.py`
-     （macOS / Linux 用兼容版本的：python3 server.py）。
-   - （可选，仅当我想做单语言版时）编辑仓库里的 dist-config.js，把 langMode 设为
-     'single'、defaultLang 设为 'zh-CN'（想用其他语言就填对应代码，如 'en'）。
-     默认是多语言，不需要改动。
-
-7) 验证与收尾
+5) 健康检查与停止
    - 访问 http://127.0.0.1:3000/api/version 与 http://127.0.0.1:3000/api/health，
      确认都返回 200。
-   - 把浏览器地址 http://127.0.0.1:3000/ 给我，让我能直接打开。
    - 告诉我关闭方法：Windows 双击「FolioFold 停止.bat」；或在运行它的终端里按 Ctrl+C。
-
-8) 出错时
-   - 如果遇到端口被占用、Python 报错或启动失败，请把我终端里的报错原文贴回给我，
-     并解释原因和下一步。
 ```
 
-> 说明：仓库里没有预编译的安装包下载链接（EXE 通过 GitHub Releases 单独分发），请 `git clone` 源码后按上面的方式启动。单语言 / 多语言只是同一份代码里的一个开关（`dist-config.js`），切换不需要改动其它文件。
+### B. 多语言版（保留语言切换）
+
+> **无需填写语言代码。** 此版保留内置的语言切换入口，不要改成单语言版。
+
+```
+请帮我在我的电脑上安装并启动 FolioFold 的“多语言版”（本地运行的简历 / 作品集编辑器）。
+必须保留语言切换功能；不要修改 `dist-config.js` 的语言模式。
+
+按“检测 → 安装/复检 → clone → 端口保护 → 启动 → 健康检查 → 说明停止方式”的顺序完成。不要假定环境已经就绪。
+
+1) 检测：检查 Git（git --version）与所有 Python（Windows 先跑 `py -0p`，并用 `python --version` / `python3 --version` 复检）。可用 Python 是 3.8–3.12；3.13 及以上不能运行。
+2) 安装/复检：缺 Git 或兼容 Python 时，先列出需要安装的内容并征得同意；Windows 可用 winget 或 Python 官方下载页：https://www.python.org/downloads/windows/。安装后重新检测，确认 Git 与 Python 3.8–3.12 可用。
+3) Clone：在我选择的位置检查是否已有 FolioFold；没有才执行 `git clone https://github.com/zero-sara/FolioFold.git` 并进入目录。
+4) 端口保护与启动：检查 127.0.0.1:3000。已是 FolioFold 就直接打开；若是别的程序占用，不要结束它，告诉我解决办法。没有冲突时，在 Windows 运行项目根目录的「FolioFold 启动.bat」。
+5) 健康检查与停止：访问 http://127.0.0.1:3000/api/version 与 http://127.0.0.1:3000/api/health，确认都返回 200；关闭时双击「FolioFold 停止.bat」，或在运行它的终端按 Ctrl+C。
+```
+
+> 需要切换版本时，请重新按对应指令设置；不要把单语言版与多语言版的配置混在一起。
 
 ---
 
@@ -150,25 +134,24 @@ Starter 是你开始制作自己的简历 / 作品集的起点；FolioFold Demo 
 
 ### 🛠️ 开始使用
 
-FolioFold 目前建议使用 **Python 3.11 或 3.12**。本项目已实际验证 Python 3.11.6 和 3.12.14；Python 3.13 及以上目前无法运行（项目依赖的 `cgi` 模块已在 3.13 移除）；3.8 / 3.9 / 3.10 本机未安装、未验证。你还需要 **Git**，但 FolioFold 自身没有第三方依赖，**不需要** `pip install`。
+FolioFold 已实际验证 **Python 3.8–3.12**（3.8.20、3.9.25、3.10.21、3.11.6、3.12.14）；**Python 3.13 及以上无法运行**，因为项目依赖的 `cgi` 模块已在 3.13 移除。你还需要 **Git**，但 FolioFold 自身没有第三方依赖，**不需要** `pip install`。
 
 ```bash
 git clone https://github.com/zero-sara/FolioFold.git
 cd FolioFold
-py -3.11 server.py    # 或 py -3.12 server.py
 ```
 
-然后在浏览器打开 <http://127.0.0.1:3000/>。
+然后双击 **`FolioFold 启动.bat`**，在浏览器打开 <http://127.0.0.1:3000/>；关闭时双击 **`FolioFold 停止.bat`**。
 
-Windows 用户直接双击项目根目录的 **`FolioFold 启动.bat`**（自动在 3.11 / 3.12 之间挑选，端口被占用时会自动处理）；关闭时双击 **`FolioFold 停止.bat`**。`FolioFold.exe` 是**可选**的一键启动器（不在源码仓库内，可从 GitHub Releases 获取或自行构建），运行它同样需要本机装有 Python 3.11 或 3.12。
+Windows 用户直接双击项目根目录的 **`FolioFold 启动.bat`**；关闭时双击 **`FolioFold 停止.bat`**。启动前会检查端口，停止脚本只停 FolioFold 自己的服务。
 
 ### Python 环境
 
-运行 FolioFold 需要 **Python 3.11 或 3.12**。推荐普通用户直接安装 Python 3.11 或 3.12 的官方 Windows 版本。
+运行 FolioFold 需要 **Python 3.8–3.12**。推荐普通用户直接安装其中仍受官方支持的版本。
 
-- **推荐**：Python 3.11 或 3.12
-- **不要使用**：Python 3.13 及以上
-- **Windows 用户下载**：[Python 官方下载页](https://www.python.org/downloads/windows/)（请选择 **3.11** 或 **3.12** 的 64-bit Windows installer）
+- **已验证支持**：Python 3.8–3.12
+- **已确认不能用**：Python 3.13 及以上（`cgi` 已移除）
+- **Windows 用户下载**：[Python 官方下载页](https://www.python.org/downloads/windows/)
 - 安装完成后，再双击 **`FolioFold 启动.bat`** 即可。
 
 ### 🚀 发布与导出
@@ -251,76 +234,64 @@ You can also import or make other templates: export a look as a template file (v
 
 ### 🛠️ Getting started
 
-FolioFold currently recommends **Python 3.11 or 3.12**. This project has actually verified Python 3.11.6 and 3.12.14; Python 3.13 and later cannot run (the `cgi` module it depends on was removed in 3.13); 3.8 / 3.9 / 3.10 are not installed on this machine and untested. You also need **Git**, but FolioFold itself has no third-party dependencies, so there is **nothing to `pip install`**.
+FolioFold has been actually verified on **Python 3.8–3.12** (3.8.20, 3.9.25, 3.10.21, 3.11.6 and 3.12.14). **Python 3.13 and later cannot run it**, because the `cgi` module it uses was removed in 3.13. You also need **Git**, but FolioFold itself has no third-party dependencies, so there is **nothing to `pip install`**.
 
 ```bash
 git clone https://github.com/zero-sara/FolioFold.git
 cd FolioFold
-py -3.11 server.py    # or py -3.12 server.py
 ```
 
-Then open <http://127.0.0.1:3000/> in your browser.
+Then double-click **`FolioFold 启动.bat`** and open <http://127.0.0.1:3000/>. To stop it, double-click **`FolioFold 停止.bat`**.
 
-On Windows, just double-click **`FolioFold 启动.bat`** in the project root (it picks 3.11 or 3.12 automatically and handles a busy port for you); to stop, double-click **`FolioFold 停止.bat`**. **`FolioFold.exe`** is an **optional** one-click launcher — it is not part of the source repo (it ships separately via GitHub Releases, or you can build it with `build_exe.bat`), and it still requires Python 3.11 or 3.12 installed.
+On Windows, just double-click **`FolioFold 启动.bat`** in the project root; to stop, double-click **`FolioFold 停止.bat`**. The start script protects an occupied port, and the stop script only stops FolioFold itself.
 
 ### Python environment
 
-Running FolioFold requires **Python 3.11 or 3.12**. Ordinary users are recommended to install the official Windows build of Python 3.11 or 3.12.
+Running FolioFold requires **Python 3.8–3.12**. Ordinary users are recommended to install a still-supported version from the official Python site.
 
-- **Recommended**: Python 3.11 or 3.12
-- **Do not use**: Python 3.13 or later
-- **Windows users**: download from the official Python site — [Python Releases for Windows](https://www.python.org/downloads/windows/) (pick the 64-bit Windows installer for **3.11** or **3.12**)
+- **Verified supported**: Python 3.8–3.12
+- **Confirmed incompatible**: Python 3.13 and later (`cgi` was removed)
+- **Windows users**: download from the official [Python Releases for Windows](https://www.python.org/downloads/windows/)
 - After installing, just double-click **`FolioFold 启动.bat`** to start.
 
 ### 🤖 Let an AI install it for me
 
-Don't want to type the commands yourself? Copy **the whole block below** to any AI assistant (ChatGPT / Claude / a local AI helper, etc.). It will first inspect your computer's environment, then decide how to install and how to start — instead of assuming the environment is already ready.
+Don't want to type the commands yourself? Copy **one complete block** below to an AI assistant. Do not mix the two versions.
+
+### A. Fixed single-language version (hide the language switcher)
+
+> **Fill in `<FIXED_LANGUAGE_CODE>` first**: `zh-CN`, `zh-TW`, `en`, `ja`, `ko`, `fr`, `es`, `it`, `de`, or `pt`.
 
 ```
-Please check the environment on my computer, install, and start FolioFold (a locally-running résumé/portfolio editor) for me.
+Install and start FolioFold's fixed single-language version for me. My fixed language is <FIXED_LANGUAGE_CODE>. Hide the language-switching UI completely; do not leave a language switcher available.
 
-Proceed in this order: detect first → then judge → install only what's missing → re-check after installing → finally start. Do not assume the environment is already ready.
+Work in this order: detect → install/re-check → clone → configure → protect the port → start → health-check → explain how to stop. Do not assume the environment is ready.
 
-1) Detect the environment
-   - Tell me the current OS and version.
-   - Check whether Git is installed (git --version).
-   - List every Python version installed on this machine (on Windows run `py -0p` first, then cross-check with `python --version` / `python3 --version`; scan common install paths if needed).
-
-2) Judge the version
-   - FolioFold needs Python 3.11 or 3.12; either works.
-   - If the machine only has 3.13 / 3.14: the server's cgi module was removed in 3.13, so those versions cannot run it — install 3.11 or 3.12.
-   - If the machine has no Python at all: install 3.11 or 3.12 first (download the 3.11 or 3.12 Windows installer from the official Python site: https://www.python.org/downloads/windows/).
-   - In every case, clearly tell me: the current state, what is needed, why, and what to do next. Don't just drop a "go install Python yourself".
-
-3) Install what's missing (if needed)
-   - Before doing anything, list what needs to be installed and get my consent.
-   - On Windows use winget (e.g. `winget install Python.Python.3.12`) or download the 3.11/3.12 Windows installer manually from the official Python site https://www.python.org/downloads/windows/; on macOS use Homebrew; on Linux use the system package manager. After installing, re-run steps 1 and 2 to confirm 3.11 or 3.12 is usable.
-   - Don't pretend the install finished; if admin rights or a manual confirmation from me is required, say so clearly.
-
-4) Check the directory and code
-   - Check whether FolioFold already exists in the directory where I intend to keep it, to avoid cloning twice.
-   - If not, run: git clone https://github.com/zero-sara/FolioFold.git   then enter that directory.
-
-5) Check port 3000
-   - Check whether 127.0.0.1:3000 is occupied.
-   - If the occupant is an already-running FolioFold, just open the browser — don't start it again.
-   - If another program occupies it, don't kill it; tell me and suggest a workable fix.
-
-6) Start
-   - Windows: run `FolioFold 启动.bat` in the project root.
-   - Or manually run in the repo: `py -3.11 server.py` or `py -3.12 server.py` (on macOS / Linux use the compatible version: `python3 server.py`).
-   - (Optional, only if I want a single-language build) edit `dist-config.js` in the repo and set `langMode` to 'single' and `defaultLang` to 'zh-CN' (or the code for another language, e.g. 'en'). The default is multi-language; no change needed.
-
-7) Verify and wrap up
-   - Visit http://127.0.0.1:3000/api/version and http://127.0.0.1:3000/api/health and confirm both return 200.
-   - Give me the browser URL http://127.0.0.1:3000/ so I can open it directly.
-   - Tell me how to stop it: on Windows double-click `FolioFold 停止.bat`; or press Ctrl+C in the terminal running it.
-
-8) On errors
-   - If the port is taken, Python errors out, or startup fails, paste the original error text from my terminal back to me and explain the cause and next step.
+1) Detect Git (`git --version`) and every installed Python (on Windows: `py -0p`, then `python --version` / `python3 --version`). Python 3.8–3.12 is compatible; 3.13+ is not.
+2) Install/re-check missing items. Before installing Git or a compatible Python, list what is needed and get my consent. On Windows, use winget or https://www.python.org/downloads/windows/; then re-check that Git and Python 3.8–3.12 are usable.
+3) Clone only if needed: in my chosen location, check whether FolioFold exists; otherwise run `git clone https://github.com/zero-sara/FolioFold.git` and enter it.
+4) Configure `dist-config.js` with `langMode: 'single'` and `defaultLang: '<FIXED_LANGUAGE_CODE>'`; confirm the UI has no language switcher.
+5) Protect the port and start: check 127.0.0.1:3000. If it is FolioFold, open it without a second start. If it belongs to another program, do not stop it; explain the solution. Otherwise run `FolioFold 启动.bat` on Windows.
+6) Health-check and stop: verify both http://127.0.0.1:3000/api/version and http://127.0.0.1:3000/api/health return 200. Explain that Windows users stop it with `FolioFold 停止.bat` (or Ctrl+C in the running terminal).
 ```
 
-> Note: there is no prebuilt installer download link in the repo (the EXE ships separately via GitHub Releases), so `git clone` the source and start it as above. Single- vs multi-language is just one switch (`dist-config.js`) in the same codebase — switching needs no other file changes.
+### B. Multi-language version (keep the language switcher)
+
+> **No language code is needed.** Keep the built-in language switcher; do not change the language mode in `dist-config.js`.
+
+```
+Install and start FolioFold's multi-language version for me. Keep language switching enabled and do not change the language mode in `dist-config.js`.
+
+Work in this order: detect → install/re-check → clone → protect the port → start → health-check → explain how to stop. Do not assume the environment is ready.
+
+1) Detect Git (`git --version`) and every installed Python (on Windows: `py -0p`, then `python --version` / `python3 --version`). Python 3.8–3.12 is compatible; 3.13+ is not.
+2) Install/re-check missing items. Before installing Git or a compatible Python, list what is needed and get my consent. On Windows, use winget or https://www.python.org/downloads/windows/; then re-check that Git and Python 3.8–3.12 are usable.
+3) Clone only if needed: in my chosen location, check whether FolioFold exists; otherwise run `git clone https://github.com/zero-sara/FolioFold.git` and enter it.
+4) Protect the port and start: check 127.0.0.1:3000. If it is FolioFold, open it without a second start. If it belongs to another program, do not stop it; explain the solution. Otherwise run `FolioFold 启动.bat` on Windows.
+5) Health-check and stop: verify both http://127.0.0.1:3000/api/version and http://127.0.0.1:3000/api/health return 200. Explain that Windows users stop it with `FolioFold 停止.bat` (or Ctrl+C in the running terminal).
+```
+
+> To change editions later, follow the appropriate complete instruction again; do not mix the single- and multi-language settings.
 
 ### 🚀 Publish & export
 
