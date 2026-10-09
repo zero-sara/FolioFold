@@ -20,7 +20,7 @@ FolioFold helps you turn scattered experience, work and ideas into a **résumé/
 
 ![文本编辑界面](docs/images/text-editor.png)
 
-**排版编辑 / Visual (layout) editor** — 拖拽调整区块顺序与留白、切换主题，右侧实时预览成品
+**排版编辑 / Visual (layout) editor** — 拖拽调整区块顺序与留白、切换主题，实时预览成品
 
 ![排版编辑界面](docs/images/visual-editor.png)
 
